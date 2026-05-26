@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>大唐雙龍傳 卷21 第八章 · 寇仲少帥國天下大勢圖</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; font-family: "PingFang TC", "Noto Sans CJK TC", "Noto Serif TC", serif; }
+  #map { height: 100vh; width: 100%; }
+
+  .info-panel {
+    position: absolute; top: 12px; left: 50px; z-index: 1000;
+    background: rgba(20, 20, 28, 0.94); color: #f5deb3;
+    padding: 14px 18px; border-radius: 8px;
+    max-width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    border: 1px solid #8b6f4e;
+  }
+  .info-panel h1 { margin: 0 0 6px 0; font-size: 18px; color: #ffd700; }
+  .info-panel h2 { margin: 12px 0 6px 0; font-size: 14px; color: #d4a356; border-bottom: 1px dashed #8b6f4e; padding-bottom: 3px; }
+  .info-panel p { margin: 4px 0; font-size: 12px; line-height: 1.55; }
+  .info-panel .legend-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; font-size: 12px; }
+  .info-panel .swatch { width: 16px; height: 16px; border-radius: 3px; display: inline-block; flex-shrink: 0; }
+  .info-panel .swatch-line { width: 20px; height: 3px; display: inline-block; flex-shrink: 0; }
+
+  .leaflet-popup-content {
+    font-family: "PingFang TC", "Noto Sans CJK TC", serif;
+    font-size: 13px; line-height: 1.6;
+  }
+  .leaflet-popup-content h3 { margin: 0 0 6px 0; color: #8b0000; font-size: 14px; }
+  .leaflet-popup-content .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; margin-right: 4px; }
+  .tag-our { background: #c8e6c9; color: #1b5e20; }
+  .tag-enemy { background: #ffcdd2; color: #b71c1c; }
+  .tag-neutral { background: #fff3e0; color: #e65100; }
+  .tag-target { background: #f3e5f5; color: #6a1b9a; }
+  .tag-place { background: #e3f2fd; color: #1565c0; }
+
+  .place-label {
+    background: rgba(255, 248, 232, 0.95);
+    border: 1px solid #5d4037;
+    color: #5d4037;
+    font-family: "PingFang TC", "Noto Serif TC", serif;
+    font-weight: 600;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+  .place-label-capital {
+    background: rgba(255, 215, 0, 0.95) !important;
+    border-color: #c0392b !important;
+    color: #8b0000 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+  }
+
+  .nav-link {
+    position: absolute; top: 12px; right: 12px; z-index: 1000;
+    background: rgba(20, 20, 28, 0.92); color: #ffd700;
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 12px; border: 1px solid #8b6f4e;
+    text-decoration: none;
+  }
+  .nav-link:hover { background: rgba(40, 40, 50, 0.95); }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<a class="nav-link" href="index.html">← 返回目錄</a>
+
+<div class="info-panel">
+  <h1>卷 21 第八章 · 天下大勢</h1>
+  <div style="font-size:12px; color:#aaa; margin-bottom:8px;">
+    寇仲領地確立 + 虛行之大戰略
+  </div>
+
+  <h2>少帥國疆界（金黃色區）</h2>
+  <p>東抵大海 · 西至梁都 · 南迄下邳 · 北達方與</p>
+  <p style="font-size:11px; color:#bbb;">含微山、駱馬諸湖富饒農田</p>
+  <p style="font-size:11px;">兵力 約 1.5 萬（非精兵）</p>
+
+  <h2>勢力色號</h2>
+  <div class="legend-row"><span class="swatch" style="background:#ffd700;"></span> 寇仲 · 少帥國</div>
+  <div class="legend-row"><span class="swatch" style="background:#7e57c2;"></span> 王世充 · 鄭（洛陽）</div>
+  <div class="legend-row"><span class="swatch" style="background:#5c6bc0;"></span> 竇建德 · 夏（河北）</div>
+  <div class="legend-row"><span class="swatch" style="background:#ef5350;"></span> 蕭銑 · 梁（巴陵）</div>
+  <div class="legend-row"><span class="swatch" style="background:#26a69a;"></span> 杜伏威 · 江淮</div>
+  <div class="legend-row"><span class="swatch" style="background:#66bb6a;"></span> 沈法興 · 江南</div>
+  <div class="legend-row"><span class="swatch" style="background:#ffa726;"></span> 李子通 · 吳（江都）</div>
+  <div class="legend-row"><span class="swatch" style="background:#bdbdbd;"></span> 朱粲 · 南陽</div>
+
+  <h2>虛行之大戰略</h2>
+  <div class="legend-row"><span class="swatch-line" style="background:#0a8043;"></span> 明取竟陵（佯攻）</div>
+  <div class="legend-row"><span class="swatch-line" style="background:#9b59b6; border-bottom:2px dashed #9b59b6;"></span> 暗圖襄陽（真目標）</div>
+  <div class="legend-row"><span class="swatch-line" style="background:#b71c1c;"></span> 血洗巴陵（誓報素仇）</div>
+  <div class="legend-row"><span class="swatch" style="background:#ffeb3b; border:1px dashed #f57f17;"></span> 飛馬牧場（待爭取盟友）</div>
+
+  <p style="margin-top:10px; font-size:11px; color:#888;">
+    座標 OpenStreetMap · 古今對照<br>
+    勢力範圍為情節推斷示意，非精確史地復原
+  </p>
+</div>
+
+<script>
+// =============================================================
+// 寇仲少帥國疆界（金黃色多邊形）
+// 東抵大海 / 西至梁都(徐州) / 南迄下邳(邳州) / 北達方與(魚台)
+// =============================================================
+const shaoshuaiTerritory = [
+  [35.10, 116.45],  // 北：方與（魚台縣）
+  [35.20, 117.30],  // 微山湖北端
+  [35.15, 118.20],
+  [34.90, 119.10],  // 東北：連雲港
+  [34.50, 119.40],  // 東：黃海岸
+  [34.10, 119.20],  // 東南：海州灣
+  [33.80, 118.95],  // 南：洪澤湖北
+  [34.05, 118.40],  // 南：下邳-宿遷
+  [34.30, 118.05],  // 下邳（邳州）
+  [34.20, 117.40],
+  [34.10, 116.80],  // 西南
+  [34.40, 116.50],  // 西
+  [34.80, 116.40],  // 西北
+];
+
+// =============================================================
+// Map init
+// =============================================================
+const map = L.map('map').setView([33.5, 116.0], 7);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap / CARTO · 大唐雙龍傳 軍事布局',
+  maxZoom: 19, subdomains: 'abcd',
+}).addTo(map);
+
+// =============================================================
+// 寇仲少帥國（金黃色填充）
+// =============================================================
+L.polygon(shaoshuaiTerritory, {
+  color: '#c08400', weight: 3, fillColor: '#ffd700', fillOpacity: 0.35,
+}).bindPopup(`<h3>少帥國領地</h3>
+  <p><span class="tag tag-our">寇仲</span> 卷 21 第八章新確立</p>
+  <p>📍 <b>東</b>抵大海 · <b>西</b>至梁都(徐州)</p>
+  <p>📍 <b>南</b>迄下邳(邳州) · <b>北</b>達方與(魚台縣)</p>
+  <p>🌾 含微山湖、駱馬湖富饒農田</p>
+  <p>⚔️ 兵力：1.5 萬（虛行之評：非精兵）</p>
+  <p>⚠️ 弱點：南北無法擴張（會撞李子通/竇建德）</p>`).addTo(map);
+
+// =============================================================
+// 對手勢力範圍（粗略示意，半透明）
+// =============================================================
+const factions = [
+  {
+    name: '王世充 · 鄭', color: '#7e57c2',
+    territory: [[35.5, 111.0], [35.3, 113.5], [34.5, 114.5], [33.5, 113.5], [33.0, 111.5], [34.0, 110.0]],
+    capital: { name: '洛陽（東都）', lat: 34.62, lon: 112.45 },
+    desc: '少帥南北擴張的最大潛在敵人 · 控制中原樞紐'
+  },
+  {
+    name: '竇建德 · 夏', color: '#5c6bc0',
+    territory: [[38.5, 114.0], [38.0, 117.5], [36.5, 117.5], [36.0, 115.5], [36.2, 113.5], [37.5, 113.0]],
+    capital: { name: '邯鄲附近', lat: 36.61, lon: 114.49 },
+    desc: '河北霸主 · 北方威脅'
+  },
+  {
+    name: '蕭銑 · 梁', color: '#ef5350',
+    territory: [[30.5, 111.0], [30.0, 114.0], [28.5, 114.0], [28.0, 112.5], [28.5, 110.5], [29.5, 110.0]],
+    capital: { name: '巴陵（岳陽）', lat: 29.06, lon: 113.35 },
+    desc: '⚠️ 寇仲血債目標 · 香玉山勾結處 · 素素遺願復仇地'
+  },
+  {
+    name: '杜伏威 · 江淮', color: '#26a69a',
+    territory: [[33.0, 117.0], [33.0, 119.5], [31.5, 119.5], [31.0, 118.0], [31.5, 116.5], [32.5, 116.5]],
+    capital: { name: '歷陽 / 丹陽附近', lat: 32.01, lon: 119.60 },
+    desc: '聯合沈法興圍攻江都 · 與少帥潛在敵對'
+  },
+  {
+    name: '沈法興 · 江南', color: '#66bb6a',
+    territory: [[31.5, 119.5], [31.5, 121.5], [30.5, 121.5], [30.0, 120.5], [30.5, 119.5]],
+    capital: { name: '常州', lat: 31.81, lon: 119.97 },
+    desc: '長江下游南岸 · 聯杜伏威攻江都'
+  },
+  {
+    name: '李子通 · 吳', color: '#ffa726',
+    territory: [[32.7, 119.0], [32.7, 120.5], [32.0, 120.5], [32.0, 119.0]],
+    capital: { name: '江都（揚州）', lat: 32.40, lon: 119.41 },
+    desc: '⚠️ 形勢所迫即將與少帥修好（殺子之仇也得忍）· 作南面屏障'
+  },
+  {
+    name: '朱粲 · 南陽', color: '#bdbdbd',
+    territory: [[33.5, 111.5], [33.5, 113.5], [32.5, 113.5], [32.5, 111.5]],
+    capital: { name: '南陽', lat: 33.00, lon: 112.53 },
+    desc: '與三大寇/飛馬牧場混戰中'
+  },
+];
+
+factions.forEach(f => {
+  L.polygon(f.territory, {
+    color: f.color, weight: 2, fillColor: f.color, fillOpacity: 0.18,
+    dashArray: '6, 4'
+  }).bindPopup(`<h3>${f.name}</h3>
+    <p><span class="tag tag-enemy">勢力</span></p>
+    <p>${f.desc}</p>
+    <p>📍 都：${f.capital.name}</p>`).addTo(map);
+
+  // 都城標記（紅色五角星樣式）
+  L.marker([f.capital.lat, f.capital.lon], {
+    icon: L.divIcon({
+      className: 'capital-marker',
+      html: `<div style="background:${f.color};width:14px;height:14px;
+              transform:rotate(45deg);border:2px solid #fff;
+              box-shadow:0 0 4px rgba(0,0,0,0.6);"></div>`,
+      iconSize: [18, 18], iconAnchor: [9, 9],
+    })
+  }).bindTooltip(f.capital.name, {
+    permanent: true, direction: 'right', offset: [10, 0],
+    className: 'place-label'
+  }).addTo(map);
+});
+
+// =============================================================
+// 重要古今地名標籤
+// =============================================================
+const places = [
+  // 少帥領地內
+  { name: '梁都（彭城/徐州）', lat: 34.27, lon: 117.20, capital: true,
+    desc: '少帥國首都 · 總管府所在 · 寇仲與虛行之議事處' },
+  { name: '下邳（邳州）',     lat: 34.34, lon: 118.01, desc: '南境屏障' },
+  { name: '東海',             lat: 34.54, lon: 118.75, desc: '焦宏進管轄 · 外貿重鎮' },
+  { name: '沭陽（沐陽）',     lat: 34.13, lon: 118.76, desc: '居民開門迎接少帥軍' },
+  { name: '方與（魚台）',     lat: 35.01, lon: 116.65, desc: '少帥北境' },
+  { name: '微山湖',           lat: 34.85, lon: 117.10, water: true, desc: '富饒農田區' },
+  { name: '駱馬湖',           lat: 34.13, lon: 118.16, water: true },
+  // 戰略目標（紫色）
+  { name: '竟陵（天門）',     lat: 30.67, lon: 113.16, target: true,
+    desc: '🎯 明擺目標 · 虛行之佯攻計' },
+  { name: '襄陽',             lat: 32.01, lon: 112.12, target: true,
+    desc: '🎯 真正圖謀 · 「在東都之南奪據點，便有機會北上爭霸」' },
+  // 仇敵地
+  { name: '巴陵（岳陽）',     lat: 29.06, lon: 113.35, blood: true,
+    desc: '⚔️ 寇仲誓言血洗 · 香玉山陷害素素之地 · 蕭銑都' },
+  // 中立 / 觀察
+  { name: '滎陽',             lat: 34.79, lon: 113.37, desc: '當年素素重逢處' },
+  { name: '飛馬牧場',         lat: 34.50, lon: 115.50, neutral: true,
+    desc: '🤝 中立 · 寇仲徐子陵口碑佳 · 虛行之建議爭取' },
+];
+
+places.forEach(p => {
+  let iconHtml;
+  if (p.capital) {
+    iconHtml = '<div style="background:#ffd700;width:18px;height:18px;border-radius:50%;border:3px solid #c0392b;box-shadow:0 0 6px rgba(192,57,43,0.6);"></div>';
+  } else if (p.target) {
+    iconHtml = '<div style="background:#9b59b6;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.6);"></div>';
+  } else if (p.blood) {
+    iconHtml = '<div style="background:#b71c1c;width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 6px rgba(255,0,0,0.6);"></div>';
+  } else if (p.neutral) {
+    iconHtml = '<div style="background:#fff176;width:14px;height:14px;border:2px dashed #f57f17;border-radius:50%;"></div>';
+  } else if (p.water) {
+    iconHtml = '<div style="background:#1565c0;width:10px;height:10px;border-radius:50%;border:2px solid #fff;"></div>';
+  } else {
+    iconHtml = '<div style="background:#5d4037;width:10px;height:10px;border-radius:50%;border:2px solid #fff;"></div>';
+  }
+
+  const popupHtml = `<h3>${p.name}</h3>
+    ${p.desc ? `<p>${p.desc}</p>` : ''}
+    ${p.capital ? '<p><span class="tag tag-our">少帥都</span></p>' : ''}
+    ${p.target ? '<p><span class="tag tag-target">戰略目標</span></p>' : ''}
+    ${p.blood ? '<p><span class="tag tag-enemy">血債目標</span></p>' : ''}
+    ${p.neutral ? '<p><span class="tag tag-neutral">中立待爭取</span></p>' : ''}`;
+
+  const marker = L.marker([p.lat, p.lon], {
+    icon: L.divIcon({
+      className: '', html: iconHtml,
+      iconSize: [22, 22], iconAnchor: [11, 11],
+    }),
+  }).bindPopup(popupHtml).addTo(map);
+
+  marker.bindTooltip(p.name, {
+    permanent: true, direction: 'right', offset: [12, 0],
+    className: 'place-label' + (p.capital ? ' place-label-capital' : '')
+  });
+});
+
+// =============================================================
+// 戰略箭頭
+// =============================================================
+// 1) 明取竟陵（綠色實線：梁都 → 竟陵）
+L.polyline([[34.27, 117.20], [33.0, 115.0], [31.5, 113.5], [30.67, 113.16]], {
+  color: '#0a8043', weight: 5, opacity: 0.85,
+}).bindPopup('<b>明取竟陵</b><br>用從竟陵退往飛馬牧場的精銳<br>不怕空巢防守薄弱').addTo(map);
+
+// 2) 暗圖襄陽（紫色虛線：襄陽是真目標）
+L.polyline([[34.27, 117.20], [33.0, 115.5], [32.5, 113.5], [32.01, 112.12]], {
+  color: '#9b59b6', weight: 4, opacity: 0.85, dashArray: '12, 8',
+}).bindPopup('<b>暗圖襄陽（真目標）</b><br>「在東都之南奪得據點，便有機會北上爭霸，不用退守一隅」').addTo(map);
+
+// 3) 血洗巴陵（紅色虛線：揚軍渡江南下）
+L.polyline([[34.27, 117.20], [32.5, 116.0], [30.5, 113.5], [29.06, 113.35]], {
+  color: '#b71c1c', weight: 4, opacity: 0.85, dashArray: '8, 6',
+}).bindPopup('<b>血洗巴陵</b><br>寇仲誓言：「我終有一天會揮軍渡江，血洗巴陵，為素姐追討血債」').addTo(map);
+
+// 4) 與李子通修好（橘色雙向）
+L.polyline([[34.27, 117.20], [32.40, 119.41]], {
+  color: '#ffa726', weight: 4, opacity: 0.7, dashArray: '4, 6',
+}).bindPopup('<b>與李子通修好</b><br>虛行之策：助其擊退杜伏威+沈法興<br>利用李子通作南面防衛').addTo(map);
+
+// =============================================================
+// 地理水文標籤
+// =============================================================
+const geoLabels = [
+  { name: '黃海',  lat: 33.50, lon: 120.50, style: 'sea' },
+  { name: '長江',  lat: 30.50, lon: 116.50, style: 'river' },
+  { name: '淮河',  lat: 33.00, lon: 116.50, style: 'river' },
+  { name: '黃河',  lat: 35.80, lon: 114.50, style: 'river' },
+  { name: '洞庭湖', lat: 29.10, lon: 112.70, style: 'water' },
+  { name: '太湖',   lat: 31.20, lon: 120.20, style: 'water' },
+];
+const styles = {
+  sea:   'color:#0d47a1;font-style:italic;font-size:18px;font-weight:bold;letter-spacing:4px;',
+  river: 'color:#1565c0;font-style:italic;font-size:13px;font-weight:600;',
+  water: 'color:#1565c0;font-style:italic;font-size:12px;',
+};
+geoLabels.forEach(g => {
+  L.marker([g.lat, g.lon], {
+    icon: L.divIcon({
+      className: '',
+      html: `<span style="${styles[g.style]};white-space:nowrap;background:rgba(255,255,255,0.6);padding:1px 4px;border-radius:2px;">${g.name}</span>`,
+      iconSize: [80, 20], iconAnchor: [40, 10],
+    }),
+    interactive: false,
+  }).addTo(map);
+});
+
+// =============================================================
+// 標題與書中關鍵引用
+// =============================================================
+const epigraph = L.control({position: 'bottomright'});
+epigraph.onAdd = function() {
+  const div = L.DomUtil.create('div', 'epigraph');
+  div.innerHTML = `
+    <div style="background:rgba(20,20,28,0.92);color:#f5deb3;
+                padding:10px 14px;border-radius:6px;border:1px solid #8b6f4e;
+                max-width:340px;font-size:11px;line-height:1.55;">
+      <div style="color:#ffd700;font-weight:bold;margin-bottom:4px;">📖 虛行之的戰略</div>
+      <div style="font-style:italic;color:#d4a356;">「固內攘外兩方面同時進行——</div>
+      <div style="font-style:italic;color:#d4a356;">固內建立完善管治與防衛系統，</div>
+      <div style="font-style:italic;color:#d4a356;">攘外避強取弱，把矛頭指向襄陽，</div>
+      <div style="font-style:italic;color:#d4a356;">只要能在東都之南奪得據點，</div>
+      <div style="font-style:italic;color:#d4a356;">便有機會北上爭霸，不用退守一隅。」</div>
+    </div>
+  `;
+  return div;
+};
+epigraph.addTo(map);
+
+// fit
+map.fitBounds([[28.0, 110.0], [36.5, 121.0]]);
+</script>
+</body>
+</html>
