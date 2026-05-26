@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>大唐雙龍傳 · 卷 22 第 1 章 · 南方七勢力競合圖</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: "PingFang TC", "Noto Sans CJK TC", "Noto Serif TC", serif;
+    margin: 0; background: #fdfaf3; color: #2a2a2a;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+  .back { color: #c0392b; text-decoration: none; border-bottom: 1px dashed; }
+  h1 { color: #8b0000; border-bottom: 2px solid #d4a356; padding-bottom: 10px; }
+  h2 { color: #5d4037; margin-top: 30px; }
+  .meta { color: #888; font-size: 13px; }
+  #map { height: 640px; border-radius: 8px; margin: 16px 0; border: 2px solid #d4a356; }
+  .legend {
+    background: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #d4a356;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 16px;
+    margin-bottom: 6px;
+  }
+  .legend-dot {
+    display: inline-block; width: 14px; height: 14px;
+    border-radius: 50%; margin-right: 6px;
+    border: 2px solid white; box-shadow: 0 0 0 1px #888;
+  }
+  .legend-line {
+    display: inline-block; width: 24px; height: 3px;
+    margin-right: 6px; vertical-align: middle;
+  }
+  .quote-box {
+    background: #fff8e1;
+    border-left: 4px solid #d4a356;
+    padding: 12px 18px;
+    margin: 16px 0;
+    border-radius: 4px;
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .quote-box .source { color: #8b6914; font-size: 12px; font-style: normal; margin-top: 6px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 14px; }
+  th, td { border-bottom: 1px solid #e6d9b8; padding: 8px 10px; text-align: left; }
+  th { background: #fdf0d0; color: #5d4037; }
+  /* Leaflet permanent tooltip 樣式 */
+  .place-label {
+    background: rgba(255,255,255,0.92);
+    border: 1px solid #8b0000;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #8b0000;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .city-label {
+    background: rgba(255,248,225,0.95);
+    border: 1px dashed #8b6914;
+    color: #8b6914;
+  }
+  .target-label {
+    background: rgba(139,0,0,0.92);
+    color: white;
+    border-color: #5b0000;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <p><a href="index.html" class="back">← 回卷別索引</a></p>
+  <h1>卷 22 · 第一章 · 步步驚心</h1>
+  <p class="meta">寇仲與駱方船頭密議，揭露南方七勢力競合·飛馬牧場危急·徐子陵江都刺殺</p>
+
+  <h2>📊 南方七勢力動向 + 三方圍剿飛馬牧場</h2>
+  <div id="map"></div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#d4a356;"></span>少帥陣營</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#8b0000;"></span>蕭銑勢力</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#1976d2;"></span>杜伏威+沈法興聯軍</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#388e3c;"></span>朱粲+曹應龍</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#7b1fa2;"></span>李子通（江都困守）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#5d4037;"></span>林士宏（洞庭牽制）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#ff6f00;"></span>飛馬牧場（戰略目標）</div>
+    <br>
+    <div class="legend-item"><span class="legend-line" style="background:#8b0000;"></span>蕭銑準備渡江北上</div>
+    <div class="legend-item"><span class="legend-line" style="background:#388e3c; border-top:2px dashed #388e3c; height:0;"></span>三方圍攻飛馬牧場</div>
+    <div class="legend-item"><span class="legend-line" style="background:#1976d2;"></span>杜沈聯軍兩路北上</div>
+  </div>
+
+  <h2>📜 寇仲戰略洞察（本章核心）</h2>
+  <div class="quote-box">
+    「蕭銑、朱粲及三寇究竟是甚麼關係，難道朱粲和曹應龍不知道若讓蕭銑在江北取得據點，他們以後都再不用出來混嗎？」<br><br>
+    「這是不會有協議的。得到以萬計的戰馬後，誰肯再交出來，所以我看蕭銑、曹應龍和朱粲仍是各懷鬼胎，各施各法，而此正是關鍵所在；也是我們的致勝要訣。」
+    <div class="source">— 寇仲對駱方</div>
+  </div>
+
+  <h2>🗺️ 古今地名對照</h2>
+  <table>
+    <tr><th>小說地名</th><th>今地</th><th>勢力</th><th>角色</th></tr>
+    <tr><td>梁都（彭城）</td><td>江蘇徐州</td><td>少帥</td><td>寇仲少帥國都城</td></tr>
+    <tr><td>巴陵</td><td>湖南岳陽</td><td>蕭銑</td><td>梁帝國都城</td></tr>
+    <tr><td>夷陵</td><td>湖北宜昌</td><td>蕭銑</td><td>董景珍 3 萬精兵駐紮·徵民船</td></tr>
+    <tr><td>遠安</td><td>湖北遠安</td><td>朱粲攻擊中</td><td>飛馬牧場西側據點</td></tr>
+    <tr><td>當陽</td><td>湖北當陽</td><td>曹應龍攻擊中</td><td>飛馬牧場南側據點</td></tr>
+    <tr><td>飛馬牧場</td><td>湖北襄陽一帶</td><td>中立·遭三方圍攻</td><td>戰略目標：萬計戰馬</td></tr>
+    <tr><td>竟陵</td><td>湖北天門</td><td>杜伏威</td><td>已攻下·按兵不動·待江都</td></tr>
+    <tr><td>江都</td><td>江蘇揚州</td><td>李子通</td><td>遭杜沈聯軍圍攻·徐子陵潛入中</td></tr>
+    <tr><td>毗陵</td><td>江蘇常州</td><td>沈法興</td><td>江南·與杜伏威聯手</td></tr>
+    <tr><td>洞庭</td><td>湖南岳陽南</td><td>林士宏</td><td>牽制蕭銑南方</td></tr>
+  </table>
+
+  <h2>⚔️ 三方圍攻飛馬牧場（少帥國戰略危機）</h2>
+  <ul>
+    <li><strong>北側</strong>：少帥求援（寇仲問徐子陵能否赴牧場）</li>
+    <li><strong>西側</strong>：朱粲攻 <strong>遠安</strong></li>
+    <li><strong>南側</strong>：曹應龍攻 <strong>當陽</strong></li>
+    <li><strong>西南遠端</strong>：蕭銑·董景珍 3 萬精兵駐 <strong>夷陵</strong>，徵民船準備渡江</li>
+  </ul>
+  <p>飛馬牧場若全軍盡出援救，怕敵乘虛而入；若不出則城池逐個淪陷。<strong>本章正是少帥國對外戰場最險惡時刻。</strong></p>
+
+  <h2>🔍 寇仲的破局思路</h2>
+  <ol>
+    <li><strong>分化三方</strong>：蕭銑、朱粲、曹應龍各懷鬼胎，無真正分贓協議</li>
+    <li><strong>挑撥</strong>：戰馬到手後沒人肯交出來——這是天然裂縫</li>
+    <li><strong>套用對付沈法興的舊招</strong>：可以鬧得他們灰頭土臉</li>
+    <li><strong>限制因素</strong>：蕭銑南方有林士宏牽制·一天未平定南方便難全力北上</li>
+  </ol>
+
+  <p class="meta" style="margin-top: 30px;">⚠️ 地名古今對照基於小說情節與唐初地名考據推測。飛馬牧場位置依據小說後續描述大致定位於襄陽西。</p>
+</div>
+
+<script>
+  const map = L.map('map').setView([31.5, 115.0], 6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18,
+    attribution: '© OpenStreetMap contributors © CARTO'
+  }).addTo(map);
+
+  // 各勢力據點
+  const forces = [
+    // 少帥
+    { coords: [34.272, 117.184], name: '梁都（徐州）', label: '梁都', color: '#d4a356', radius: 12, popup: '寇仲少帥國都城<br>本章寇仲與駱方船頭密議返梁都' },
+    // 蕭銑
+    { coords: [29.371, 113.129], name: '巴陵（岳陽）', label: '巴陵', color: '#8b0000', radius: 12, popup: '蕭銑·梁帝國都城' },
+    { coords: [30.691, 111.287], name: '夷陵（宜昌）', label: '夷陵', color: '#8b0000', radius: 10, popup: '董景珍·蕭銑頭號大將<br>近 3 萬精兵駐紮<br>徵用民船準備渡江北上' },
+    // 朱粲·曹應龍
+    { coords: [31.060, 111.643], name: '遠安', label: '遠安', color: '#388e3c', radius: 8, popup: '朱粲攻擊中' },
+    { coords: [30.820, 111.787], name: '當陽', label: '當陽', color: '#388e3c', radius: 8, popup: '曹應龍攻擊中' },
+    // 飛馬牧場（戰略目標）
+    { coords: [32.000, 112.150], name: '飛馬牧場', label: '飛馬牧場', color: '#ff6f00', radius: 14, popup: '<strong>戰略目標：以萬計戰馬</strong><br>三方圍攻中（朱粲遠安·曹應龍當陽·蕭銑夷陵）<br>少帥求援徐子陵' },
+    // 杜伏威·沈法興
+    { coords: [30.663, 113.165], name: '竟陵（天門）', label: '竟陵', color: '#1976d2', radius: 10, popup: '杜伏威·已攻下·按兵不動<br>計劃以此為根據地兩路北上' },
+    { coords: [32.396, 119.412], name: '江都（揚州）', label: '江都', color: '#7b1fa2', radius: 12, popup: '李子通困守<br>遭杜伏威+沈法興聯軍圍攻<br><strong>徐子陵假扮侯希白潛入中</strong>' },
+    { coords: [31.792, 119.974], name: '毗陵（常州）', label: '毗陵', color: '#1976d2', radius: 9, popup: '沈法興·江南·與杜伏威聯手攻江都' },
+    // 林士宏
+    { coords: [28.683, 115.892], name: '洞庭（林士宏）', label: '林士宏', color: '#5d4037', radius: 10, popup: '林士宏據洞庭<br>牽制蕭銑南方·使蕭銑無法全力北上' },
+  ];
+
+  forces.forEach(f => {
+    const marker = L.circleMarker(f.coords, {
+      radius: f.radius,
+      fillColor: f.color,
+      color: 'white',
+      weight: 2,
+      fillOpacity: 0.9
+    }).addTo(map);
+    marker.bindPopup(`<strong>${f.name}</strong><br>${f.popup}`);
+    marker.bindTooltip(f.label, {
+      permanent: true,
+      direction: 'right',
+      offset: [10, 0],
+      className: f.name === '飛馬牧場' ? 'place-label target-label' : 'place-label'
+    });
+  });
+
+  // 重要地標城市（額外標籤）
+  const cities = [
+    { coords: [32.045, 112.155], name: '襄陽' },
+    { coords: [32.060, 118.796], name: '建康（金陵）' },
+    { coords: [30.593, 114.305], name: '江夏（武昌）' },
+    { coords: [33.420, 119.027], name: '淮陰' },
+  ];
+  cities.forEach(c => {
+    L.circleMarker(c.coords, {
+      radius: 4, fillColor: '#8b6914', color: '#fff', weight: 1, fillOpacity: 0.7
+    }).addTo(map).bindTooltip(c.name, {
+      permanent: true, direction: 'right', offset: [8, 0], className: 'place-label city-label'
+    });
+  });
+
+  // 蕭銑準備渡江北上（夷陵 → 渡江）
+  L.polyline([[30.691, 111.287], [30.4, 112.0], [30.0, 112.4]], {
+    color: '#8b0000', weight: 3, opacity: 0.7,
+  }).addTo(map).bindTooltip('蕭銑·徵民船準備渡江北上', { sticky: true });
+
+  // 三方圍攻飛馬牧場
+  const target = [32.000, 112.150];
+  [
+    { from: [30.691, 111.287], label: '夷陵·董景珍 3 萬精兵' },
+    { from: [31.060, 111.643], label: '朱粲攻遠安' },
+    { from: [30.820, 111.787], label: '曹應龍攻當陽' },
+  ].forEach(arrow => {
+    L.polyline([arrow.from, target], {
+      color: '#388e3c', weight: 2, opacity: 0.7, dashArray: '8,6'
+    }).addTo(map).bindTooltip(arrow.label, { sticky: true });
+  });
+
+  // 杜沈聯軍兩路北上（規劃）
+  L.polyline([[30.663, 113.165], [31.5, 116.0], [32.3, 119.3]], {
+    color: '#1976d2', weight: 2.5, opacity: 0.7
+  }).addTo(map).bindTooltip('杜沈聯軍兩路北上（江都失陷後）', { sticky: true });
+
+  // 林士宏牽制
+  L.polyline([[28.683, 115.892], [29.0, 114.0], [29.371, 113.129]], {
+    color: '#5d4037', weight: 2, opacity: 0.6, dashArray: '4,4'
+  }).addTo(map).bindTooltip('林士宏牽制蕭銑南方', { sticky: true });
+</script>
+</body>
+</html>
