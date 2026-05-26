@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>大唐雙龍傳 卷21 第七章「江湖激戰」軍事布局圖</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; font-family: "PingFang TC", "Noto Sans CJK TC", sans-serif; }
+  #map { height: 100vh; width: 100%; }
+
+  .info-panel {
+    position: absolute; top: 12px; left: 50px; z-index: 1000;
+    background: rgba(20, 20, 28, 0.92); color: #f5deb3;
+    padding: 14px 18px; border-radius: 8px;
+    max-width: 380px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    border: 1px solid #8b6f4e;
+  }
+  .info-panel h1 { margin: 0 0 6px 0; font-size: 18px; color: #ffd700; }
+  .info-panel h2 { margin: 10px 0 4px 0; font-size: 14px; color: #d4a356; }
+  .info-panel p { margin: 4px 0; font-size: 12px; line-height: 1.5; }
+  .info-panel .legend-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 12px; }
+  .info-panel .swatch {
+    width: 16px; height: 16px; border-radius: 50%;
+    display: inline-block; flex-shrink: 0;
+  }
+
+  .legend-toggle {
+    position: absolute; top: 12px; right: 12px; z-index: 1000;
+    background: rgba(20, 20, 28, 0.92); color: #ffd700;
+    padding: 6px 12px; border-radius: 6px; cursor: pointer;
+    font-size: 12px; border: 1px solid #8b6f4e;
+  }
+
+  .leaflet-popup-content {
+    font-family: "PingFang TC", "Noto Sans CJK TC", sans-serif;
+    font-size: 13px; line-height: 1.6;
+  }
+  .leaflet-popup-content h3 { margin: 0 0 6px 0; color: #8b0000; font-size: 14px; }
+  .leaflet-popup-content .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; margin-right: 4px; }
+  .tag-our { background: #c8e6c9; color: #1b5e20; }
+  .tag-enemy { background: #ffcdd2; color: #b71c1c; }
+  .tag-place { background: #fff3e0; color: #e65100; }
+  .tag-trap { background: #f3e5f5; color: #6a1b9a; }
+
+  /* 永久顯示的繁體地名標籤 */
+  .place-label {
+    background: rgba(255, 243, 224, 0.95);
+    border: 1px solid #e65100;
+    color: #e65100;
+    font-family: "PingFang TC", "Noto Sans CJK TC", "Noto Serif TC", serif;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .place-label::before { border-right-color: #e65100 !important; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<div class="info-panel" id="infoPanel">
+  <h1>大唐雙龍傳 · 卷 21 第七章</h1>
+  <div style="font-size:13px; color:#aaa; margin-bottom:8px;">江湖激戰 · 軍事布局俯瞰圖</div>
+
+  <h2>戰場 A · 洪澤湖夜戰</h2>
+  <p style="font-size:11px; color:#bbb;">徐子陵護素素遺體+小陵仲北上下邳途中</p>
+  <div class="legend-row"><span class="swatch" style="background:#27ae60;"></span> 巨鯤幫 3 艦（徐子陵/卜天志/陳老謀）</div>
+  <div class="legend-row"><span class="swatch" style="background:#c0392b;"></span> 大江會 7 艦（裴岳/裴炎）</div>
+  <div class="legend-row"><span class="swatch" style="background:#e67e22;"></span> 李子通快艇 50+</div>
+
+  <h2>戰場 B · 毒龍峽伏擊戰</h2>
+  <p style="font-size:11px; color:#bbb;">寇仲少帥軍 vs 東海+沐陽聯軍</p>
+  <div class="legend-row"><span class="swatch" style="background:#27ae60;"></span> 少帥軍 7 艦（寇仲）</div>
+  <div class="legend-row"><span class="swatch" style="background:#c0392b;"></span> 東海聯軍 30+（李子云/童叔文）</div>
+  <div class="legend-row"><span class="swatch" style="background:#9b59b6;"></span> 兩岸火飛抓伏兵（洛將軍）</div>
+
+  <p style="margin-top:10px; font-size:11px; color:#888;">
+    🟢 我方 &nbsp; 🔴 敵方 &nbsp; 🟣 陷阱/伏兵 &nbsp; 🟠 地點<br>
+    座標來源 OpenStreetMap · 古今地名對照
+  </p>
+</div>
+
+<script>
+// =============================================================
+// 地點對照（古名 → 今地）
+// =============================================================
+const places = {
+  zhongli: { name: "鍾離（今鳳陽）", lat: 32.778, lon: 117.607, desc: "李軍水師駐地，故意放行誘敵入洪澤湖" },
+  hongze:  { name: "洪澤湖",         lat: 33.351, lon: 118.758, desc: "戰場 A · 中原第四大淡水湖，湖底淺平多泥，蘆葦遍布" },
+  shuyang: { name: "沭陽（古沐陽）", lat: 34.130, lon: 118.760, desc: "東海聯軍潑火油的地點 · 少帥軍經過時船底被沾染" },
+  donghai: { name: "東海縣",         lat: 34.543, lon: 118.747, desc: "東海水師大本營，潛伏在沐陽分支水道" },
+  xiapi:   { name: "下邳（今邳州）", lat: 34.340, lon: 118.007, desc: "寇仲少帥軍據點，攻取後成山東根據地" },
+  luoma:   { name: "駱馬湖",         lat: 34.132, lon: 118.161, desc: "下邳東北方水道節點" },
+  // 毒龍峽：沭陽下游 ~4 里（推測在沭陽往東海方向的沭河段）
+  dulong:  { name: "毒龍峽 (戰場 B)", lat: 34.22, lon: 118.85, desc: "兩岸山勢陡峭、崖岸礁石、水流湍急 · 寇仲設伏處" },
+};
+
+// =============================================================
+// 初始化地圖：中心放在兩戰場之間，縮放看全局
+// =============================================================
+const map = L.map('map').setView([33.7, 118.5], 8);
+
+// 古樸感地圖底圖（**無標籤版**，由我們自己疊繁體中文標籤）
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap / CARTO | 大唐雙龍傳 軍事布局重建',
+  maxZoom: 19, subdomains: 'abcd',
+}).addTo(map);
+
+// =============================================================
+// 地點標記（橘色圓圈）
+// =============================================================
+const placeIcon = L.divIcon({
+  className: 'place-marker',
+  html: '<div style="background:#e67e22;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.6);"></div>',
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+});
+
+Object.values(places).forEach(p => {
+  const marker = L.marker([p.lat, p.lon], { icon: placeIcon })
+    .bindPopup(`<h3>${p.name}</h3><p>${p.desc}</p><div><span class="tag tag-place">古今對照</span></div>`)
+    .addTo(map);
+  // 在地點旁顯示永久繁體標籤
+  marker.bindTooltip(p.name, {
+    permanent: true, direction: 'right', offset: [12, 0],
+    className: 'place-label'
+  });
+});
+
+// 補上幾個重要的繁體地理標籤（湖、河、海）
+const geoLabels = [
+  { name: '洪澤湖',  lat: 33.30, lon: 118.55, type: 'water' },
+  { name: '駱馬湖',  lat: 34.10, lon: 118.16, type: 'water' },
+  { name: '淮河',    lat: 33.05, lon: 118.20, type: 'river' },
+  { name: '沭河',    lat: 34.40, lon: 118.65, type: 'river' },
+  { name: '黃海',    lat: 34.70, lon: 119.50, type: 'sea' },
+  { name: '徐州',    lat: 34.27, lon: 117.18, type: 'city' },
+  { name: '宿遷',    lat: 33.96, lon: 118.28, type: 'city' },
+  { name: '連雲港',  lat: 34.59, lon: 119.22, type: 'city' },
+  { name: '淮安',    lat: 33.50, lon: 119.02, type: 'city' },
+  { name: '蚌埠',    lat: 32.92, lon: 117.39, type: 'city' },
+];
+geoLabels.forEach(g => {
+  const style = {
+    water: 'color:#1565c0;font-style:italic;',
+    river: 'color:#1565c0;font-style:italic;font-size:11px;',
+    sea:   'color:#1565c0;font-style:italic;font-size:14px;font-weight:bold;',
+    city:  'color:#424242;font-size:11px;',
+  }[g.type];
+  L.marker([g.lat, g.lon], {
+    icon: L.divIcon({
+      className: 'geo-label',
+      html: `<span style="${style};white-space:nowrap;background:rgba(255,255,255,0.7);padding:1px 4px;border-radius:2px;">${g.name}</span>`,
+      iconSize: [60, 16], iconAnchor: [30, 8],
+    }),
+    interactive: false,
+  }).addTo(map);
+});
+
+// =============================================================
+// 戰場 A：洪澤湖夜戰
+// =============================================================
+// 巨鯤幫 3 艘（綠色，品字形→一字排開，朝湖西逆風搶上流）
+const ourA = L.circleMarker([33.32, 118.55], {
+  radius: 12, color: '#27ae60', fillColor: '#27ae60', fillOpacity: 0.85, weight: 3
+}).bindPopup(`<h3>巨鯤幫 3 艦</h3>
+  <p><span class="tag tag-our">我方</span> 徐子陵 · 卜天志 · 陳老謀</p>
+  <p>• 滅燈、降帆、改 36 支長槳</p>
+  <p>• 從品字 → 一字排開</p>
+  <p>• 兩舷加浮板防擱淺</p>
+  <p>• 反其道逆風朝湖西搶上流</p>`).addTo(map);
+
+// 大江會 7 艘（紅色，扇形包圍從湖東/北來）
+const enemyA = L.circleMarker([33.45, 119.00], {
+  radius: 14, color: '#c0392b', fillColor: '#c0392b', fillOpacity: 0.85, weight: 3
+}).bindPopup(`<h3>大江會 7 艦</h3>
+  <p><span class="tag tag-enemy">敵方</span> 「龍君」裴岳 · 「虎君」裴炎</p>
+  <p>• 扇形合圍 · 投靠蕭銑陣營</p>
+  <p>• 最終 7 艦全部撞上火船焚毀</p>`).addTo(map);
+
+// 李子通快艇 50+（橘紅，銜尾追擊）
+const enemyA2 = L.circleMarker([33.55, 118.90], {
+  radius: 10, color: '#e67e22', fillColor: '#e67e22', fillOpacity: 0.75, weight: 2
+}).bindPopup(`<h3>李子通快艇 50+</h3>
+  <p><span class="tag tag-enemy">敵方</span> 速度為大船兩倍 · 進退靈活</p>
+  <p>• 被石灰幕滲眼後潰散</p>`).addTo(map);
+
+// 我方逃跑路線：湖中央 → 湖西搶上流 → 北逸
+const pathA = L.polyline([
+  [33.30, 118.85],   // 進湖
+  [33.32, 118.55],   // 搶上流
+  [33.42, 118.60],   // 反包圍後北逸
+  [33.55, 118.65],
+  [33.80, 118.70],   // 朝沭陽方向
+], {
+  color: '#0a8043', weight: 6, opacity: 0.9, dashArray: '12, 8'
+}).bindPopup('巨鯤幫逃逸路線：搶上流 → 反殺 → 北逸').addTo(map);
+
+// 敵方推進路線（紅色虛線，加粗）
+L.polyline([
+  [33.55, 119.10],
+  [33.45, 119.00],
+  [33.40, 118.80],
+], { color: '#b71c1c', weight: 5, opacity: 0.85, dashArray: '8, 6' }).addTo(map);
+
+// 戰場 A 範圍框
+L.rectangle([[33.15, 118.30], [33.65, 119.15]], {
+  color: '#ffd700', weight: 2, fillOpacity: 0.05, dashArray: '10, 8'
+}).bindPopup('<b>戰場 A · 洪澤湖夜戰</b><br>水戰九忌 / 滅燈降帆 / 石灰反包圍').addTo(map);
+
+
+// =============================================================
+// 戰場 B：毒龍峽伏擊戰
+// =============================================================
+// 少帥軍 7 艦（綠色，峽口一字排開封水口）
+const ourB = L.circleMarker([34.22, 118.85], {
+  radius: 14, color: '#27ae60', fillColor: '#27ae60', fillOpacity: 0.85, weight: 3
+}).bindPopup(`<h3>少帥軍 7 艦</h3>
+  <p><span class="tag tag-our">我方</span> 寇仲帥船 · 焦宏進</p>
+  <p>• 識破船底火油詭計後棄船</p>
+  <p>• 七艦在峽口一字排開</p>
+  <p>• 纜索綁兩岸大樹封閉水口</p>
+  <p>• 鼓擊雷霆，伏兵齊發</p>`).addTo(map);
+
+// 兩岸伏兵（紫色，火飛抓+十字火箭）
+const trap1 = L.circleMarker([34.235, 118.870], {
+  radius: 10, color: '#9b59b6', fillColor: '#9b59b6', fillOpacity: 0.85, weight: 2
+}).bindPopup(`<h3>北岸伏兵</h3>
+  <p><span class="tag tag-trap">陷阱</span> 洛將軍部隊</p>
+  <p>• 魯妙子設計：<b>火飛抓</b></p>
+  <p>• 魯妙子設計：<b>十字火箭</b></p>`).addTo(map);
+
+const trap2 = L.circleMarker([34.205, 118.870], {
+  radius: 10, color: '#9b59b6', fillColor: '#9b59b6', fillOpacity: 0.85, weight: 2
+}).bindPopup(`<h3>南岸伏兵</h3>
+  <p><span class="tag tag-trap">陷阱</span> 洛將軍部隊</p>
+  <p>• 火飛抓 / 十字火箭</p>`).addTo(map);
+
+// 東海聯軍 30+ 艦（紅色）
+const enemyB = L.circleMarker([34.35, 118.83], {
+  radius: 14, color: '#c0392b', fillColor: '#c0392b', fillOpacity: 0.85, weight: 3
+}).bindPopup(`<h3>東海聯軍 30+ 艦</h3>
+  <p><span class="tag tag-enemy">敵方</span> 李子云 · 童叔文 · 李星元</p>
+  <p>• 躲沐陽分支水道</p>
+  <p>• 順流追擊 · 算準在毒龍峽追上</p>
+  <p>• 結果前無去路、後遭火攻 · 全軍覆沒</p>`).addTo(map);
+
+// 沐陽火油佈置點
+const trap3 = L.circleMarker([34.13, 118.76], {
+  radius: 8, color: '#9b59b6', fillColor: '#9b59b6', fillOpacity: 0.7, weight: 2
+}).bindPopup(`<h3>沐陽火油佈置點</h3>
+  <p><span class="tag tag-trap">敵方陷阱</span></p>
+  <p>東海聯軍在此將火油倒入河面，少帥軍船底通過時被沾染</p>`).addTo(map);
+
+// 少帥軍路線（綠線 北→南，從下邳出來經沭陽到毒龍峽）
+L.polyline([
+  [34.340, 118.007],  // 下邳出發
+  [34.150, 118.50],
+  [34.130, 118.76],   // 經沭陽（沾油）
+  [34.22, 118.85],    // 抵毒龍峽口設伏
+], { color: '#0a8043', weight: 6, opacity: 0.9 })
+  .bindPopup('少帥軍行軍路線：下邳→沭陽→毒龍峽設伏').addTo(map);
+
+// 東海聯軍路線（紅線 北→南順流）
+L.polyline([
+  [34.543, 118.747],  // 東海大本營
+  [34.40, 118.80],    // 潛伏分支水道出口
+  [34.35, 118.83],    // 順流追擊
+], { color: '#b71c1c', weight: 5, opacity: 0.9, dashArray: '10, 6' })
+  .bindPopup('東海聯軍追擊路線：東海→沐陽分支→順流追').addTo(map);
+
+// 戰場 B 範圍框
+L.rectangle([[34.18, 118.80], [34.42, 118.92]], {
+  color: '#ffd700', weight: 2, fillOpacity: 0.05, dashArray: '10, 8'
+}).bindPopup('<b>戰場 B · 毒龍峽伏擊戰</b><br>船底火油 / 鎖鏈封口 / 兩岸火攻').addTo(map);
+
+
+// =============================================================
+// 徐子陵北上整體路線（從洪澤湖戰後 → 沭陽 → 下邳）
+// 灰白色細虛線表示「故事行進方向」
+// =============================================================
+L.polyline([
+  [33.20, 118.75],    // 進入洪澤湖
+  [33.42, 118.60],    // 戰場 A 後北逸
+  [33.80, 118.70],
+  [34.13, 118.76],    // 經沭陽
+  [34.132, 118.161],  // 駱馬湖
+  [34.340, 118.007],  // 抵下邳
+], {
+  color: '#5d4037', weight: 3, opacity: 0.7, dashArray: '4, 8'
+}).bindPopup('徐子陵北上整體路線（淮水→洪澤湖→沭陽→駱馬湖→下邳）').addTo(map);
+
+// =============================================================
+// 自動 fit 到兩戰場範圍
+// =============================================================
+map.fitBounds([
+  [33.15, 117.50],
+  [34.60, 119.20],
+]);
+
+// =============================================================
+// 標題自動彈出（戰場 A）
+// =============================================================
+setTimeout(() => {
+  ourA.openPopup();
+}, 600);
+
+</script>
+</body>
+</html>
