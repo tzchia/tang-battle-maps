@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>大唐雙龍傳 · 卷 23 第 7 章 · 嫁禍東吳</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  body {
+    font-family: "PingFang TC","Noto Sans CJK TC","Noto Serif TC",serif;
+    margin:0; background:#fdfaf3; color:#2a2a2a; line-height:1.6;
+  }
+  .container { max-width:1200px; margin:0 auto; padding:24px 20px; }
+  h1 { color:#8b0000; border-bottom:3px solid #d4a356; padding-bottom:10px; margin-bottom:4px; font-size:26px; }
+  h2 { color:#5d4037; margin-top:36px; font-size:20px; border-left:5px solid #d4a356; padding-left:10px; }
+  h3 { color:#8b6914; margin-top:24px; font-size:16px; }
+  .meta { color:#888; font-size:13px; }
+  .back { color:#c0392b; text-decoration:none; border-bottom:1px dashed; }
+  .map-frame {
+    width:100%; height:520px; border:3px solid #8b6914; border-radius:8px;
+    margin:14px 0;
+  }
+  .legend {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:6px; background:#fff; padding:12px 16px; border-radius:6px;
+    border:1px solid #d4a356; margin:10px 0; font-size:13px;
+  }
+  .legend-item { display:flex; align-items:center; }
+  .legend-dot {
+    display:inline-block; width:14px; height:14px; border-radius:50%;
+    margin-right:8px; border:2px solid #fff; box-shadow:0 0 0 1px #888;
+    flex-shrink:0;
+  }
+  .legend-line {
+    display:inline-block; width:24px; height:0; margin-right:8px;
+    flex-shrink:0;
+  }
+  /* Leaflet 永久標籤 */
+  .place-label {
+    background:rgba(255,243,224,0.95); border:1px solid #e65100;
+    color:#e65100; font-weight:600; font-size:12px; padding:2px 8px;
+    border-radius:3px;
+  }
+  .geo-label-city { background:rgba(255,255,255,0.7); color:#424242; font-size:11px; padding:1px 4px; border-radius:2px; white-space:nowrap; }
+  .geo-label-river { background:rgba(255,255,255,0.7); color:#1565c0; font-style:italic; font-size:11px; padding:1px 4px; border-radius:2px; white-space:nowrap; }
+  .geo-label-mountain { background:rgba(255,255,255,0.7); color:#5d4037; font-size:11px; padding:1px 4px; border-radius:2px; white-space:nowrap; }
+  /* Popup 樣式 */
+  .leaflet-popup-content h3 { margin:0 0 6px 0; color:#8b0000; font-size:14px; }
+  .leaflet-popup-content .tag {
+    display:inline-block; padding:1px 6px; border-radius:3px; font-size:11px;
+    margin-right:4px; font-weight:bold;
+  }
+  .tag-our { background:#c8e6c9; color:#1b5e20; }
+  .tag-enemy { background:#ffcdd2; color:#b71c1c; }
+  .tag-third { background:#fff3e0; color:#e65100; }
+  .tag-place { background:#e8eaf6; color:#283593; }
+  .tag-trap { background:#f3e5f5; color:#6a1b9a; }
+
+  /* 人物關係 SVG */
+  .character-chart {
+    width:100%; height:auto; background:#fffbe6;
+    border:2px solid #8b6914; border-radius:8px;
+    margin:10px 0; display:block;
+  }
+  .summary-box {
+    background:#fff3e0; border-left:5px solid #e65100;
+    padding:14px 18px; margin:14px 0; border-radius:0 6px 6px 0;
+  }
+  .summary-box h3 { margin-top:0; color:#e65100; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+  th, td { border:1px solid #d4a356; padding:6px 10px; text-align:left; vertical-align:top; }
+  th { background:#fff3e0; color:#8b0000; }
+</style>
+</head>
+<body>
+<div class="container">
+  <p><a href="index.html" class="back">← 回到地圖集索引</a></p>
+  <h1>卷 23 第 7 章 · 嫁禍東吳</h1>
+  <p class="meta">兩線並進：徐子陵在 <b>蜀道金牛道</b> 苦鬥侯希白後撞上尤鳥倦 ｜ 寇仲在 <b>長江北岸</b> 偽裝沈綸部，奇襲杜伏威帳下陳盛江淮水師 — 嫁禍東吳，激杜伏威找沈綸出氣。</p>
+
+  <div class="summary-box">
+    <h3>「嫁禍東吳」計策核心</h3>
+    <p>寇仲偷襲 <b>陳盛</b>（杜伏威水軍統領，120 艘船東進江都），扮成 <b>沈綸</b> 麾下「長槍郎」<b>古俊</b>。船隊被擊潰 → 杜伏威先鋒失援、攻江都受阻 → 怒火必落在沈綸頭上。<br>
+    嫁禍對象：江淮南方的 <b>沈綸</b>（杜伏威盟友兼對手）。挑撥兩家內鬥，少帥國坐收漁利。</p>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- 人物關係圖 -->
+  <!-- ============================================== -->
+  <h2>① 人物陣營關係</h2>
+  <p class="meta">本章登場/提及人物（左：少帥國我方；中：花間派與邪道；右：江淮三方）</p>
+
+  <svg class="character-chart" viewBox="0 0 1200 540" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr-friend" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L9,3 z" fill="#27ae60"/>
+      </marker>
+      <marker id="arr-foe" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L9,3 z" fill="#c0392b"/>
+      </marker>
+      <marker id="arr-neutral" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L9,3 z" fill="#e67e22"/>
+      </marker>
+    </defs>
+
+    <!-- 三大區塊背景 -->
+    <rect x="20" y="60" width="360" height="450" rx="10" fill="#e8f5e9" stroke="#27ae60" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="200" y="85" text-anchor="middle" font-size="18" font-weight="bold" fill="#1b5e20">少帥國我方</text>
+
+    <rect x="410" y="60" width="380" height="450" rx="10" fill="#f3e5f5" stroke="#9b59b6" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="600" y="85" text-anchor="middle" font-size="18" font-weight="bold" fill="#6a1b9a">花間派 / 魔道</text>
+
+    <rect x="820" y="60" width="360" height="450" rx="10" fill="#ffebee" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="1000" y="85" text-anchor="middle" font-size="18" font-weight="bold" fill="#b71c1c">江淮三方勢力</text>
+
+    <!-- 標題 -->
+    <text x="600" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#5d4037">本章人物關係</text>
+    <text x="600" y="50" text-anchor="middle" font-size="12" fill="#888">綠線：盟友/師徒  紅線：敵對/交鋒  橘線：嫁禍/利用</text>
+
+    <!-- 少帥國 -->
+    <g>
+      <circle cx="200" cy="160" r="36" fill="#27ae60" stroke="#fff" stroke-width="3"/>
+      <text x="200" y="166" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">寇仲</text>
+      <text x="200" y="210" text-anchor="middle" font-size="11" fill="#1b5e20">扮古俊 · 帥船指揮</text>
+
+      <circle cx="120" cy="290" r="28" fill="#66bb6a" stroke="#fff" stroke-width="3"/>
+      <text x="120" y="295" text-anchor="middle" font-size="12" fill="#fff">陳長林</text>
+      <text x="120" y="330" text-anchor="middle" font-size="10" fill="#1b5e20">船隊 · 風向參謀</text>
+
+      <circle cx="280" cy="290" r="28" fill="#66bb6a" stroke="#fff" stroke-width="3"/>
+      <text x="280" y="295" text-anchor="middle" font-size="12" fill="#fff">卜天志</text>
+      <text x="280" y="330" text-anchor="middle" font-size="10" fill="#1b5e20">掌舵 · 煙霧戰</text>
+
+      <circle cx="200" cy="410" r="36" fill="#27ae60" stroke="#fff" stroke-width="3"/>
+      <text x="200" y="416" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">徐子陵</text>
+      <text x="200" y="458" text-anchor="middle" font-size="11" fill="#1b5e20">蜀道金牛道 · 重傷</text>
+      <text x="200" y="473" text-anchor="middle" font-size="10" fill="#888">《長生訣》＋和氏璧</text>
+
+      <!-- 寇仲 ↔ 副手 -->
+      <line x1="170" y1="180" x2="138" y2="265" stroke="#27ae60" stroke-width="2"/>
+      <line x1="230" y1="180" x2="262" y2="265" stroke="#27ae60" stroke-width="2"/>
+      <!-- 寇仲 ↔ 徐子陵 (兄弟) -->
+      <line x1="200" y1="200" x2="200" y2="370" stroke="#27ae60" stroke-width="3" stroke-dasharray="6,4"/>
+      <text x="215" y="290" font-size="11" fill="#1b5e20" font-style="italic">兄弟</text>
+    </g>
+
+    <!-- 花間派 -->
+    <g>
+      <circle cx="600" cy="160" r="36" fill="#9b59b6" stroke="#fff" stroke-width="3"/>
+      <text x="600" y="166" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">石之軒</text>
+      <text x="600" y="210" text-anchor="middle" font-size="11" fill="#6a1b9a">邪王 · 花間派宗師</text>
+      <text x="600" y="225" text-anchor="middle" font-size="10" fill="#888">（本章僅提及，未現身）</text>
+
+      <circle cx="500" cy="320" r="34" fill="#ab47bc" stroke="#fff" stroke-width="3"/>
+      <text x="500" y="326" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">侯希白</text>
+      <text x="500" y="368" text-anchor="middle" font-size="11" fill="#6a1b9a">花間派傳人</text>
+      <text x="500" y="383" text-anchor="middle" font-size="10" fill="#888">美人扇 · 卸力魔功</text>
+
+      <circle cx="700" cy="320" r="32" fill="#ba68c8" stroke="#fff" stroke-width="3"/>
+      <text x="700" y="326" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">尤鳥倦</text>
+      <text x="700" y="365" text-anchor="middle" font-size="11" fill="#6a1b9a">聖極門 · 倒行逆施</text>
+      <text x="700" y="380" text-anchor="middle" font-size="10" fill="#888">邪道八大高手榜末</text>
+
+      <!-- 石之軒 ↔ 侯希白 (師徒) -->
+      <line x1="572" y1="186" x2="525" y2="290" stroke="#27ae60" stroke-width="2.5" marker-end="url(#arr-friend)"/>
+      <text x="528" y="240" font-size="11" fill="#1b5e20" font-style="italic">師父</text>
+
+      <!-- 徐子陵 ↔ 侯希白 (棧道惡鬥) -->
+      <path d="M 240 410 Q 360 410 470 350" stroke="#c0392b" stroke-width="3" fill="none" marker-end="url(#arr-foe)"/>
+      <text x="350" y="430" font-size="12" fill="#b71c1c" font-weight="bold">棧道惡鬥 · 兩人皆傷</text>
+
+      <!-- 徐子陵 ↔ 尤鳥倦 (繼起遭遇) -->
+      <path d="M 235 425 Q 460 480 670 350" stroke="#c0392b" stroke-width="2" stroke-dasharray="8,4" fill="none" marker-end="url(#arr-foe)"/>
+      <text x="450" y="500" font-size="11" fill="#b71c1c">續：徐子陵重傷狀態下撞上尤鳥倦</text>
+    </g>
+
+    <!-- 江淮三方 -->
+    <g>
+      <circle cx="1000" cy="160" r="34" fill="#c0392b" stroke="#fff" stroke-width="3"/>
+      <text x="1000" y="166" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">杜伏威</text>
+      <text x="1000" y="208" text-anchor="middle" font-size="11" fill="#b71c1c">江淮霸主</text>
+      <text x="1000" y="222" text-anchor="middle" font-size="10" fill="#888">攻江都的主謀</text>
+
+      <circle cx="900" cy="320" r="30" fill="#e74c3c" stroke="#fff" stroke-width="3"/>
+      <text x="900" y="326" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">陳盛</text>
+      <text x="900" y="362" text-anchor="middle" font-size="11" fill="#b71c1c">江淮水師統領</text>
+      <text x="900" y="377" text-anchor="middle" font-size="10" fill="#888">120 艘船 · 帥船</text>
+
+      <circle cx="1100" cy="320" r="32" fill="#e67e22" stroke="#fff" stroke-width="3"/>
+      <text x="1100" y="326" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">沈綸</text>
+      <text x="1100" y="362" text-anchor="middle" font-size="11" fill="#e65100">江都守將 · 替罪</text>
+      <text x="1100" y="377" text-anchor="middle" font-size="10" fill="#888">將被嫁禍對象</text>
+
+      <circle cx="1100" cy="440" r="26" fill="#e67e22" stroke="#fff" stroke-width="3"/>
+      <text x="1100" y="446" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">古俊</text>
+      <text x="1100" y="478" text-anchor="middle" font-size="10" fill="#e65100">長槍郎 · 寇仲冒充</text>
+
+      <!-- 杜伏威 → 陳盛 (派遣) -->
+      <line x1="975" y1="186" x2="918" y2="295" stroke="#c0392b" stroke-width="2" marker-end="url(#arr-foe)"/>
+      <text x="918" y="240" font-size="11" fill="#b71c1c" font-style="italic">派遣</text>
+      <!-- 杜伏威 → 沈綸 (盟友兼) -->
+      <line x1="1025" y1="186" x2="1080" y2="295" stroke="#e67e22" stroke-width="2" stroke-dasharray="4,3"/>
+      <text x="1080" y="240" font-size="11" fill="#e65100" font-style="italic">名義盟友</text>
+      <!-- 沈綸 → 古俊 (主僕) -->
+      <line x1="1100" y1="350" x2="1100" y2="415" stroke="#e67e22" stroke-width="2"/>
+
+      <!-- 寇仲 → 陳盛 (奇襲) 跨區 -->
+      <path d="M 236 160 Q 580 110 866 320" stroke="#c0392b" stroke-width="3" fill="none" marker-end="url(#arr-foe)"/>
+      <text x="540" y="105" font-size="12" fill="#b71c1c" font-weight="bold">長江夜襲 · 擊潰陳盛船隊</text>
+
+      <!-- 寇仲 → 古俊 (冒充) -->
+      <path d="M 236 175 Q 700 540 1075 458" stroke="#e67e22" stroke-width="2.5" stroke-dasharray="10,4" fill="none" marker-end="url(#arr-neutral)"/>
+      <text x="700" y="525" font-size="11" fill="#e65100" font-style="italic">冒充身份 · 嫁禍</text>
+    </g>
+  </svg>
+
+  <!-- ============================================== -->
+  <!-- 西線地圖 -->
+  <!-- ============================================== -->
+  <h2>② 西線 · 蜀道金牛道（徐子陵苦戰）</h2>
+  <p class="meta">徐子陵北上入川，與花間派傳人侯希白在金牛道盤山棧道惡鬥。地點推測為今 <b>四川廣元朝天區明月峽</b> 一帶（古金牛道險段）。徐子陵兩拳借棧道地利逼退侯希白，但自身重傷療息近五個時辰未復，又撞上邪道八大高手「倒行逆施」尤鳥倦。</p>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#27ae60"></span>徐子陵（我方）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#9b59b6"></span>侯希白（花間派）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>尤鳥倦（邪道）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>古今地名 / 城</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px solid #5d4037"></span>金牛道（蜀道主線）</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px dashed #c0392b"></span>侯希白入川方向</div>
+  </div>
+
+  <div id="map-west" class="map-frame"></div>
+
+  <!-- ============================================== -->
+  <!-- 東線地圖 -->
+  <!-- ============================================== -->
+  <h2>③ 東線 · 長江夜襲（寇仲嫁禍）</h2>
+  <p class="meta">寇仲扮成沈綸帳下「長槍郎」古俊，率 7 艘戰船自六合附近支流出擊，趁陳盛江淮水師（30 戰船 + 90 貨船）於黃昏離六合東進江都途中夜襲。雙管齊下：突襲帥船 + 六艘分散打擾 + 煙霧+石灰+火箭+投石機。事後棄船借水遁。</p>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#27ae60"></span>寇仲我方船隊（7 艘）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>陳盛江淮水師（120 艘）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>沈綸江都 / 古俊（嫁禍對象）</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px solid #c0392b"></span>陳盛船隊行進路線（六合→江都）</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px solid #27ae60"></span>寇仲奇襲路徑</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px dashed #6a1b9a"></span>煙霧戰場範圍</div>
+  </div>
+
+  <div id="map-east" class="map-frame"></div>
+
+  <!-- ============================================== -->
+  <!-- 古今對照表 -->
+  <!-- ============================================== -->
+  <h2>④ 古今地名對照</h2>
+  <table>
+    <tr><th>小說地名</th><th>現代位置</th><th>說明</th></tr>
+    <tr><td>金牛道（棧道）</td><td>四川廣元朝天區明月峽 (32.66°N, 105.98°E)</td><td>古蜀道四大幹線之一，自漢中越米倉/秦嶺入蜀，盤山棧道險段在朝天明月峽</td></tr>
+    <tr><td>蜀（川）</td><td>今四川盆地（成都 30.66°N, 104.06°E）</td><td>侯希白「往前走」入川目的地</td></tr>
+    <tr><td>漢中</td><td>陝西漢中市 (33.17°N, 107.05°E)</td><td>金牛道北端，由此入川</td></tr>
+    <tr><td>六合</td><td>江蘇南京六合區 (32.33°N, 118.82°E)</td><td>陳盛江淮水師出發地</td></tr>
+    <tr><td>江都</td><td>江蘇揚州江都區 (32.44°N, 119.56°E)</td><td>陳盛目標、沈綸守城</td></tr>
+    <tr><td>大江</td><td>長江下游 揚州段</td><td>夜襲戰場，戰船航行兩個時辰由六合到江都</td></tr>
+    <tr><td>支流伏擊點</td><td>長江北岸 儀征/邗江一帶（推測 32.40°N, 119.10°E）</td><td>寇仲 7 戰船自隱蔽支流出擊</td></tr>
+  </table>
+
+  <p class="meta" style="margin-top:30px">資料來源：黃易《大唐雙龍傳》卷 23 第 7 章「嫁禍東吳」全文。古地名以小說情節推測，並非精準史地復原。底圖：OpenStreetMap / CARTO。</p>
+</div>
+
+<script>
+/* =====================================================================
+   西線地圖 · 蜀道金牛道
+   ===================================================================== */
+const mapW = L.map('map-west').setView([32.5, 106.5], 7);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution:'© OpenStreetMap / CARTO',
+  maxZoom:18, subdomains:'abcd',
+}).addTo(mapW);
+
+// 繁體 地理標籤
+const geoW = [
+  { name:'漢中',  lat:33.17, lon:107.05, cls:'geo-label-city' },
+  { name:'寧強',  lat:32.94, lon:106.23, cls:'geo-label-city' },
+  { name:'勉縣',  lat:33.17, lon:106.68, cls:'geo-label-city' },
+  { name:'廣元',  lat:32.27, lon:105.84, cls:'geo-label-city' },
+  { name:'劍閣',  lat:31.91, lon:105.50, cls:'geo-label-city' },
+  { name:'梓潼',  lat:31.66, lon:105.19, cls:'geo-label-city' },
+  { name:'成都',  lat:30.66, lon:104.06, cls:'geo-label-city' },
+  { name:'秦嶺',  lat:33.80, lon:106.50, cls:'geo-label-mountain' },
+  { name:'大巴山', lat:32.50, lon:107.50, cls:'geo-label-mountain' },
+  { name:'嘉陵江', lat:32.20, lon:105.70, cls:'geo-label-river' },
+];
+geoW.forEach(g => {
+  L.marker([g.lat,g.lon], {
+    icon: L.divIcon({ className:'', html:`<span class="${g.cls}">${g.name}</span>`, iconSize:[60,16], iconAnchor:[30,8] }),
+    interactive:false,
+  }).addTo(mapW);
+});
+
+// 金牛道主線（漢中→寧強→朝天→廣元→劍閣→梓潼→成都）
+L.polyline([
+  [33.17,107.05],[33.17,106.68],[32.94,106.23],[32.66,105.98],
+  [32.27,105.84],[32.16,105.84],[31.91,105.50],[31.66,105.19],[30.66,104.06]
+], { color:'#5d4037', weight:4, opacity:0.7, dashArray:'2,4' })
+ .bindPopup('<b>金牛道</b><br>古蜀道四大幹線之一，由漢中入蜀的盤山棧道。')
+ .addTo(mapW);
+
+// 棧道惡鬥地點（朝天明月峽，推測）
+const battleW = [32.66, 105.98];
+L.circleMarker(battleW, {
+  radius:18, color:'#fff', fillColor:'#c0392b', fillOpacity:0.85, weight:4
+}).bindPopup(`
+  <h3>金牛道棧道惡鬥</h3>
+  <p><span class="tag tag-our">徐子陵</span> vs <span class="tag tag-enemy">侯希白</span></p>
+  <p>盤山險道，狹路無可閃避。侯希白美人扇借力打力，徐子陵以螺旋勁逐漸聚束破之，兩拳硬拚兩人皆傷退五步。徐子陵借《長生訣》＋和氏璧先天真氣自療，遠走十里始癱坐噴血。</p>
+`).bindTooltip('棧道惡鬥點（明月峽推測）', { permanent:true, direction:'top', offset:[0,-12], className:'place-label' }).addTo(mapW);
+
+// 徐子陵療傷後遇尤鳥倦
+const yuPoint = [32.55, 105.92];
+L.circleMarker(yuPoint, {
+  radius:13, color:'#fff', fillColor:'#9b59b6', fillOpacity:0.85, weight:3
+}).bindPopup(`
+  <h3>遇邪道尤鳥倦</h3>
+  <p><span class="tag tag-trap">伏筆</span> 徐子陵療息近五個時辰，內傷未復，現可使四五成功力。</p>
+  <p>「倒行逆施」<b>尤鳥倦</b> 自入川方向迅速掠至，邪道八大高手排末，聖極門忤逆傳人。冤家路窄。</p>
+`).bindTooltip('續遭尤鳥倦', { permanent:true, direction:'bottom', offset:[0,16], className:'place-label' }).addTo(mapW);
+
+// 棧道惡鬥 → 徐子陵逃離方向（往成都方向約十里）
+L.polyline([battleW, [32.60, 105.95], yuPoint], {
+  color:'#27ae60', weight:5, opacity:0.85
+}).bindPopup('徐子陵負傷遠走近十里，方坐地噴血').addTo(mapW);
+
+// 侯希白入川方向（自蜀往北→反方向，他要繼續往前走入川）
+L.polyline([[battleW[0]+0.05, battleW[1]+0.08],[battleW[0]+0.5, battleW[1]+0.5]], {
+  color:'#c0392b', weight:4, opacity:0.7, dashArray:'10,6'
+}).bindPopup('侯希白：「在下當然是往前走」（繼續入川）').addTo(mapW);
+
+/* =====================================================================
+   東線地圖 · 長江夜襲
+   ===================================================================== */
+const mapE = L.map('map-east').setView([32.40, 119.15], 10);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution:'© OpenStreetMap / CARTO',
+  maxZoom:18, subdomains:'abcd',
+}).addTo(mapE);
+
+// 繁體 地理標籤
+const geoE = [
+  { name:'六合', lat:32.33, lon:118.82, cls:'geo-label-city' },
+  { name:'南京（江寧）', lat:32.04, lon:118.78, cls:'geo-label-city' },
+  { name:'江都', lat:32.44, lon:119.56, cls:'geo-label-city' },
+  { name:'揚州（江都郡）', lat:32.40, lon:119.41, cls:'geo-label-city' },
+  { name:'儀征', lat:32.27, lon:119.18, cls:'geo-label-city' },
+  { name:'大江（長江）', lat:32.22, lon:119.20, cls:'geo-label-river' },
+];
+geoE.forEach(g => {
+  L.marker([g.lat,g.lon], {
+    icon: L.divIcon({ className:'', html:`<span class="${g.cls}">${g.name}</span>`, iconSize:[80,16], iconAnchor:[40,8] }),
+    interactive:false,
+  }).addTo(mapE);
+});
+
+// 陳盛水師起點（六合）
+L.circleMarker([32.33, 118.82], {
+  radius:16, color:'#fff', fillColor:'#c0392b', fillOpacity:0.85, weight:4
+}).bindPopup(`
+  <h3>六合 · 陳盛水師啟航</h3>
+  <p><span class="tag tag-enemy">江淮水師</span> 杜伏威帳下統領 <b>陳盛</b>。</p>
+  <p>大小船隻 120 餘艘（30 艘戰船 + 90 餘艘輜重糧船），黃昏離六合東進江都。</p>
+`).bindTooltip('六合啟航（陳盛 120 艘船）', { permanent:true, direction:'left', offset:[-12,0], className:'place-label' }).addTo(mapE);
+
+// 江都（目標 + 沈綸守城 = 嫁禍對象）
+L.circleMarker([32.44, 119.56], {
+  radius:16, color:'#fff', fillColor:'#e67e22', fillOpacity:0.85, weight:4
+}).bindPopup(`
+  <h3>江都 · 沈綸守城</h3>
+  <p><span class="tag tag-third">嫁禍對象</span> 沈綸 — 杜伏威名義盟友兼對手。</p>
+  <p>陳盛船隊原目的地（攻江都的後勤糧道）。船隊出事 → 杜伏威先鋒失援 → 怒火必落沈綸。</p>
+`).bindTooltip('江都（沈綸 = 嫁禍對象）', { permanent:true, direction:'right', offset:[12,0], className:'place-label' }).addTo(mapE);
+
+// 寇仲伏擊出擊點（六合東約 30km 支流）
+const ambush = [32.40, 119.05];
+L.circleMarker(ambush, {
+  radius:14, color:'#fff', fillColor:'#27ae60', fillOpacity:0.85, weight:4
+}).bindPopup(`
+  <h3>寇仲 7 戰船伏擊出擊點</h3>
+  <p><span class="tag tag-our">我方</span> 隱藏支流密林處，貼河岸停靠。寇仲扮古俊，與陳長林、卜天志卓立船板。</p>
+  <p>當晚東南風 — 若緊隨敵尾順風殺下，雖萬無一失但變大戰，難擊帥艦；故改採突襲帥船 + 六艘分散惑敵。</p>
+`).bindTooltip('伏擊出擊點（支流密林）', { permanent:true, direction:'top', offset:[0,-12], className:'place-label' }).addTo(mapE);
+
+// 偷襲戰場（大江中游、帥船所在）
+const battleE = [32.32, 119.20];
+L.circleMarker(battleE, {
+  radius:20, color:'#fff', fillColor:'#b71c1c', fillOpacity:0.7, weight:4
+}).bindPopup(`
+  <h3>大江夜襲戰場</h3>
+  <p><span class="tag tag-enemy">陳盛帥船</span> 三艘樓船級巨艦，中間為帥艦。</p>
+  <p>火箭激射、石灰撒散、煙霧順東南風下罩、投石機擊船身。寇仲蒙沖鬥艦從支流衝出，順流全速逼帥艦。</p>
+`).bindTooltip('帥船夜襲戰', { permanent:true, direction:'top', offset:[0,-14], className:'place-label' }).addTo(mapE);
+
+// 陳盛船隊行進線（六合 → 江都）
+L.polyline([[32.33, 118.82],[32.32, 119.00],[32.32, 119.20],[32.35, 119.40],[32.44, 119.56]], {
+  color:'#c0392b', weight:5, opacity:0.85
+}).bindPopup('江淮水師東進路線（黃昏出發，原計兩個時辰抵江都）').addTo(mapE);
+
+// 寇仲奇襲路徑（支流→帥船→棄船遁）
+L.polyline([ambush, [32.36, 119.10], battleE], {
+  color:'#27ae60', weight:5, opacity:0.9
+}).bindPopup('寇仲蒙沖鬥艦突襲帥艦路徑').addTo(mapE);
+
+// 其他六艘分散
+L.polyline([ambush, [32.40, 119.18],[32.45, 119.30]], {
+  color:'#27ae60', weight:3, opacity:0.6, dashArray:'8,4'
+}).bindPopup('其他六艘戰船分散開出，惑敵').addTo(mapE);
+
+// 煙霧範圍（東南風 → 西北→東南向）
+L.rectangle([[32.25, 119.10],[32.42, 119.32]], {
+  color:'#6a1b9a', weight:2, fillOpacity:0.08, dashArray:'10,6'
+}).bindPopup('<b>煙霧戰場範圍</b><br>東南風順下，煙霧+石灰罩向帥艦及後方四艘輕艦').addTo(mapE);
+
+// 棄船借水遁方向
+L.polyline([battleE, [32.30, 119.10], [32.25, 118.95]], {
+  color:'#27ae60', weight:3, opacity:0.7, dashArray:'4,6'
+}).bindPopup('戰罷棄船借水而遁').addTo(mapE);
+
+</script>
+</body>
+</html>
