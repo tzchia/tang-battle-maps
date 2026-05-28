@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>大唐雙龍傳 · 卷 23 第 12 章 · 天下形勢</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  body { font-family:"PingFang TC","Noto Sans CJK TC","Noto Serif TC",serif; margin:0; background:#fdfaf3; color:#2a2a2a; line-height:1.65; }
+  .container { max-width:1200px; margin:0 auto; padding:24px 20px; }
+  h1 { color:#8b0000; border-bottom:3px solid #d4a356; padding-bottom:10px; margin-bottom:4px; font-size:26px; }
+  h2 { color:#5d4037; margin-top:40px; font-size:20px; border-left:5px solid #d4a356; padding-left:10px; }
+  h3 { color:#8b6914; margin-top:24px; font-size:16px; }
+  .meta { color:#888; font-size:13px; }
+  .back { color:#c0392b; text-decoration:none; border-bottom:1px dashed; }
+  .map-frame { width:100%; height:620px; border:3px solid #8b6914; border-radius:8px; margin:14px 0; }
+  .mini-map { width:100%; height:480px; border:3px solid #8b6914; border-radius:8px; margin:14px 0; }
+  .legend { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:6px; background:#fff; padding:12px 16px; border-radius:6px; border:1px solid #d4a356; margin:10px 0; font-size:13px; }
+  .legend-item { display:flex; align-items:center; }
+  .legend-dot { display:inline-block; width:14px; height:14px; border-radius:50%; margin-right:8px; border:2px solid #fff; box-shadow:0 0 0 1px #888; flex-shrink:0; }
+  .legend-line { display:inline-block; width:24px; height:0; margin-right:8px; flex-shrink:0; }
+  .key-points { background:#e8eaf6; border-left:5px solid #283593; padding:14px 18px; margin:14px 0; border-radius:0 6px 6px 0; }
+  .key-points h3 { margin-top:0; color:#283593; }
+  .key-points ol { padding-left:22px; }
+  .summary-box { background:#fff3e0; border-left:5px solid #e65100; padding:14px 18px; margin:14px 0; border-radius:0 6px 6px 0; }
+  .summary-box h3 { margin-top:0; color:#e65100; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+  th, td { border:1px solid #d4a356; padding:6px 10px; text-align:left; vertical-align:top; }
+  th { background:#fff3e0; color:#8b0000; }
+  tr:nth-child(even) td { background:#fffbe6; }
+  .place-label { background:rgba(255,243,224,0.95); border:1px solid #e65100; color:#e65100; font-weight:600; font-size:12px; padding:2px 8px; border-radius:3px; }
+  .force-label { background:rgba(255,255,255,0.92); color:#222; font-weight:700; font-size:13px; padding:3px 10px; border-radius:3px; border-width:2px; border-style:solid; white-space:nowrap; }
+  .geo-label-city { background:rgba(255,255,255,0.7); color:#424242; font-size:11px; padding:1px 4px; border-radius:2px; white-space:nowrap; }
+  .geo-label-river { background:rgba(255,255,255,0.7); color:#1565c0; font-style:italic; font-size:11px; padding:1px 4px; border-radius:2px; white-space:nowrap; }
+  .leaflet-popup-content h3 { margin:0 0 6px 0; color:#8b0000; font-size:14px; }
+  .leaflet-popup-content .tag { display:inline-block; padding:1px 6px; border-radius:3px; font-size:11px; margin-right:4px; font-weight:bold; }
+  .tag-tang { background:#ffe0b2; color:#bf360c; }
+  .tag-magic { background:#c8e6c9; color:#1b5e20; }
+  .tag-zheng { background:#bbdefb; color:#0d47a1; }
+  .tag-xian { background:#d1c4e9; color:#311b92; }
+  .tag-our { background:#fff9c4; color:#827717; }
+  .character-chart { width:100%; height:auto; background:#fffbe6; border:2px solid #8b6914; border-radius:8px; margin:10px 0; display:block; }
+</style>
+</head>
+<body>
+<div class="container">
+  <p><a href="index.html" class="back">← 回到地圖集索引</a></p>
+  <h1>卷 23 第 12 章 · 天下形勢</h1>
+  <p class="meta">寇仲與部下酒席分析隋末群雄總局，是後續幾十卷戰略的「藍圖章」。徐子陵入蜀偶遇師妃暄、確認師妃暄入川目的（為李世民鋪路）。</p>
+
+  <div class="key-points">
+    <h3>📌 這章你只要記住六件事</h3>
+    <ol>
+      <li><b>淺水原慘敗</b>：兩個月前西秦薛舉 vs 唐軍。李世民「突然抱恙」（推測陰癸派婠婠下手），由劉文靜+殷開山代指揮，被薛舉精銳輕騎背後包抄。<b>唐軍損失近半，李世民晉陽起兵以來首次吃敗仗</b>。</li>
+      <li><b>薛舉暴死</b>：戰勝後幾個時辰前還在巡視前線，忽然「病死」。寇仲斷定是楊虛彥下手（「於千軍萬馬中取首級若探囊」）。子薛仁杲繼位 — 驕橫不合眾將，西秦盛極而衰。</li>
+      <li><b>師妃暄為何入川</b>：寇仲一拍即明 — <b>為李世民鋪路</b>。預測薛仁杲必敗於李世民，李軌投降，李閥取得隴右後將兵出關中；師妃暄先到巴蜀（成都）佈局，免巴蜀成李閥背後漏洞。</li>
+      <li><b>北方僵局</b>：劉武周/宋金剛不南下，因突厥還不肯與李淵撕破臉 + 竇建德牽制。</li>
+      <li><b>瓦崗軍分裂</b>：李靖+魏徵勸李密歸唐 → 徐世績、沉落雁主戰反對 → 李密軍分裂成主降/主戰。寇仲：「至少他只派人去說幾句話，多麼划算，我們要好好學習。」</li>
+      <li><b>師妃暄與徐子陵的對話</b>：徐子陵入蜀只為提醒石青璇小心楊虛彥，不問世事。師妃暄評語：「若沒有寇仲，徐子陵只會是閑雲野鶴」。</li>
+    </ol>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- 全國勢力分布地圖 -->
+  <!-- ============================================== -->
+  <h2>① 隋末群雄勢力分布總圖（寇仲視角）</h2>
+  <p class="meta">本章寇仲酒酣論天下時提到的全部勢力。涵蓋唐閥（橘）、西秦薛家（紅）、瓦崗李密（藍）、王世充（紫）、竇建德（深綠）、劉武周（褐）、蕭銑（青）、杜伏威（金黃）、李軌（淡綠）、少帥國（黃）、突厥（灰）。</p>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>唐 · 李淵李世民（長安）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>西秦 · 薛舉→薛仁杲（折墌）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#1976d2"></span>瓦崗 · 李密（東至海、西抵汝州）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#7b1fa2"></span>王世充（洛陽）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#1b5e20"></span>竇建德（樂壽 · 河北）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#795548"></span>劉武周·宋金剛（太原 · 背突厥）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#00838f"></span>蕭銑（江陵）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#fbc02d"></span>杜伏威（江都）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#aed581"></span>李軌（涼州 · 覬覦秦隴）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#827717"></span>少帥國（寇仲）</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px dashed #c0392b"></span>薛舉 → 淺水原 進攻線</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px solid #e67e22"></span>李閥潛在西征線（金川出巴蜀）</div>
+  </div>
+
+  <div id="map-cn" class="map-frame"></div>
+
+  <!-- ============================================== -->
+  <!-- 淺水原戰役戰術圖 -->
+  <!-- ============================================== -->
+  <h2>② 淺水原戰役 · 戰術復盤</h2>
+  <p class="meta">兩個月前唐軍敗於薛舉的關鍵戰。本章只用幾行字敘述，這裡把它畫出來：薛舉自隴右涇州出 → 沿涇水東進殺至豳川/岐州 → 李淵封李世民為西討元帥屯高墌 → <b>李世民「抱恙」</b>由劉殷代指揮 → 薛舉以<b>精銳輕騎從背後包抄</b>於淺水原。</p>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>薛舉主力 / 輕騎</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>唐軍 · 高墌城</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px solid #c0392b"></span>薛舉沿涇水東進</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px dashed #b71c1c"></span>薛舉精銳輕騎背後包抄</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px solid #e67e22"></span>李世民退回長安</div>
+  </div>
+
+  <div id="map-qss" class="mini-map"></div>
+
+  <!-- ============================================== -->
+  <!-- 群雄關係網 -->
+  <!-- ============================================== -->
+  <h2>③ 群雄關係網 · 派系與牽制</h2>
+  <p class="meta">本章寇仲分析的核心：北方為何沒人南下？瓦崗為何分裂？李閥為何要先取隴右？</p>
+
+  <svg class="character-chart" viewBox="0 0 1200 640" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="ar-friend" markerWidth="12" markerHeight="12" refX="11" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#27ae60"/></marker>
+      <marker id="ar-foe" markerWidth="12" markerHeight="12" refX="11" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#c0392b"/></marker>
+      <marker id="ar-watch" markerWidth="12" markerHeight="12" refX="11" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#e67e22"/></marker>
+      <marker id="ar-back" markerWidth="12" markerHeight="12" refX="11" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#7b1fa2"/></marker>
+    </defs>
+    <text x="600" y="28" text-anchor="middle" font-size="20" font-weight="bold" fill="#5d4037">群雄關係網（卷 23 第 12 章時點）</text>
+    <text x="600" y="50" text-anchor="middle" font-size="12" fill="#888">綠=支援/暗助 ｜ 紅=敵對 ｜ 橘=牽制/觀望 ｜ 紫=陰癸派幕後</text>
+
+    <!-- 北方軸 -->
+    <g>
+      <rect x="60" y="80" width="180" height="120" rx="10" fill="#fff3e0" stroke="#e67e22" stroke-width="2.5"/>
+      <text x="150" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="#bf360c">唐 · 李閥</text>
+      <text x="150" y="130" text-anchor="middle" font-size="11" fill="#bf360c">李淵 / 李世民</text>
+      <text x="150" y="148" text-anchor="middle" font-size="11" fill="#bf360c">長安 (關中)</text>
+      <text x="150" y="172" text-anchor="middle" font-size="10" fill="#888">大將：李靖</text>
+      <text x="150" y="188" text-anchor="middle" font-size="10" fill="#888">通天手段 · 擅收買人心</text>
+    </g>
+
+    <g>
+      <rect x="290" y="80" width="180" height="120" rx="10" fill="#ffebee" stroke="#c0392b" stroke-width="2.5"/>
+      <text x="380" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="#b71c1c">西秦 · 薛家</text>
+      <text x="380" y="130" text-anchor="middle" font-size="11" fill="#b71c1c">薛舉 ✝ → 薛仁杲</text>
+      <text x="380" y="148" text-anchor="middle" font-size="11" fill="#b71c1c">折墌 (隴右)</text>
+      <text x="380" y="172" text-anchor="middle" font-size="10" fill="#888">將：宗羅候</text>
+      <text x="380" y="188" text-anchor="middle" font-size="10" fill="#888">驕橫不合 · 由盛轉衰</text>
+    </g>
+
+    <g>
+      <rect x="520" y="80" width="180" height="120" rx="10" fill="#efebe9" stroke="#795548" stroke-width="2.5"/>
+      <text x="610" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="#3e2723">劉武周 · 宋金剛</text>
+      <text x="610" y="130" text-anchor="middle" font-size="11" fill="#3e2723">太原 (晉陽)</text>
+      <text x="610" y="155" text-anchor="middle" font-size="11" fill="#888">背後：突厥</text>
+      <text x="610" y="178" text-anchor="middle" font-size="10" fill="#888">沒突厥不敢南下</text>
+      <text x="610" y="194" text-anchor="middle" font-size="10" fill="#888">受竇建德牽制</text>
+    </g>
+
+    <g>
+      <rect x="750" y="80" width="180" height="120" rx="10" fill="#eceff1" stroke="#555" stroke-width="2.5"/>
+      <text x="840" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">突厥</text>
+      <text x="840" y="135" text-anchor="middle" font-size="11" fill="#333">幕後主謀</text>
+      <text x="840" y="158" text-anchor="middle" font-size="10" fill="#888">不肯與李淵撕破臉</text>
+      <text x="840" y="175" text-anchor="middle" font-size="10" fill="#888">暗供薛舉裝備戰馬</text>
+      <text x="840" y="192" text-anchor="middle" font-size="10" fill="#888">郭子和/梁師都都看臉色</text>
+    </g>
+
+    <g>
+      <rect x="980" y="80" width="180" height="120" rx="10" fill="#e8f5e9" stroke="#1b5e20" stroke-width="2.5"/>
+      <text x="1070" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="#1b5e20">竇建德</text>
+      <text x="1070" y="130" text-anchor="middle" font-size="11" fill="#1b5e20">樂壽 (河北)</text>
+      <text x="1070" y="155" text-anchor="middle" font-size="11" fill="#888">從不賣突厥的賬</text>
+      <text x="1070" y="178" text-anchor="middle" font-size="10" fill="#888">牽制劉武周</text>
+      <text x="1070" y="194" text-anchor="middle" font-size="10" fill="#888">獨立勢力</text>
+    </g>
+
+    <!-- 中原軸 -->
+    <g>
+      <rect x="290" y="260" width="180" height="120" rx="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="2.5"/>
+      <text x="380" y="290" text-anchor="middle" font-size="16" font-weight="bold" fill="#0d47a1">瓦崗 · 李密</text>
+      <text x="380" y="310" text-anchor="middle" font-size="11" fill="#0d47a1">東至海 西抵汝州</text>
+      <text x="380" y="326" text-anchor="middle" font-size="11" fill="#0d47a1">南至江 北控魏郡</text>
+      <text x="380" y="350" text-anchor="middle" font-size="10" fill="#b71c1c">⚠ 分裂中</text>
+      <text x="380" y="366" text-anchor="middle" font-size="10" fill="#888">主降：魏徵 ｜ 主戰：徐世績·沉落雁</text>
+    </g>
+
+    <g>
+      <rect x="520" y="260" width="180" height="120" rx="10" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2.5"/>
+      <text x="610" y="290" text-anchor="middle" font-size="16" font-weight="bold" fill="#4a148c">王世充</text>
+      <text x="610" y="310" text-anchor="middle" font-size="11" fill="#4a148c">洛陽</text>
+      <text x="610" y="335" text-anchor="middle" font-size="10" fill="#888">用人惟私 心胸狹窄</text>
+      <text x="610" y="352" text-anchor="middle" font-size="10" fill="#888">招降李密將：秦叔寶·程咬金·羅士信</text>
+      <text x="610" y="368" text-anchor="middle" font-size="10" fill="#888">「想殺少帥」傳出 → 諸將心寒</text>
+    </g>
+
+    <!-- 陰癸派 (中央) -->
+    <g>
+      <rect x="750" y="260" width="180" height="120" rx="10" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="3" stroke-dasharray="6,4"/>
+      <text x="840" y="290" text-anchor="middle" font-size="16" font-weight="bold" fill="#4a148c">陰癸派</text>
+      <text x="840" y="310" text-anchor="middle" font-size="11" fill="#4a148c">祝玉妍 · 婠婠</text>
+      <text x="840" y="335" text-anchor="middle" font-size="11" fill="#7b1fa2" font-weight="bold">幕後黑手</text>
+      <text x="840" y="354" text-anchor="middle" font-size="10" fill="#888">推測：使李世民「抱恙」</text>
+      <text x="840" y="370" text-anchor="middle" font-size="10" fill="#888">師妃暄追蹤目標</text>
+    </g>
+
+    <g>
+      <rect x="980" y="260" width="180" height="120" rx="10" fill="#fff9c4" stroke="#827717" stroke-width="2.5"/>
+      <text x="1070" y="290" text-anchor="middle" font-size="16" font-weight="bold" fill="#827717">少帥國</text>
+      <text x="1070" y="310" text-anchor="middle" font-size="11" fill="#827717">寇仲</text>
+      <text x="1070" y="335" text-anchor="middle" font-size="10" fill="#888">嫁禍杜伏威成功</text>
+      <text x="1070" y="352" text-anchor="middle" font-size="10" fill="#888">準備搶占南方</text>
+      <text x="1070" y="368" text-anchor="middle" font-size="10" fill="#888">「我們要趕快點部署」</text>
+    </g>
+
+    <!-- 南方軸 -->
+    <g>
+      <rect x="290" y="440" width="180" height="120" rx="10" fill="#e0f7fa" stroke="#00838f" stroke-width="2.5"/>
+      <text x="380" y="470" text-anchor="middle" font-size="16" font-weight="bold" fill="#006064">蕭銑</text>
+      <text x="380" y="490" text-anchor="middle" font-size="11" fill="#006064">江陵 (荊州)</text>
+      <text x="380" y="515" text-anchor="middle" font-size="10" fill="#888">南方無敵手</text>
+      <text x="380" y="532" text-anchor="middle" font-size="10" fill="#888">與杜伏威互為敵</text>
+      <text x="380" y="548" text-anchor="middle" font-size="10" fill="#888">若李閥兵出 → 可能與杜合作</text>
+    </g>
+
+    <g>
+      <rect x="520" y="440" width="180" height="120" rx="10" fill="#fff8e1" stroke="#fbc02d" stroke-width="2.5"/>
+      <text x="610" y="470" text-anchor="middle" font-size="16" font-weight="bold" fill="#f57f17">杜伏威</text>
+      <text x="610" y="490" text-anchor="middle" font-size="11" fill="#f57f17">江都 (江淮)</text>
+      <text x="610" y="515" text-anchor="middle" font-size="10" fill="#888">江淮霸主</text>
+      <text x="610" y="532" text-anchor="middle" font-size="10" fill="#b71c1c">⚠ 帥艦掉頭 → 找沈綸算帳</text>
+      <text x="610" y="548" text-anchor="middle" font-size="10" fill="#888">（嫁禍東吳已生效）</text>
+    </g>
+
+    <g>
+      <rect x="750" y="440" width="180" height="120" rx="10" fill="#f1f8e9" stroke="#aed581" stroke-width="2.5"/>
+      <text x="840" y="470" text-anchor="middle" font-size="16" font-weight="bold" fill="#558b2f">李軌</text>
+      <text x="840" y="490" text-anchor="middle" font-size="11" fill="#558b2f">涼州 (河西)</text>
+      <text x="840" y="515" text-anchor="middle" font-size="10" fill="#888">覬覦薛家秦、隴之地</text>
+      <text x="840" y="532" text-anchor="middle" font-size="10" fill="#888">薛舉死後動靜未明</text>
+      <text x="840" y="548" text-anchor="middle" font-size="10" fill="#888">寇仲：「將只剩投降一途」</text>
+    </g>
+
+    <g>
+      <rect x="980" y="440" width="180" height="120" rx="10" fill="#fafafa" stroke="#9e9e9e" stroke-width="2.5" stroke-dasharray="4,3"/>
+      <text x="1070" y="470" text-anchor="middle" font-size="16" font-weight="bold" fill="#424242">巴蜀（成都）</text>
+      <text x="1070" y="490" text-anchor="middle" font-size="11" fill="#424242">無主之地</text>
+      <text x="1070" y="515" text-anchor="middle" font-size="10" fill="#888">石青璇/徐子陵在此</text>
+      <text x="1070" y="532" text-anchor="middle" font-size="11" fill="#7b1fa2" font-weight="bold">師妃暄赴此鋪路</text>
+      <text x="1070" y="548" text-anchor="middle" font-size="10" fill="#888">寇仲頓悟此理由</text>
+    </g>
+
+    <!-- 連線 -->
+    <!-- 薛舉 vs 唐 (敵) -->
+    <line x1="290" y1="140" x2="240" y2="140" stroke="#c0392b" stroke-width="3" marker-end="url(#ar-foe)"/>
+    <text x="262" y="130" font-size="10" fill="#b71c1c" font-weight="bold">攻關中</text>
+    <!-- 突厥 → 薛舉 (暗助) -->
+    <line x1="750" y1="135" x2="470" y2="135" stroke="#27ae60" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#ar-friend)"/>
+    <text x="600" y="125" font-size="10" fill="#1b5e20" font-style="italic">暗供裝備戰馬</text>
+    <!-- 突厥 → 劉武周 (背景) -->
+    <line x1="750" y1="170" x2="700" y2="170" stroke="#27ae60" stroke-width="2.5"/>
+    <!-- 竇建德 → 劉武周 (牽制) -->
+    <line x1="980" y1="170" x2="700" y2="170" stroke="#e67e22" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#ar-watch)"/>
+    <text x="850" y="208" font-size="10" fill="#e65100" font-style="italic">牽制</text>
+    <!-- 陰癸派 → 李世民 (幕後) -->
+    <path d="M 750 290 Q 500 240 240 165" stroke="#7b1fa2" stroke-width="2.5" stroke-dasharray="2,4" fill="none" marker-end="url(#ar-back)"/>
+    <text x="430" y="232" font-size="10" fill="#4a148c" font-style="italic">推測使李世民抱恙</text>
+    <!-- 王世充 vs 李密 (敵) -->
+    <line x1="520" y1="320" x2="470" y2="320" stroke="#c0392b" stroke-width="3" marker-end="url(#ar-foe)"/>
+    <text x="495" y="312" font-size="10" fill="#b71c1c">爭中原</text>
+    <!-- 李靖+魏徵 → 李密 (招降) -->
+    <path d="M 150 200 Q 230 260 290 305" stroke="#27ae60" stroke-width="2.5" stroke-dasharray="6,3" fill="none" marker-end="url(#ar-friend)"/>
+    <text x="155" y="245" font-size="10" fill="#1b5e20" font-style="italic">李靖+魏徵勸降</text>
+    <!-- 寇仲 → 杜伏威 (嫁禍生效) -->
+    <line x1="1070" y1="380" x2="700" y2="440" stroke="#27ae60" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#ar-friend)"/>
+    <text x="880" y="408" font-size="10" fill="#1b5e20" font-style="italic">嫁禍生效</text>
+    <!-- 蕭銑 ↔ 杜伏威 (互敵→可能合作) -->
+    <line x1="470" y1="500" x2="520" y2="500" stroke="#c0392b" stroke-width="3"/>
+    <text x="485" y="492" font-size="10" fill="#b71c1c">敵</text>
+    <text x="478" y="588" font-size="10" fill="#e65100" font-style="italic">若李閥兵出 → 可能聯手</text>
+    <!-- 李軌 → 薛仁杲 (背後窺) -->
+    <path d="M 840 440 Q 700 380 470 200" stroke="#e67e22" stroke-width="2.5" stroke-dasharray="4,3" fill="none" marker-end="url(#ar-watch)"/>
+    <text x="700" y="395" font-size="10" fill="#e65100" font-style="italic">背後覬覦秦隴</text>
+    <!-- 師妃暄 → 巴蜀 (鋪路) -->
+    <path d="M 840 380 Q 920 410 1070 440" stroke="#7b1fa2" stroke-width="3" fill="none" marker-end="url(#ar-back)"/>
+    <text x="930" y="410" font-size="10" fill="#4a148c" font-style="italic">師妃暄為李世民鋪路</text>
+    <!-- 李閥 → 巴蜀 (潛在) -->
+    <path d="M 150 200 Q 600 600 980 500" stroke="#e67e22" stroke-width="2" stroke-dasharray="2,5" fill="none" marker-end="url(#ar-watch)"/>
+    <text x="300" y="630" font-size="10" fill="#e65100" font-style="italic">潛在路線：自金川出巴蜀 → 沿江東攻杜伏威</text>
+  </svg>
+
+  <!-- ============================================== -->
+  <!-- 寇仲推理鏈 -->
+  <!-- ============================================== -->
+  <h2>④ 寇仲的「天下形勢」推理鏈</h2>
+
+  <table>
+    <tr>
+      <th width="50">步驟</th>
+      <th>已知事實</th>
+      <th>寇仲的推論</th>
+    </tr>
+    <tr><td>1</td><td>李世民忽然「抱恙」</td><td>陰癸派下手，<b>八成是婠婠</b></td></tr>
+    <tr><td>2</td><td>師妃暄追陰癸派到合肥</td><td>就是要對付這件事</td></tr>
+    <tr><td>3</td><td>薛舉戰後幾個時辰前還在巡視</td><td>不是病死，<b>是被刺殺 — 楊虛彥乾的</b></td></tr>
+    <tr><td>4</td><td>薛仁杲驕橫，與諸將不合</td><td>西秦軍由盛轉衰</td></tr>
+    <tr><td>5</td><td>薛仁杲長於速戰、李世民長於穩守</td><td><b>薛仁杲必先小勝後大敗</b></td></tr>
+    <tr><td>6</td><td>李軌覬覦秦隴</td><td>李世民盡收隴右 → <b>李軌只剩投降一途</b></td></tr>
+    <tr><td>7</td><td>劉武周/竇建德/蕭銑/杜伏威各有牽制</td><td>北方暫不會南下 → 李閥可專注向東向南</td></tr>
+    <tr><td>8</td><td>陳老謀提：李閥若取蕭銑/杜伏威 → 必經巴蜀</td><td><b>「終於明白為何師妃暄會到西南來啦！」</b><br>師妃暄入川為李世民鋪路</td></tr>
+  </table>
+
+  <!-- ============================================== -->
+  <!-- 寇仲學到的兩件事 -->
+  <!-- ============================================== -->
+  <div class="summary-box">
+    <h3>寇仲在這章學到的兩件事（未來他會用）</h3>
+    <ol>
+      <li><b>「李小子真厲害，只派人去說幾句話，立令李密軍分裂成主降和主戰兩派，多麼划算，我們要好好學習」</b> — 心戰／離間術。後面寇仲確實這樣對付李閥。</li>
+      <li><b>李世民「穩守」克薛仁杲「速戰」</b> — 寇仲一向走快攻路線，這是他第一次承認「穩守」也是頂級兵法。後續對戰李世民時這成為心結。</li>
+    </ol>
+  </div>
+
+  <p class="meta" style="margin-top:30px">資料來源：黃易《大唐雙龍傳》卷 23 第 12 章「天下形勢」全文。地圖底圖：OpenStreetMap / CARTO。古今對照與勢力疆界為小說情節推測。</p>
+</div>
+
+<script>
+/* =====================================================================
+   全國勢力分布地圖
+   ===================================================================== */
+const mapCN = L.map('map-cn').setView([33.5, 110.0], 5);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution:'© OpenStreetMap / CARTO', maxZoom:18, subdomains:'abcd',
+}).addTo(mapCN);
+
+// 自然地理標籤
+const geoCN = [
+  { name:'黃河', lat:35.0, lon:113.0, cls:'geo-label-river' },
+  { name:'長江', lat:30.5, lon:113.5, cls:'geo-label-river' },
+  { name:'渭水', lat:34.4, lon:109.5, cls:'geo-label-river' },
+  { name:'涇水', lat:34.8, lon:108.0, cls:'geo-label-river' },
+  { name:'淮河', lat:33.0, lon:117.5, cls:'geo-label-river' },
+  { name:'秦嶺', lat:33.8, lon:107.5, cls:'geo-label-city' },
+];
+geoCN.forEach(g => {
+  L.marker([g.lat, g.lon], {
+    icon: L.divIcon({ className:'', html:`<span class="${g.cls}">${g.name}</span>`, iconSize:[60,16], iconAnchor:[30,8] }),
+    interactive:false,
+  }).addTo(mapCN);
+});
+
+// 勢力中心點 + 圓圈
+const forces = [
+  { name:'唐 · 長安',     short:'唐 · 長安',   lat:34.26, lon:108.94, color:'#e67e22', r:80, desc:'李淵李世民。本章背景：李世民剛戰敗淺水原退回長安。' },
+  { name:'西秦 · 折墌',   short:'西秦 · 薛仁杲', lat:34.83, lon:106.79, color:'#c0392b', r:60, desc:'薛舉暴死，子薛仁杲繼位。屯兵折墌城，準備守住戰果。' },
+  { name:'秦州（薛家根據）', short:'秦州',     lat:34.65, lon:105.80, color:'#c0392b', r:0,  desc:'薛家根據地（甘肅天水）' },
+  { name:'李軌 · 涼州',   short:'李軌',       lat:37.93, lon:102.63, color:'#aed581', r:50, desc:'河西走廊。覬覦薛氏秦、隴之地。薛舉死後動靜未明。' },
+  { name:'劉武周·宋金剛 · 太原', short:'劉武周', lat:37.87, lon:112.54, color:'#795548', r:65, desc:'晉陽。靠突厥撐腰。沒突厥就不敢南下，受竇建德牽制。' },
+  { name:'竇建德 · 樂壽', short:'竇建德',     lat:38.19, lon:116.12, color:'#1b5e20', r:60, desc:'從不賣突厥的賬，與郭子和、梁師都不同路。牽制劉武周。' },
+  { name:'瓦崗 · 李密 (洛陽東)', short:'瓦崗李密', lat:34.40, lon:114.50, color:'#1976d2', r:90, desc:'東至海、南至江、西抵汝州、北控魏郡。李靖+魏徵勸降中，徐世績·沉落雁主戰反對 — 分裂中。' },
+  { name:'王世充 · 洛陽', short:'王世充',     lat:34.62, lon:112.45, color:'#7b1fa2', r:55, desc:'用人惟私、招降秦叔寶/程咬金/羅士信。想殺少帥傳出 → 諸將心寒。' },
+  { name:'蕭銑 · 江陵',   short:'蕭銑',       lat:30.34, lon:112.23, color:'#00838f', r:70, desc:'荊州。南方無敵手。與杜伏威互為敵但若李閥兵出可能聯手。' },
+  { name:'杜伏威 · 江都', short:'杜伏威',     lat:32.44, lon:119.56, color:'#fbc02d', r:60, desc:'江淮霸主。本章背景：嫁禍東吳剛奏效，掉頭去找沈綸算帳。' },
+  { name:'少帥國 · 寇仲', short:'少帥國',     lat:32.30, lon:118.80, color:'#827717', r:45, desc:'本章寇仲與部屬密議天下形勢。' },
+  { name:'巴蜀（成都）',   short:'巴蜀',       lat:30.66, lon:104.06, color:'#9e9e9e', r:70, desc:'本章伏筆：石青璇/徐子陵/楊虛彥都在這。師妃暄為李世民鋪路而來。' },
+  { name:'合肥（師妃暄追婠婠）', short:'合肥', lat:31.87, lon:117.28, color:'#9c27b0', r:0, desc:'師妃暄追陰癸派至此（追使李世民抱恙的元凶）。' },
+];
+
+forces.forEach(f => {
+  if (f.r > 0) {
+    L.circle([f.lat, f.lon], {
+      radius:f.r*1000, color:f.color, fillColor:f.color, fillOpacity:0.15, weight:2
+    }).addTo(mapCN);
+  }
+  L.circleMarker([f.lat, f.lon], {
+    radius:11, color:'#fff', fillColor:f.color, fillOpacity:0.95, weight:3
+  }).bindPopup(`<h3>${f.name}</h3><p>${f.desc}</p>`)
+    .bindTooltip(f.short, { permanent:true, direction:'right', offset:[12,0],
+      className:'force-label',
+      // border color via inline style by reusing dynamic class hack: use opts.className + minimal CSS — handled by force-label base; specific color baked into html
+    })
+    .addTo(mapCN);
+});
+
+// 淺水原戰役標記
+const qss = [35.17, 107.82]; // 長武縣 = 古高墌/淺水原
+L.circleMarker(qss, {
+  radius:14, color:'#fff', fillColor:'#b71c1c', fillOpacity:0.9, weight:4
+}).bindPopup(`
+  <h3>淺水原戰場（高墌城）</h3>
+  <p><span class="tag tag-tang">唐軍</span>vs<span class="tag" style="background:#ffcdd2;color:#b71c1c">西秦</span></p>
+  <p>兩月前唐軍慘敗於此。李世民「突然抱恙」由劉文靜+殷開山代指揮，薛舉精銳輕騎背後包抄，唐軍損失近半。</p>
+`).bindTooltip('淺水原 (高墌)', { permanent:true, direction:'top', offset:[0,-12], className:'place-label' }).addTo(mapCN);
+
+// 薛舉進攻路線（從根據地秦州→涇州→豳川→岐州→高墌）
+L.polyline([
+  [34.65, 105.80], [35.35, 107.43], [35.04, 108.08], [34.56, 107.42], qss
+], { color:'#c0392b', weight:5, opacity:0.85, dashArray:'10,5' })
+ .bindPopup('薛舉沿涇水東進 → 直殺至豳川、岐州，震動關中').addTo(mapCN);
+
+// 李閥潛在西征路線：長安→金川→巴蜀→順江東攻
+L.polyline([
+  [34.26, 108.94], [32.50, 106.50], [31.20, 105.50], [30.66, 104.06],
+  [30.34, 112.23], [32.44, 119.56]
+], { color:'#e67e22', weight:4, opacity:0.7, dashArray:'2,8' })
+ .bindPopup('陳老謀推測的李閥潛在西征路線：自金川出巴蜀 → 沿江而下迫江陵 → 順江東攻杜伏威').addTo(mapCN);
+
+/* =====================================================================
+   淺水原戰役戰術圖
+   ===================================================================== */
+const mapQSS = L.map('map-qss').setView([34.7, 107.5], 8);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution:'© OpenStreetMap / CARTO', maxZoom:18, subdomains:'abcd',
+}).addTo(mapQSS);
+
+const geoQSS = [
+  { name:'長安', lat:34.26, lon:108.94, cls:'geo-label-city' },
+  { name:'涇州', lat:35.35, lon:107.43, cls:'geo-label-city' },
+  { name:'豳川（邠州）', lat:35.04, lon:108.08, cls:'geo-label-city' },
+  { name:'岐州（鳳翔）', lat:34.56, lon:107.42, cls:'geo-label-city' },
+  { name:'高墌·淺水原', lat:35.17, lon:107.82, cls:'geo-label-city' },
+  { name:'秦州（薛舉根據）', lat:34.65, lon:105.80, cls:'geo-label-city' },
+  { name:'涇水', lat:35.10, lon:108.20, cls:'geo-label-river' },
+  { name:'渭水', lat:34.40, lon:108.50, cls:'geo-label-river' },
+];
+geoQSS.forEach(g => {
+  L.marker([g.lat, g.lon], {
+    icon: L.divIcon({ className:'', html:`<span class="${g.cls}">${g.name}</span>`, iconSize:[80,16], iconAnchor:[40,8] }),
+    interactive:false,
+  }).addTo(mapQSS);
+});
+
+// 薛舉根據地
+L.circleMarker([34.65, 105.80], {
+  radius:13, color:'#fff', fillColor:'#c0392b', fillOpacity:0.9, weight:3
+}).bindPopup('<h3>薛舉根據地 · 秦州</h3><p>傾巢東出</p>').bindTooltip('薛舉起兵', { permanent:true, direction:'left', offset:[-12,0], className:'place-label' }).addTo(mapQSS);
+
+// 高墌城（唐軍駐紮 + 戰場）
+L.circleMarker([35.17, 107.82], {
+  radius:16, color:'#fff', fillColor:'#b71c1c', fillOpacity:0.9, weight:4
+}).bindPopup(`
+  <h3>高墌城 · 淺水原戰場</h3>
+  <p><b>唐軍駐紮位置</b>。李世民封西討元帥屯於此。後抱恙，劉文靜+殷開山代理指揮。</p>
+  <p>戰況：薛舉以精銳輕騎自背後包抄，唐軍損失近半，失高墌城。</p>
+`).bindTooltip('高墌 (淺水原)', { permanent:true, direction:'top', offset:[0,-14], className:'place-label' }).addTo(mapQSS);
+
+// 長安（李閥根據）
+L.circleMarker([34.26, 108.94], {
+  radius:14, color:'#fff', fillColor:'#e67e22', fillOpacity:0.9, weight:3
+}).bindPopup('<h3>長安</h3><p>李淵都城。李世民敗退回此處。</p>').bindTooltip('長安', { permanent:true, direction:'right', offset:[12,0], className:'place-label' }).addTo(mapQSS);
+
+// 薛舉沿涇水進攻線
+L.polyline([
+  [34.65, 105.80], [35.35, 107.43], [35.04, 108.08], [34.56, 107.42], [35.17, 107.82]
+], { color:'#c0392b', weight:6, opacity:0.85 })
+ .bindPopup('薛舉主力進攻線：秦州 → 涇州 → 豳川 → 岐州 → 高墌').addTo(mapQSS);
+
+// 薛舉精銳輕騎背後包抄路線（虛線）
+L.polyline([
+  [34.65, 105.80], [34.20, 106.50], [34.50, 107.50], [34.95, 107.95], [35.17, 107.82]
+], { color:'#b71c1c', weight:4, opacity:0.85, dashArray:'12,6' })
+ .bindPopup('<b>精銳輕騎背後包抄</b><br>關鍵戰術 — 唐軍被前後夾擊').addTo(mapQSS);
+
+// 李世民敗退回長安
+L.polyline([
+  [35.17, 107.82], [34.60, 108.30], [34.26, 108.94]
+], { color:'#e67e22', weight:5, opacity:0.8, dashArray:'4,4' })
+ .bindPopup('李世民敗退回長安').addTo(mapQSS);
+</script>
+</body>
+</html>
