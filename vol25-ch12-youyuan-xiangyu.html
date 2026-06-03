@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>大唐雙龍傳 · 卷 25 第 12 章 · 有緣相遇</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  body {
+    font-family: "PingFang TC","Noto Sans CJK TC","Noto Serif TC",serif;
+    margin:0; background:#fdfaf3; color:#2a2a2a; line-height:1.6;
+  }
+  .container { max-width:1200px; margin:0 auto; padding:24px 20px; }
+  h1 { color:#8b0000; border-bottom:3px solid #d4a356; padding-bottom:10px; margin-bottom:4px; font-size:26px; }
+  h2 { color:#5d4037; margin-top:36px; font-size:20px; border-left:5px solid #d4a356; padding-left:10px; }
+  h3 { color:#8b6914; margin-top:24px; font-size:16px; }
+  .meta { color:#888; font-size:13px; }
+  .back { color:#c0392b; text-decoration:none; border-bottom:1px dashed; }
+  .map-frame {
+    width:100%; height:520px; border:3px solid #8b6914; border-radius:8px;
+    margin:14px 0;
+  }
+  .legend {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:6px; background:#fff; padding:12px 16px; border-radius:6px;
+    border:1px solid #d4a356; margin:10px 0; font-size:13px;
+  }
+  .legend-item { display:flex; align-items:center; }
+  .legend-dot {
+    display:inline-block; width:14px; height:14px; border-radius:50%;
+    margin-right:8px; border:2px solid #fff; box-shadow:0 0 0 1px #888;
+    flex-shrink:0;
+  }
+  .legend-line {
+    display:inline-block; width:24px; height:0; margin-right:8px;
+    flex-shrink:0;
+  }
+  .place-label {
+    background:rgba(255,243,224,0.95); border:1px solid #e65100;
+    color:#e65100; font-weight:600; font-size:12px; padding:2px 8px;
+    border-radius:3px;
+  }
+  .geo-label-city { background:rgba(255,255,255,0.7); color:#424242; font-size:11px; padding:1px 4px; border-radius:2px; white-space:nowrap; }
+  .geo-label-river { background:rgba(255,255,255,0.7); color:#1565c0; font-style:italic; font-size:11px; padding:1px 4px; border-radius:2px; white-space:nowrap; }
+  .geo-label-mountain { background:rgba(255,255,255,0.7); color:#5d4037; font-size:11px; padding:1px 4px; border-radius:2px; white-space:nowrap; }
+  .geo-label-sea { background:rgba(255,255,255,0.7); color:#1565c0; font-style:italic; font-size:13px; font-weight:bold; padding:1px 4px; border-radius:2px; white-space:nowrap; }
+  .leaflet-popup-content h3 { margin:0 0 6px 0; color:#8b0000; font-size:14px; }
+  .leaflet-popup-content .tag {
+    display:inline-block; padding:1px 6px; border-radius:3px; font-size:11px;
+    margin-right:4px; font-weight:bold;
+  }
+  .tag-our { background:#c8e6c9; color:#1b5e20; }
+  .tag-enemy { background:#ffcdd2; color:#b71c1c; }
+  .tag-third { background:#fff3e0; color:#e65100; }
+  .tag-place { background:#e8eaf6; color:#283593; }
+  .tag-trap { background:#f3e5f5; color:#6a1b9a; }
+
+  .character-chart {
+    width:100%; height:auto; background:#fffbe6;
+    border:2px solid #8b6914; border-radius:8px;
+    margin:10px 0; display:block;
+  }
+  .summary-box {
+    background:#fff3e0; border-left:5px solid #e65100;
+    padding:14px 18px; margin:14px 0; border-radius:0 6px 6px 0;
+  }
+  .summary-box h3 { margin-top:0; color:#e65100; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+  th, td { border:1px solid #d4a356; padding:6px 10px; text-align:left; vertical-align:top; }
+  th { background:#fff3e0; color:#8b0000; }
+</style>
+</head>
+<body>
+<div class="container">
+  <p><a href="index.html" class="back">← 回到地圖集索引</a></p>
+  <h1>卷 25 第 12 章 · 有緣相遇</h1>
+  <p class="meta">兩線並進、相距逾一千二百公里：徐子陵扮疤臉客「弓辰春」搭烏江幫客貨船，<b>順長江東下出三峽</b>，途中暗助被追殺的韓澤南一家 ｜ 寇仲在<b>嶺南俚僚山區</b>迷失於往郁林郡的路途，攀峰尋路之際，與朝思暮想的宋玉致在村口「有緣相遇」。</p>
+
+  <div class="summary-box">
+    <h3>本章雙線主旨</h3>
+    <p><b>徐子陵線（長江三峽）</b>：自巴蜀啟程，因侯希白安排，搭烏江幫沙老大的三峽客貨船順流赴九江。船上遇韓澤南夫婦帶五歲小傑——一家被神秘騎士追殺，欲在巴陵下船遭烏江幫香主林朗婉拒（巴陵是長江聯地頭、烏江幫與其有爭執，按江湖規矩須到巴東郡才放人）。徐子陵憐惜小傑，暗下決心若他們有難絕不袖手。<br>
+    <b>寇仲線（嶺南）</b>：寇仲沿郁水北岸往西，山川擋路迷失於往郁林郡途中，誤入俚僚村寨遭惡犬群吠、語言不通。攀上高峰遠眺尋路時，宋玉致英風凜凜出現村口——本章章名「有緣相遇」所指。</p>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- 人物關係圖 -->
+  <!-- ============================================== -->
+  <h2>① 人物陣營關係</h2>
+  <p class="meta">左：長江船上（徐子陵線）｜ 中：牽線與心念之人（多為回憶/提及）｜ 右：嶺南俚僚山區（寇仲線）。綠線＝兄弟/盟友/親情　紅線＝追殺/敵對　橘線＝情牽/利用</p>
+
+  <svg class="character-chart" viewBox="0 0 1200 560" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr-friend" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L9,3 z" fill="#27ae60"/>
+      </marker>
+      <marker id="arr-foe" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L9,3 z" fill="#c0392b"/>
+      </marker>
+      <marker id="arr-neutral" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,6 L9,3 z" fill="#e67e22"/>
+      </marker>
+    </defs>
+
+    <!-- 三大區塊背景 -->
+    <rect x="20" y="64" width="360" height="476" rx="10" fill="#e8f5e9" stroke="#27ae60" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="200" y="88" text-anchor="middle" font-size="17" font-weight="bold" fill="#1b5e20">長江船上 · 徐子陵線</text>
+
+    <rect x="410" y="64" width="380" height="476" rx="10" fill="#f3e5f5" stroke="#9b59b6" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="600" y="88" text-anchor="middle" font-size="17" font-weight="bold" fill="#6a1b9a">心念 · 牽線之人（回憶/提及）</text>
+
+    <rect x="820" y="64" width="360" height="476" rx="10" fill="#fff3e0" stroke="#e67e22" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="1000" y="88" text-anchor="middle" font-size="17" font-weight="bold" fill="#e65100">嶺南俚僚山區 · 寇仲線</text>
+
+    <!-- 標題 -->
+    <text x="600" y="28" text-anchor="middle" font-size="20" font-weight="bold" fill="#5d4037">卷 25 第 12 章 · 人物關係</text>
+    <text x="600" y="48" text-anchor="middle" font-size="12" fill="#888">兩線天各一方未交會，卻各自心繫對方陣營之人</text>
+
+    <!-- ===== 左區：徐子陵線 ===== -->
+    <g>
+      <circle cx="200" cy="150" r="36" fill="#27ae60" stroke="#fff" stroke-width="3"/>
+      <text x="200" y="156" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">徐子陵</text>
+      <text x="200" y="200" text-anchor="middle" font-size="11" fill="#1b5e20">扮疤臉客「弓辰春」</text>
+      <text x="200" y="214" text-anchor="middle" font-size="10" fill="#888">獨佔艙房 · 順流出三峽</text>
+
+      <circle cx="105" cy="270" r="27" fill="#66bb6a" stroke="#fff" stroke-width="3"/>
+      <text x="105" y="275" text-anchor="middle" font-size="12" fill="#fff">侯希白</text>
+      <text x="105" y="308" text-anchor="middle" font-size="10" fill="#1b5e20">送別 · 安排船位</text>
+      <text x="105" y="321" text-anchor="middle" font-size="9" fill="#888">潛修不死印卷</text>
+
+      <circle cx="300" cy="265" r="27" fill="#66bb6a" stroke="#fff" stroke-width="3"/>
+      <text x="300" y="270" text-anchor="middle" font-size="12" fill="#fff">林朗</text>
+      <text x="300" y="302" text-anchor="middle" font-size="10" fill="#1b5e20">烏江幫梅花堂香主</text>
+      <text x="300" y="315" text-anchor="middle" font-size="9" fill="#888">招待弓爺 · 守江湖規矩</text>
+
+      <circle cx="108" cy="408" r="25" fill="#43a047" stroke="#fff" stroke-width="3"/>
+      <text x="108" y="413" text-anchor="middle" font-size="12" fill="#fff">韓澤南</text>
+      <text x="108" y="444" text-anchor="middle" font-size="10" fill="#1b5e20">讀書人 · 被追殺</text>
+      <text x="108" y="457" text-anchor="middle" font-size="9" fill="#888">欲在巴陵下船遭拒</text>
+
+      <circle cx="292" cy="405" r="24" fill="#81c784" stroke="#fff" stroke-width="3"/>
+      <text x="292" y="410" text-anchor="middle" font-size="11" fill="#fff">韓妻</text>
+      <text x="292" y="440" text-anchor="middle" font-size="10" fill="#1b5e20">秀麗端莊小媳婦</text>
+
+      <circle cx="200" cy="478" r="26" fill="#27ae60" stroke="#fff" stroke-width="3"/>
+      <text x="200" y="483" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">小傑</text>
+      <text x="200" y="514" text-anchor="middle" font-size="10" fill="#1b5e20">四五歲 · 純真童心</text>
+
+      <!-- 連線 -->
+      <line x1="173" y1="172" x2="125" y2="248" stroke="#27ae60" stroke-width="2.5" marker-end="url(#arr-friend)"/>
+      <text x="120" y="222" font-size="10" fill="#1b5e20" font-style="italic">送別安排</text>
+      <line x1="232" y1="168" x2="282" y2="244" stroke="#27ae60" stroke-width="2"/>
+      <text x="258" y="214" font-size="10" fill="#1b5e20" font-style="italic">禮待弓爺</text>
+
+      <!-- 一家三口 -->
+      <line x1="128" y1="428" x2="178" y2="462" stroke="#43a047" stroke-width="2.5"/>
+      <line x1="272" y1="424" x2="222" y2="462" stroke="#43a047" stroke-width="2.5"/>
+      <line x1="133" y1="405" x2="268" y2="405" stroke="#43a047" stroke-width="2" stroke-dasharray="5,3"/>
+      <text x="200" y="398" text-anchor="middle" font-size="10" fill="#1b5e20" font-style="italic">一家三口</text>
+
+      <!-- 林朗 → 韓澤南 婉拒下船 -->
+      <path d="M 290 290 Q 230 360 133 392" stroke="#e67e22" stroke-width="2" stroke-dasharray="6,4" fill="none" marker-end="url(#arr-neutral)"/>
+      <text x="210" y="345" font-size="10" fill="#e65100" font-style="italic">婉拒巴陵下船</text>
+
+      <!-- 徐子陵 → 小傑 憐惜決意相助 -->
+      <path d="M 188 184 Q 150 360 185 452" stroke="#27ae60" stroke-width="2.5" fill="none" marker-end="url(#arr-friend)"/>
+      <text x="120" y="360" font-size="10" fill="#1b5e20" font-style="italic">憐惜 · 決意相助</text>
+    </g>
+
+    <!-- ===== 中區：牽線/心念 ===== -->
+    <g>
+      <circle cx="600" cy="155" r="34" fill="#ec407a" stroke="#fff" stroke-width="3"/>
+      <text x="600" y="161" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">宋玉致</text>
+      <text x="600" y="203" text-anchor="middle" font-size="11" fill="#ad1457">寇仲朝思暮想的美人</text>
+      <text x="600" y="217" text-anchor="middle" font-size="10" fill="#888">本章末現身村口（連右線）</text>
+
+      <circle cx="498" cy="305" r="28" fill="#ab47bc" stroke="#fff" stroke-width="3"/>
+      <text x="498" y="310" text-anchor="middle" font-size="12" fill="#fff">石青璇</text>
+      <text x="498" y="345" text-anchor="middle" font-size="10" fill="#6a1b9a">徐子陵動真情之人</text>
+      <text x="498" y="358" text-anchor="middle" font-size="9" fill="#888">欲離巴蜀以忘之</text>
+
+      <circle cx="702" cy="300" r="27" fill="#ba68c8" stroke="#fff" stroke-width="3"/>
+      <text x="702" y="305" text-anchor="middle" font-size="12" fill="#fff">師妃暄</text>
+      <text x="702" y="338" text-anchor="middle" font-size="10" fill="#6a1b9a">曾陪侯希白游三峽</text>
+      <text x="702" y="351" text-anchor="middle" font-size="9" fill="#888">徐子陵睹景生情</text>
+
+      <circle cx="510" cy="438" r="23" fill="#ce93d8" stroke="#fff" stroke-width="3"/>
+      <text x="510" y="443" text-anchor="middle" font-size="11" fill="#fff">沙老大</text>
+      <text x="510" y="472" text-anchor="middle" font-size="9" fill="#6a1b9a">烏江幫主（提及）</text>
+
+      <circle cx="690" cy="440" r="23" fill="#ce93d8" stroke="#fff" stroke-width="3"/>
+      <text x="690" y="445" text-anchor="middle" font-size="11" fill="#fff">蕭銑</text>
+      <text x="690" y="474" text-anchor="middle" font-size="9" fill="#6a1b9a">巴蜀買糧主顧（提及）</text>
+
+      <!-- 沙老大 → 林朗（指揮，跨左區）-->
+      <path d="M 487 437 Q 400 360 326 285" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arr-friend)"/>
+      <text x="382" y="372" font-size="10" fill="#1b5e20" font-style="italic">沙老大屬下</text>
+      <!-- 蕭銑 ↔ 沙老大（買糧付運）-->
+      <line x1="668" y1="445" x2="532" y2="440" stroke="#e67e22" stroke-width="1.8" stroke-dasharray="4,3"/>
+      <text x="600" y="460" text-anchor="middle" font-size="9" fill="#e65100" font-style="italic">買糧付運生意</text>
+    </g>
+
+    <!-- ===== 右區：寇仲線 ===== -->
+    <g>
+      <circle cx="1000" cy="150" r="36" fill="#e67e22" stroke="#fff" stroke-width="3"/>
+      <text x="1000" y="156" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">寇仲</text>
+      <text x="1000" y="200" text-anchor="middle" font-size="11" fill="#e65100">迷失往郁林郡途中</text>
+      <text x="1000" y="214" text-anchor="middle" font-size="10" fill="#888">攀峰尋路 · 天生地理直覺</text>
+
+      <circle cx="910" cy="320" r="27" fill="#bdb76b" stroke="#fff" stroke-width="3"/>
+      <text x="910" y="325" text-anchor="middle" font-size="11" fill="#fff">俚僚村民</text>
+      <text x="910" y="358" text-anchor="middle" font-size="10" fill="#827717">語言不通 · 戒備</text>
+      <text x="910" y="371" text-anchor="middle" font-size="9" fill="#888">吊腳樓寨 · 刺繡婦女</text>
+
+      <circle cx="1098" cy="320" r="24" fill="#a1887f" stroke="#fff" stroke-width="3"/>
+      <text x="1098" y="325" text-anchor="middle" font-size="11" fill="#fff">惡犬群</text>
+      <text x="1098" y="354" text-anchor="middle" font-size="9" fill="#5d4037">近十頭 · 伏首狂吠</text>
+
+      <!-- 村民 ↔ 惡犬 -->
+      <line x1="937" y1="320" x2="1074" y2="320" stroke="#a1887f" stroke-width="1.8"/>
+      <!-- 寇仲 → 村民（問路不得）-->
+      <path d="M 978 178 Q 920 250 912 292" stroke="#e67e22" stroke-width="2" stroke-dasharray="6,4" fill="none" marker-end="url(#arr-neutral)"/>
+      <text x="900" y="240" font-size="10" fill="#e65100" font-style="italic">問路 · 語言不通</text>
+    </g>
+
+    <!-- ===== 跨區大關係 ===== -->
+    <!-- 徐子陵 ↔ 寇仲 兄弟（頂部大弧）-->
+    <path d="M 232 128 Q 600 6 968 128" stroke="#27ae60" stroke-width="3" stroke-dasharray="8,5" fill="none"/>
+    <text x="600" y="120" text-anchor="middle" font-size="12" fill="#1b5e20" font-weight="bold">結義兄弟（本章兩地分隔，互相掛念）</text>
+
+    <!-- 徐子陵 ⇢ 石青璇 動情 -->
+    <path d="M 226 168 Q 360 280 470 300" stroke="#e67e22" stroke-width="2.5" fill="none" marker-end="url(#arr-neutral)"/>
+    <text x="320" y="252" font-size="11" fill="#e65100" font-weight="bold">為石青璇動情 · 急欲離蜀</text>
+
+    <!-- 徐子陵 ⇢ 師妃暄 睹景生情 -->
+    <path d="M 235 158 Q 470 100 678 290" stroke="#9b59b6" stroke-width="1.8" stroke-dasharray="7,4" fill="none" marker-end="url(#arr-neutral)"/>
+    <text x="470" y="150" font-size="10" fill="#6a1b9a" font-style="italic">游三峽憶師妃暄</text>
+
+    <!-- 侯希白 ⇢ 師妃暄 曾陪游三峽 -->
+    <path d="M 130 270 Q 420 540 680 320" stroke="#9b59b6" stroke-width="1.6" stroke-dasharray="5,4" fill="none" marker-end="url(#arr-neutral)"/>
+    <text x="380" y="525" font-size="10" fill="#6a1b9a" font-style="italic">侯希白曾陪師妃暄游三峽</text>
+
+    <!-- 寇仲 → 宋玉致 有緣相遇（章名核心）-->
+    <path d="M 968 158 Q 780 110 634 152" stroke="#c0392b" stroke-width="3" fill="none" marker-end="url(#arr-foe)"/>
+    <text x="800" y="118" text-anchor="middle" font-size="12" fill="#b71c1c" font-weight="bold">有緣相遇（村口）</text>
+  </svg>
+
+  <!-- ============================================== -->
+  <!-- 徐子陵線地圖 -->
+  <!-- ============================================== -->
+  <h2>② 徐子陵線 · 長江三峽水路（巴蜀 → 九江）</h2>
+  <p class="meta">徐子陵搭烏江幫客貨船自巴蜀啟程，晚間啟航，一夜駛經眉山、犍為、瀘川三郡；正午過巴郡，續行險要水路，過白帝城後即入峽口（瞿塘峽），經巴東、歸郡（小說作鄭郡，寺廟眾多，逗留一晚），出西陵峽口（宜昌），終點九江。神秘騎士於碼頭沿岸疾追要船停下。韓澤南一家欲在巴陵（長江聯地頭）下船遭拒，須至巴東郡才放人。</p>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#27ae60"></span>徐子陵（弓辰春）所在</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>古今地名 / 郡城</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>神秘騎士追船點</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#283593"></span>韓澤南一家相關（巴陵/巴東）</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:5px solid #1565c0"></span>客貨船順流航線</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:5px solid #6a1b9a"></span>長江三峽險段（白帝城→宜昌）</div>
+  </div>
+
+  <div id="map-yangzi" class="map-frame"></div>
+
+  <!-- ============================================== -->
+  <!-- 寇仲線地圖 -->
+  <!-- ============================================== -->
+  <h2>③ 寇仲線 · 嶺南俚僚山區（迷失往郁林郡途中）</h2>
+  <p class="meta">寇仲本沿郁水（今鬱江）北岸往西，欲赴郁林郡（今廣西貴港一帶），山川擋路、繞行迷途，連官道影子都找不到。先後誤入兩座俚僚村寨——惡犬狂吠、語言不通。後攀上一座巍峨高峰，雲霧繚繞，登頂朝西見十多里下有梯田村寨；下山趕往，竟在村口與宋玉致「有緣相遇」。</p>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>寇仲所在 / 行經</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#bdb76b"></span>俚僚村寨（推測位置）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#ec407a"></span>與宋玉致相遇村口</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#283593"></span>郁林郡（目的地）</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:5px solid #e67e22"></span>寇仲迷途路徑（沿郁水往西繞行）</div>
+    <div class="legend-item"><span class="legend-line" style="border-top:4px dashed #5d4037"></span>攀峰遠眺方向</div>
+  </div>
+
+  <div id="map-lingnan" class="map-frame"></div>
+
+  <!-- ============================================== -->
+  <!-- 古今對照表 -->
+  <!-- ============================================== -->
+  <h2>④ 古今地名對照</h2>
+  <table>
+    <tr><th>小說地名</th><th>現代位置</th><th>說明</th></tr>
+    <tr><td>巴蜀（啟程地）</td><td>四川盆地（成都—眉山一帶）</td><td>徐子陵自巴蜀登船，因石青璇之事急欲離開</td></tr>
+    <tr><td>眉山</td><td>四川眉山市 (29.99°N, 103.78°E)</td><td>一夜順流駛經三郡之一（岷江段）</td></tr>
+    <tr><td>犍為</td><td>四川樂山市犍為縣 (29.21°N, 103.94°E)</td><td>岷江畔，順流駛經</td></tr>
+    <tr><td>瀘川</td><td>四川瀘州市 (28.87°N, 105.44°E)</td><td>岷江匯入長江後的長江上游城</td></tr>
+    <tr><td>巴郡</td><td>重慶市渝中區 (29.57°N, 106.55°E)</td><td>正午經過；巴郡到巴東水路最險要</td></tr>
+    <tr><td>白帝城</td><td>重慶奉節縣 (31.02°N, 109.55°E)</td><td>過白帝城後個許時辰即峽口（瞿塘峽夔門）</td></tr>
+    <tr><td>峽口（三峽）</td><td>瞿塘峽—巫峽—西陵峽 (奉節→宜昌)</td><td>山峰夾江聳峙，險峻形勢令初游者嘆為觀止</td></tr>
+    <tr><td>巴東</td><td>湖北恩施巴東縣 (31.04°N, 110.34°E)</td><td>韓澤南一家依江湖規矩須至此才能下船</td></tr>
+    <tr><td>歸郡（小說作鄭郡）</td><td>湖北宜昌秭歸縣 (30.83°N, 110.97°E)</td><td>明日黃昏可抵，寺廟眾多，逗留一晚——伏筆危機</td></tr>
+    <tr><td>峽口出口</td><td>湖北宜昌市 (30.69°N, 111.28°E)</td><td>西陵峽口，出三峽</td></tr>
+    <tr><td>巴陵</td><td>湖南岳陽市 (29.36°N, 113.13°E)</td><td>長江聯地頭，烏江幫與其有爭執，不肯泊岸放客</td></tr>
+    <tr><td>九江</td><td>江西九江市 (29.71°N, 116.00°E)</td><td>客貨船終點站</td></tr>
+    <tr><td>郁林郡</td><td>廣西貴港市一帶 (23.10°N, 109.60°E)</td><td>寇仲迷失於前往此地的途中</td></tr>
+    <tr><td>郁水</td><td>今鬱江（西江上游，廣西） (約23.3°N, 110.0°E)</td><td>寇仲沿其北岸往西繞行</td></tr>
+    <tr><td>俚僚村寨</td><td>鬱江流域山區（推測，原著未明指）</td><td>吊腳樓木瓦長屋、梯田、刺繡婦女——嶺南俚僚（壯/侗族先民）風貌</td></tr>
+  </table>
+
+  <p class="meta" style="margin-top:30px">資料來源：黃易《大唐雙龍傳》卷 25 第 12 章「有緣相遇」全文。長江沿線郡名依小說情節與唐代地理對應；寇仲線俚僚村寨為情節推測，原著未給精確座標。底圖：OpenStreetMap / CARTO Voyager（無標籤版），繁體地名為自繪圖層。</p>
+</div>
+
+<script>
+/* =====================================================================
+   徐子陵線 · 長江三峽水路
+   ===================================================================== */
+const mapY = L.map('map-yangzi').setView([30.2, 109.5], 6);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution:'© OpenStreetMap / CARTO',
+  maxZoom:18, subdomains:'abcd',
+}).addTo(mapY);
+
+// 繁體 地理標籤
+const geoY = [
+  { name:'成都',     lat:30.66, lon:104.06, cls:'geo-label-city' },
+  { name:'岷江',     lat:29.60, lon:103.80, cls:'geo-label-river' },
+  { name:'長江',     lat:30.30, lon:107.80, cls:'geo-label-river' },
+  { name:'大巴山',   lat:32.00, lon:108.50, cls:'geo-label-mountain' },
+  { name:'巫山',     lat:31.20, lon:109.90, cls:'geo-label-mountain' },
+  { name:'洞庭湖',   lat:29.30, lon:112.90, cls:'geo-label-river' },
+  { name:'鄱陽湖',   lat:29.20, lon:116.20, cls:'geo-label-river' },
+];
+geoY.forEach(g => {
+  L.marker([g.lat,g.lon], {
+    icon: L.divIcon({ className:'', html:`<span class="${g.cls}">${g.name}</span>`, iconSize:[70,16], iconAnchor:[35,8] }),
+    interactive:false,
+  }).addTo(mapY);
+});
+
+// 沿線郡城（古今對照 marker）
+const portsY = {
+  meishan:  { name:'眉山（順流駛經）',    lat:29.99, lon:103.78, desc:'一夜順流駛經三郡之一，岷江段。' },
+  qianwei:  { name:'犍為（順流駛經）',    lat:29.21, lon:103.94, desc:'岷江畔，徐子陵船上吃過早膳賞景。' },
+  luzhou:   { name:'瀘川（今瀘州）',      lat:28.87, lon:105.44, desc:'岷江匯入長江後的長江上游城。' },
+  bajun:    { name:'巴郡（今重慶）',      lat:29.57, lon:106.55, desc:'正午經過。林朗：由巴郡到巴東那段水路更是險要。' },
+  baidi:    { name:'白帝城（今奉節）',    lat:31.02, lon:109.55, desc:'過白帝城後個許時辰就是峽口（瞿塘峽夔門）。' },
+  badong:   { name:'巴東',               lat:31.04, lon:110.34, desc:'韓澤南一家依江湖規矩須至此才能下船——林朗才推得一乾二淨。' },
+  zigui:    { name:'歸郡（今秭歸 · 小說作鄭郡）', lat:30.83, lon:110.97, desc:'明日黃昏可抵，寺廟眾多，逗留一晚。徐子陵憂韓家危機在此夜爆發。' },
+  yichang:  { name:'峽口（今宜昌）',      lat:30.69, lon:111.28, desc:'西陵峽口，出三峽。' },
+  baling:   { name:'巴陵（今岳陽）',      lat:29.36, lon:113.13, desc:'長江聯地頭。烏江幫與其有爭執，不肯泊岸放客——韓澤南欲此下船被拒。' },
+  jiujiang: { name:'九江（終點）',        lat:29.71, lon:116.00, desc:'這艘客貨船說好到九江去，沿途泊幾個碼頭皆早定下。' },
+};
+const portIcon = L.divIcon({
+  className:'', html:'<div style="background:#e67e22;width:13px;height:13px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.6);"></div>',
+  iconSize:[19,19], iconAnchor:[9,9],
+});
+Object.values(portsY).forEach(p => {
+  L.marker([p.lat,p.lon], { icon:portIcon })
+   .bindPopup(`<h3>${p.name}</h3><p>${p.desc}</p>`)
+   .bindTooltip(p.name, { permanent:true, direction:'top', offset:[0,-8], className:'place-label' })
+   .addTo(mapY);
+});
+
+// 船的順流航線（巴蜀 → 九江）
+const routeY = [
+  [29.99,103.78],[29.21,103.94],[28.87,105.44],[29.57,106.55],
+  [31.02,109.55],[31.04,110.34],[30.83,110.97],[30.69,111.28],
+  [29.36,113.13],[29.71,116.00]
+];
+L.polyline(routeY, { color:'#1565c0', weight:5, opacity:0.85 })
+ .bindPopup('烏江幫客貨船順流東下航線：巴蜀啟航 → 九江').addTo(mapY);
+
+// 三峽險段高亮（白帝城 → 宜昌）
+L.polyline([[31.02,109.55],[31.04,110.34],[30.83,110.97],[30.69,111.28]], {
+  color:'#6a1b9a', weight:7, opacity:0.55
+}).bindPopup('<b>長江三峽險段</b><br>瞿塘峽—巫峽—西陵峽。山峰夾江聳峙，徐子陵初游嘆為觀止。').addTo(mapY);
+
+// 徐子陵當前所在（船頭，巴郡附近）
+L.circleMarker([29.57,106.55], {
+  radius:13, color:'#fff', fillColor:'#27ae60', fillOpacity:0.9, weight:3
+}).bindPopup(`
+  <h3>徐子陵（弓辰春）</h3>
+  <p><span class="tag tag-our">我方</span> 扮疤臉客獨佔一艙房。船頭迎風卓立賞江景，憶石青璇、師妃暄，心潮起伏。</p>
+`).addTo(mapY);
+
+// 神秘騎士追船點（啟航碼頭，沿岸疾追）
+L.circleMarker([29.80,103.85], {
+  radius:12, color:'#fff', fillColor:'#c0392b', fillOpacity:0.85, weight:3
+}).bindPopup(`
+  <h3>神秘騎士追船</h3>
+  <p><span class="tag tag-enemy">追兵</span> 十多騎旋風般穿過樹林趕至碼頭高呼停船；烏江幫加速離岸順水直放，騎士沿岸疾追，轉眼被拋遠。</p>
+  <p>林朗憂其乘船銜尾窮追，若在歸郡（鄭郡）逗留一晚恐生變。</p>
+`).bindTooltip('騎士追船（啟航碼頭）', { permanent:true, direction:'bottom', offset:[0,12], className:'place-label' }).addTo(mapY);
+
+// 韓澤南一家標記（巴陵 想下船 / 巴東 才放人）
+L.circleMarker([29.36,113.13], {
+  radius:11, color:'#fff', fillColor:'#283593', fillOpacity:0.85, weight:3
+}).bindPopup(`
+  <h3>韓澤南一家：巴陵下船被拒</h3>
+  <p><span class="tag tag-place">情節</span> 韓澤南苦求在巴陵下船，林朗以「巴陵是長江聯地頭、烏江幫與其有爭執」婉拒。</p>
+`).addTo(mapY);
+
+mapY.fitBounds([[28.4,103.4],[31.4,116.4]], { padding:[20,20] });
+
+/* =====================================================================
+   寇仲線 · 嶺南俚僚山區
+   ===================================================================== */
+const mapL = L.map('map-lingnan').setView([23.25, 109.95], 9);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution:'© OpenStreetMap / CARTO',
+  maxZoom:18, subdomains:'abcd',
+}).addTo(mapL);
+
+// 繁體 地理標籤
+const geoL = [
+  { name:'郁水（今鬱江）', lat:23.20, lon:109.78, cls:'geo-label-river' },
+  { name:'大瑤山',        lat:23.95, lon:110.10, cls:'geo-label-mountain' },
+  { name:'大容山',        lat:22.75, lon:110.30, cls:'geo-label-mountain' },
+  { name:'潯江',          lat:23.40, lon:110.30, cls:'geo-label-river' },
+];
+geoL.forEach(g => {
+  L.marker([g.lat,g.lon], {
+    icon: L.divIcon({ className:'', html:`<span class="${g.cls}">${g.name}</span>`, iconSize:[90,16], iconAnchor:[45,8] }),
+    interactive:false,
+  }).addTo(mapL);
+});
+
+// 郁林郡（目的地）
+L.circleMarker([23.10, 109.60], {
+  radius:14, color:'#fff', fillColor:'#283593', fillOpacity:0.85, weight:4
+}).bindPopup(`
+  <h3>郁林郡（今貴港一帶）</h3>
+  <p><span class="tag tag-place">目的地</span> 寇仲本欲前往，卻迷失於途中——沿郁水北岸往西，山川擋路繞行，連一條官道的影子都找不到。</p>
+`).bindTooltip('郁林郡（目的地）', { permanent:true, direction:'left', offset:[-12,0], className:'place-label' }).addTo(mapL);
+
+// 俚僚村寨①（先誤入、惡犬狂吠）
+const village1 = [23.42, 110.02];
+L.circleMarker(village1, {
+  radius:13, color:'#fff', fillColor:'#bdb76b', fillOpacity:0.85, weight:3
+}).bindPopup(`
+  <h3>俚僚村寨①（惡犬迎客）</h3>
+  <p><span class="tag tag-third">山寨</span> 河流自西北穿寨往東南流；四至六間木瓦長屋成寨、吊腳樓臨水。寇仲入村遭近十頭惡犬伏首狂吠，村中僅餘老人小孩，語言不通。</p>
+`).bindTooltip('俚僚村寨①', { permanent:true, direction:'top', offset:[0,-10], className:'place-label' }).addTo(mapL);
+
+// 攀峰點（巍峨高峰，登頂朝西遠眺）
+const peak = [23.34, 110.12];
+L.circleMarker(peak, {
+  radius:15, color:'#fff', fillColor:'#5d4037', fillOpacity:0.85, weight:4
+}).bindPopup(`
+  <h3>巍峨高峰（登頂遠眺）</h3>
+  <p><span class="tag tag-trap">尋路</span> 寇仲索性攀上群山中一座高峰，走到一半已雲霧繚繞、溪流交錯。登頂朝西瞧去，十多里下見一梯田村寨隱現林木間，秋冬林葉金黃，遺世獨立。</p>
+`).bindTooltip('攀峰遠眺點', { permanent:true, direction:'right', offset:[12,0], className:'place-label' }).addTo(mapL);
+
+// 相遇村寨（朝西十多里下，村口遇宋玉致）
+const meetVillage = [23.30, 109.92];
+L.circleMarker(meetVillage, {
+  radius:16, color:'#fff', fillColor:'#ec407a', fillOpacity:0.9, weight:4
+}).bindPopup(`
+  <h3>有緣相遇 · 村口</h3>
+  <p><span class="tag tag-enemy" style="background:#fce4ec;color:#ad1457">章名核心</span> 寇仲下峰趕往遠眺所見的村寨，俚僚婦女圍坐刺繡戒備。正當問路不得，村口出現一身勁裝、英風凜凜的 <b>宋玉致</b>——這幾日朝思暮想的美人兒。</p>
+`).bindTooltip('與宋玉致相遇', { permanent:true, direction:'bottom', offset:[0,14], className:'place-label' }).addTo(mapL);
+
+// 寇仲迷途路徑（沿郁水北岸往西繞行 → 村寨① → 攀峰）
+L.polyline([[23.55,110.45],[23.48,110.25],village1,[23.38,110.08],peak], {
+  color:'#e67e22', weight:5, opacity:0.9
+}).bindPopup('寇仲沿郁水北岸往西繞行的迷途路徑').addTo(mapL);
+
+// 郁水流向示意（西北→東南穿村寨）
+L.polyline([[23.95,109.55],[23.50,109.85],[23.20,109.95],[23.00,110.30]], {
+  color:'#1565c0', weight:4, opacity:0.55, dashArray:'2,5'
+}).bindPopup('郁水（今鬱江）大致流向').addTo(mapL);
+
+// 攀峰遠眺方向（峰頂 → 朝西十多里下村寨）
+L.polyline([peak, meetVillage], {
+  color:'#5d4037', weight:4, opacity:0.8, dashArray:'10,6'
+}).bindPopup('登頂朝西望見十多里下的梯田村寨，遂下山趕往').addTo(mapL);
+
+mapL.fitBounds([[22.85,109.45],[23.70,110.45]], { padding:[20,20] });
+</script>
+</body>
+</html>
