@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>與虎謀皮 · 軍事分析｜大唐雙龍傳 卷三十六 第十二章</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+:root{
+  --ink:#1c1a17;
+  --ink-soft:#3a352e;
+  --paper:#f4ede0;
+  --paper-2:#ece2d0;
+  --paper-card:#faf5ea;
+  --line:#c9bca3;
+  --line-strong:#a3906f;
+  --seal:#b23a2e;
+  --seal-deep:#8f2a20;
+  --gold:#9a7b3f;
+  --tang:#c99a3a;
+  --wei:#4a6b57;   /* 唐 - 綠 */
+  --zheng:#7a4a6b; /* 鄭王世充 - 紫 */
+  --tu:#8a6d3b;    /* 突厥/宋金剛 */
+  --wagang:#3d6b8a;/* 瓦崗李世績 - 藍 */
+  --muted:#6f665a;
+  --shadow:0 2px 18px rgba(40,30,15,.13);
+  --maxw:920px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:"Noto Serif TC",serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 600px at 80% -5%, rgba(201,154,58,.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(178,58,46,.06), transparent 55%),
+    var(--paper);
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+/* ===== HERO ===== */
+header.hero{
+  position:relative;
+  padding:74px 22px 46px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+header.hero::before{
+  content:"";position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 38px, rgba(160,140,100,.06) 38px 39px);
+  pointer-events:none;
+}
+.kicker{
+  font-family:"Noto Sans TC",sans-serif;
+  letter-spacing:.42em;font-size:12px;font-weight:700;
+  color:var(--seal);margin:0 0 14px;text-indent:.42em;
+}
+.hero h1{
+  font-weight:900;font-size:clamp(34px,7vw,60px);
+  margin:0;letter-spacing:.06em;line-height:1.18;
+  text-shadow:0 1px 0 rgba(255,255,255,.5);
+}
+.hero .sub{
+  font-family:"Noto Sans TC",sans-serif;
+  color:var(--muted);margin:16px 0 0;font-size:15px;letter-spacing:.08em;
+}
+.seal{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:74px;height:74px;margin:26px auto 0;
+  border:2.5px solid var(--seal);color:var(--seal);
+  border-radius:10px;transform:rotate(-4deg);
+  font-weight:900;font-size:22px;line-height:1.05;letter-spacing:.05em;
+  padding:6px;background:rgba(178,58,46,.05);
+  box-shadow:inset 0 0 0 3px rgba(178,58,46,.12);
+}
+.seal span{writing-mode:vertical-rl;text-orientation:upright}
+
+/* ===== SECTION ===== */
+section{padding:48px 0 8px}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin:0 0 22px}
+.sec-num{
+  font-family:"Noto Sans TC",sans-serif;font-weight:700;
+  color:var(--seal);font-size:14px;letter-spacing:.2em;
+  border:1.5px solid var(--seal);border-radius:6px;
+  padding:3px 10px;white-space:nowrap;flex:none;
+}
+.sec-head h2{font-weight:800;font-size:clamp(23px,4.5vw,31px);margin:0;letter-spacing:.04em}
+p{margin:0 0 18px;font-size:17px;color:var(--ink-soft)}
+.lead{font-size:18.5px;color:var(--ink)}
+strong{color:var(--ink);font-weight:700}
+.note{
+  font-family:"Noto Sans TC",sans-serif;font-size:13.5px;color:var(--muted);
+  background:var(--paper-2);border-left:3px solid var(--line-strong);
+  padding:12px 16px;border-radius:0 8px 8px 0;line-height:1.7;
+}
+
+/* ===== MAP ===== */
+#map{height:460px;border-radius:14px;border:1px solid var(--line-strong);box-shadow:var(--shadow);margin:6px 0 12px}
+.map-legend{
+  display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;
+  font-family:"Noto Sans TC",sans-serif;font-size:13px;color:var(--ink-soft);margin:2px 0 4px;
+}
+.map-legend b{display:inline-flex;align-items:center;gap:7px;font-weight:500}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid rgba(0,0,0,.15)}
+.leaflet-container{font-family:"Noto Sans TC",sans-serif}
+
+/* ===== THREE FRONTS ===== */
+.fronts{display:grid;grid-template-columns:1fr;gap:16px;margin:8px 0 4px}
+@media(min-width:720px){.fronts{grid-template-columns:repeat(3,1fr)}}
+.front{
+  background:var(--paper-card);border:1px solid var(--line);
+  border-top:4px solid var(--c);border-radius:12px;padding:20px 18px;
+  box-shadow:var(--shadow);
+}
+.front h3{margin:0 0 4px;font-size:20px;font-weight:800}
+.front .tag{font-family:"Noto Sans TC",sans-serif;font-size:12px;font-weight:700;color:var(--c);letter-spacing:.12em}
+.front ul{margin:12px 0 0;padding-left:1.1em}
+.front li{font-size:14.5px;color:var(--ink-soft);margin:0 0 8px;font-family:"Noto Sans TC",sans-serif;line-height:1.65}
+
+/* ===== FLOW / 推演 ===== */
+.flow{
+  background:linear-gradient(180deg,var(--paper-card),var(--paper-2));
+  border:1px solid var(--line-strong);border-radius:14px;
+  padding:26px 24px;box-shadow:var(--shadow);margin:6px 0 8px;
+}
+.flow-step{display:flex;gap:16px;align-items:flex-start;padding:14px 0}
+.flow-step:not(:last-child){border-bottom:1px dashed var(--line)}
+.flow-idx{
+  flex:none;width:34px;height:34px;border-radius:50%;
+  background:var(--seal);color:#fff;font-weight:800;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+  font-family:"Noto Sans TC",sans-serif;box-shadow:0 2px 6px rgba(178,58,46,.35);
+}
+.flow-body h4{margin:2px 0 4px;font-size:17px;font-weight:700}
+.flow-body p{margin:0;font-size:15px}
+
+/* ===== DUEL 攻守 ===== */
+.duel{display:grid;grid-template-columns:1fr;gap:0;margin:6px 0;
+  border:1px solid var(--line-strong);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+@media(min-width:640px){.duel{grid-template-columns:1fr 64px 1fr}}
+.duel-side{padding:24px 22px;background:var(--paper-card)}
+.duel-side.atk{background:linear-gradient(180deg,#fbf3ea,#f6e8d8)}
+.duel-side.def{background:linear-gradient(180deg,#eef3ee,#e2ece2)}
+.duel-side h3{margin:0 0 2px;font-size:22px}
+.duel-side .who{font-family:"Noto Sans TC",sans-serif;font-size:13px;letter-spacing:.1em;font-weight:700;margin-bottom:10px}
+.duel-side.atk .who{color:var(--seal)}
+.duel-side.def .who{color:var(--wei)}
+.duel-side p{font-size:14.5px;margin:0}
+.vs{display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--paper);
+  font-weight:900;font-size:20px;letter-spacing:.05em}
+@media(max-width:639px){.vs{padding:8px 0}}
+
+/* ===== TABLE ===== */
+.tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--line-strong);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:560px;background:var(--paper-card);font-size:14.5px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--ink);color:var(--paper);font-family:"Noto Sans TC",sans-serif;font-weight:700;letter-spacing:.06em;font-size:13.5px}
+tbody tr:last-child td{border-bottom:none}
+td:first-child{font-weight:700;white-space:nowrap}
+.pill{display:inline-block;font-family:"Noto Sans TC",sans-serif;font-size:11.5px;font-weight:700;
+  padding:2px 9px;border-radius:20px;color:#fff}
+
+/* ===== QUOTE ===== */
+.quote{
+  margin:30px 0 10px;padding:30px 34px;position:relative;
+  background:var(--ink);color:var(--paper);border-radius:16px;box-shadow:var(--shadow);
+}
+.quote::before{content:"「";position:absolute;top:2px;left:14px;font-size:66px;color:var(--tang);opacity:.5;font-weight:900}
+.quote p{color:#f4ede0;font-size:clamp(19px,4vw,26px);font-weight:600;margin:0;line-height:1.6;letter-spacing:.03em}
+.quote .attr{font-family:"Noto Sans TC",sans-serif;color:var(--tang);font-size:14px;margin-top:14px;letter-spacing:.1em}
+
+/* ===== FOOTER ===== */
+footer{margin-top:56px;padding:32px 22px 48px;border-top:1px solid var(--line);text-align:center;
+  font-family:"Noto Sans TC",sans-serif;color:var(--muted);font-size:13px;line-height:1.8}
+footer a{color:var(--seal);text-decoration:none;border-bottom:1px dotted var(--seal)}
+
+/* fade-in */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">大唐雙龍傳 · 卷三十六 · 第十二章</p>
+    <h1>與 虎 謀 皮</h1>
+    <p class="sub">黃易 ｜ 軍事戰略分析 · 武德年間三線態勢推演</p>
+    <div class="seal"><span>兵者詭道</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="reveal">
+    <p class="lead">這一章沒有一兵一卒的實戰，卻是全書少見的<strong>純戰略推演</strong>章節。黃易借王玄應、王世充、寇仲三人之口，把武德年間的天下大勢一次攤開——並層層剝開李世民「以太原為餌、以內鬥為幕、以東征為實」的三重佈局。</p>
+    <div class="note">還原說明：河圖網頁面採段落亂序防爬，本文已依文意還原，個別語句順序或與原文微異。所有情報、地名、勢力範圍均取自本章白紙黑字；地圖上的疆域為<strong>示意輪廓</strong>，非精確史地界線。</div>
+  </section>
+
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-num">壹</span><h2>棋盤全局 · 三線同時開打</h2></div>
+    <p>本章的天下棋盤上，三條戰線同時在動。下圖為各勢力與衝突點的示意態勢——</p>
+    <div id="map"></div>
+    <div class="map-legend">
+      <b><span class="dot" style="background:var(--wei)"></span>唐（李淵／李世民）</b>
+      <b><span class="dot" style="background:var(--zheng)"></span>鄭（王世充 · 洛陽）</b>
+      <b><span class="dot" style="background:var(--wagang)"></span>瓦崗降唐（李世績）</b>
+      <b><span class="dot" style="background:var(--tu)"></span>宋金剛／突厥</b>
+      <b><span class="dot" style="background:var(--seal)"></span>衝突／叛亂點</b>
+    </div>
+
+    <div class="fronts">
+      <div class="front" style="--c:var(--tu)">
+        <span class="tag">北線 · 太原</span>
+        <h3>草原壓境</h3>
+        <ul>
+          <li>宋金剛借得突厥戰馬，於太原以北的<strong>并州邊境</strong>屯兵</li>
+          <li>隨時南下直搗李家龍興之地——太原</li>
+          <li>李淵已派<strong>李元吉</strong>出鎮太原，續作物資支援</li>
+        </ul>
+      </div>
+      <div class="front" style="--c:var(--seal)">
+        <span class="tag">西線 · 關中內亂</span>
+        <h3>後院起火</h3>
+        <ul>
+          <li><strong>楊文干之亂</strong>：叛軍已被李世民擊潰、全軍覆沒</li>
+          <li>楊文干孤身突圍逃走，不知所蹤</li>
+          <li>舊隋將領<strong>王行本</strong>於蒲城擁兵自重、抗命作反</li>
+        </ul>
+      </div>
+      <div class="front" style="--c:var(--wagang)">
+        <span class="tag">東線 · 中原爭霸</span>
+        <h3>群雄夾縫</h3>
+        <ul>
+          <li>瓦崗殘部<strong>李世績</strong>降唐，仍據東至東海、南至大河、西至當州、北至魏郡</li>
+          <li>竇建德正對付宇文化及</li>
+          <li>王世充據洛陽，舊隋三都中庫藏最厚</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-num">貳</span><h2>本章核心 · 李世民的「棄子誘敵」</h2></div>
+    <p>寇仲的分析是全章的<strong>軍事之眼</strong>。他一語道破：李世民派李元吉守太原，是<strong>故意要讓李元吉吃敗仗</strong>——這是「以退為進」的險著，由內外兩因逼出。</p>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-idx">外</div>
+        <div class="flow-body">
+          <h4>戰略重心早已東移</h4>
+          <p>大唐軍已把輕輜糧草運往關東，準備大舉東侵。真正的目標是<strong>東征中原</strong>，不是死保太原。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-idx">內</div>
+        <div class="flow-body">
+          <h4>唐室內鬥的掣肘</h4>
+          <p>楊文干之亂未能動搖李建成的太子寶座；建成、元吉一派反對李世民東征，怕他出關後聲勢坐大、更難節制。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-idx">著</div>
+        <div class="flow-body">
+          <h4>放手讓元吉碰釘子</h4>
+          <p>李世民索性任李元吉去太原吃敗仗，自己退居「支援」之位——險則險矣，卻高明至極。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-idx">果</div>
+        <div class="flow-body">
+          <h4>被動之中，主動盡握</h4>
+          <p>元吉一敗，正反證「非世民不能守太原」，既替東征鋪路，又反襯建成、元吉之無能。<strong>手段莫測高深。</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-num">參</span><h2>攻守辯證 · 一個沒有答案的懸念</h2></div>
+    <p>王世充點破關鍵——李世民<strong>守城能力天下無人能過其右</strong>。而寇仲自知：無論武功兵法，他都是擅攻而不善守，即使守城，也以奇兵突擊為主。於是全章拋出一道無解之問。</p>
+    <div class="duel">
+      <div class="duel-side atk">
+        <div class="who">攻 · 少帥</div>
+        <h3>寇 仲</h3>
+        <p>擅攻不善守，守城亦以奇兵突擊為主。攻擊型統帥，鋒芒外露、主動求戰。</p>
+      </div>
+      <div class="vs">對</div>
+      <div class="duel-side def">
+        <div class="who">守 · 秦王</div>
+        <h3>李世民</h3>
+        <p>守城能力天下第一。慣以築壘堅守、斷糧道後路、待敵糧盡而擊——防禦大師。</p>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:19px;margin-top:22px;color:var(--seal);font-weight:700">「以寇仲的攻，對付李世民的守，會是怎樣的結果？」</p>
+    <p style="text-align:center">——這是後續東都之戰的預告，也是寇仲最忌憚的對局。</p>
+  </section>
+
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-num">肆</span><h2>王世充的連環算盤 · 與虎謀皮</h2></div>
+    <p>王世充向寇仲兜售了一整套滅唐戰略，環環相扣：</p>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-idx">1</div><div class="flow-body"><h4>先解東線</h4><p>待竇建德擊垮宇文化及後，鄭、夏南北夾擊李世績，速殲瓦崗殘部。</p></div></div>
+      <div class="flow-step"><div class="flow-idx">2</div><div class="flow-body"><h4>斷唐命脈</h4><p>李世績一垮，<strong>太原與關中的聯繫即斷</strong>，李世民將被迫棄守太原。</p></div></div>
+      <div class="flow-step"><div class="flow-idx">3</div><div class="flow-body"><h4>迫李入關</h4><p>把李世民逼回關內，孤守太原的李元吉便成孤軍。</p></div></div>
+      <div class="flow-step"><div class="flow-idx">4</div><div class="flow-body"><h4>以彼之道</h4><p>效法李世民慣用手法：築壘堅守、斷其後路、待糧盡而擊。</p></div></div>
+      <div class="flow-step"><div class="flow-idx">5</div><div class="flow-body"><h4>招攬寇仲</h4><p>請寇仲屈就聯軍軍師，用「攻」來破李世民的「守」——這正是「與虎謀皮」。</p></div></div>
+    </div>
+    <p>但寇仲早看穿：這計對唐固然狠，對他自己卻無半點好處。一旦慫恿鄭軍攻唐，等於替李世民試火力、耗鄭軍，最終得利的還是天策府。於是他選擇<strong>按兵不動、不入王世充的局</strong>。</p>
+  </section>
+
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-num">伍</span><h2>勢力盤點</h2></div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>勢力</th><th>核心人物</th><th>本章態勢</th><th>戰略處境</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill" style="background:var(--wei)">唐</span></td><td>李世民 · 李元吉 · 李淵</td><td>平楊文干之亂；糧草東運；元吉出鎮太原</td><td>表面被動，主動權盡握——欲東征中原</td></tr>
+        <tr><td><span class="pill" style="background:var(--zheng)">鄭</span></td><td>王世充 · 郎奉 · 宋蒙秋</td><td>據洛陽，庫藏最厚；謀聯夏滅瓦崗</td><td>欲拉寇仲入局，主動求聯</td></tr>
+        <tr><td><span class="pill" style="background:var(--wagang)">瓦崗（降唐）</span></td><td>李世績</td><td>控東海至魏郡廣土，唐之東屏</td><td>恐遭鄭、夏南北夾擊，處境危殆</td></tr>
+        <tr><td><span class="pill" style="background:var(--tu)">突厥系</span></td><td>宋金剛</td><td>借突厥馬，屯并州邊境待南下</td><td>趁關中亂局發難，攻其不備</td></tr>
+        <tr><td><span class="pill" style="background:var(--ink)">少帥軍</span></td><td>寇仲 · 徐子陵</td><td>寇仲赴洛陽探風；徐子陵於弘農對付陳式</td><td>識破全局，選擇按兵、不受慫恿</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note" style="margin-top:14px">支線：徐子陵在弘農查出陳式（雷九指結拜兄弟）暗助李世民、洩其行蹤——天策府已把兩人畫像分發弘農幫各分舵偵監。此線牽出唐室對二人的情報網，並埋下弘農幫去留的伏筆。</div>
+  </section>
+
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-num">陸</span><h2>總評</h2></div>
+    <p>本章是黃易對李世民「戰略欺敵」能力最精煉的一次刻劃：以太原為餌、以內鬥為幕、以東征為實，三重佈局層層嵌套。而寇仲能在對話中即時拆解此局，也印證了他作為「攻擊型統帥」的敏銳——只是拆得穿，未必打得破。</p>
+    <div class="quote">
+      <p>李世民表面似是被動，事實卻剛好相反，主動權全在他手上。</p>
+      <div class="attr">— 全書對秦王戰略欺敵最精煉的一筆</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  出處：黃易《大唐雙龍傳》卷三十六 第十二章〈與虎謀皮〉<br>
+  <a href="https://www.hetubook.com/book/3134/2221363.html" target="_blank" rel="noopener">原文連結（河圖書庫）</a><br>
+  <span style="opacity:.7">本頁為讀者向軍事／戰略分析，僅供賞析。地圖疆域為示意，非史地精確界線。</span>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ---- 態勢地圖（示意）----
+var map = L.map('map', {scrollWheelZoom:false, attributionControl:true}).setView([35.6, 113.5], 6);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution:'&copy; OpenStreetMap &copy; CARTO ｜ 疆域為示意',
+  subdomains:'abcd', maxZoom:12
+}).addTo(map);
+
+function marker(lat,lng,color,label,desc){
+  var ic = L.divIcon({
+    className:'',
+    html:'<div style="width:16px;height:16px;border-radius:50%;background:'+color+';border:2.5px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.4)"></div>',
+    iconSize:[16,16], iconAnchor:[8,8]
+  });
+  L.marker([lat,lng],{icon:ic}).addTo(map)
+   .bindTooltip('<b>'+label+'</b>', {permanent:true, direction:'right', offset:[8,0], className:'mtip'})
+   .bindPopup('<b>'+label+'</b><br>'+desc);
+}
+
+// 瓦崗李世績控制範圍（示意輪廓：東海—大河—當州—魏郡）
+L.polygon([[36.6,114.4],[35.0,119.2],[34.2,118.0],[34.4,113.0],[36.6,114.4]],
+  {color:'#3d6b8a',weight:1.5,fillColor:'#3d6b8a',fillOpacity:.10,dashArray:'5 4'})
+  .addTo(map).bindPopup('瓦崗李世績控制範圍<br>（文中：東至東海、南至大河、西至當州、北至魏郡·示意）');
+
+// 突厥／宋金剛南下箭頭（并州邊境 → 太原）
+L.polyline([[39.2,112.4],[37.9,112.6]],{color:'#8a6d3b',weight:3,dashArray:'8 6'})
+  .addTo(map).bindPopup('宋金剛借突厥馬，屯并州邊境，待機南下太原');
+
+marker(37.87,112.55,'#4a6b57','太原','李元吉出鎮；北線焦點，李家龍興之地');
+marker(39.3,112.4,'#8a6d3b','并州邊境','宋金剛屯兵處，突厥戰馬集結');
+marker(34.34,108.94,'#4a6b57','關中·長安','唐之根本；楊文干之亂平定於此區');
+marker(34.87,110.32,'#b23a2e','蒲城（蒲州）','王行本擁兵作反，抗李淵之命');
+marker(34.52,110.87,'#b23a2e','弘農','徐子陵對付陳式；天策府情報網布點');
+marker(34.62,112.45,'#7a4a6b','洛陽','王世充據守；舊隋三都庫藏最厚');
+marker(36.28,114.62,'#3d6b8a','魏郡','瓦崗控制範圍之北界');
+marker(34.6,119.15,'#3d6b8a','東海','瓦崗控制範圍之東界');
+
+var tipCss = document.createElement('style');
+tipCss.textContent='.mtip{background:rgba(28,26,23,.88);color:#f4ede0;border:none;border-radius:5px;font-size:12px;font-weight:700;padding:2px 7px;box-shadow:0 1px 4px rgba(0,0,0,.3)}.mtip::before{display:none}';
+document.head.appendChild(tipCss);
+
+// ---- reveal on scroll ----
+var io = new IntersectionObserver(function(es){
+  es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+setTimeout(function(){map.invalidateSize()},400);
+</script>
+</body>
+</html>
