@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>大唐雙龍傳 · 卷 39 第 3 章 · 燕集干戈（燕原集突圍戰）</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  body { font-family:"PingFang TC","Noto Sans CJK TC","Noto Serif TC",serif; margin:0; background:#fdfaf3; color:#2a2a2a; }
+  .container { max-width:1100px; margin:0 auto; padding:30px 20px; }
+  .back { color:#c0392b; text-decoration:none; border-bottom:1px dashed; }
+  h1 { color:#8b0000; border-bottom:2px solid #d4a356; padding-bottom:10px; }
+  h2 { color:#5d4037; margin-top:34px; }
+  .meta { color:#888; font-size:13px; }
+  .scene-svg { width:100%; background:#2c2416; border:3px solid #8b6914; border-radius:8px; margin:20px 0; display:block; }
+  .scene-svg text { paint-order:stroke; stroke:#2c2416; stroke-width:2.6px; stroke-linejoin:round; }
+  .legend { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:8px; background:#fff; padding:14px 18px; border-radius:8px; border:1px solid #d4a356; margin:12px 0; font-size:14px; }
+  .legend-item { display:flex; align-items:center; }
+  .legend-dot { display:inline-block; width:14px; height:14px; border-radius:50%; margin-right:8px; border:2px solid white; box-shadow:0 0 0 1px #888; flex-shrink:0; }
+  .legend-dot.sq { border-radius:3px; }
+  .quote-box { background:#fff8e1; border-left:4px solid #d4a356; padding:12px 18px; margin:16px 0; border-radius:4px; line-height:1.7; }
+  .quote-box .source { color:#8b6914; font-size:12px; margin-top:8px; }
+  table { border-collapse:collapse; width:100%; margin:12px 0; font-size:14px; }
+  th, td { border-bottom:1px solid #e6d9b8; padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:#fdf0d0; color:#5d4037; }
+  .step { background:#fff; border-left:4px solid #c0392b; padding:10px 14px; margin:8px 0; border-radius:4px; line-height:1.7; }
+  .step-num { display:inline-block; background:#c0392b; color:white; border-radius:50%; width:24px; height:24px; text-align:center; line-height:24px; font-weight:bold; margin-right:8px; }
+  .step.plot { border-left-color:#6a1b9a; }
+  .step.plot .step-num { background:#6a1b9a; }
+  .map-frame { height:520px; border:3px solid #8b6914; border-radius:8px; margin:16px 0; }
+  .place-label { background:rgba(255,243,224,0.95); border:1px solid #e65100; color:#e65100; font-weight:600; font-size:12px; padding:2px 8px; border-radius:3px; }
+  .note { background:#f5f0e0; border:1px dashed #b5894e; padding:12px 16px; border-radius:6px; font-size:13px; color:#6d5640; line-height:1.7; margin-top:26px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <p><a href="index.html" class="back">← 回卷別索引</a></p>
+  <h1>卷 39 · 第三章 · 燕集干戈</h1>
+  <p class="meta">捕魚兒海旁 · 燕原集千人伏擊 · 寇仲／徐子陵／跋鋒寒識破陷阱先下手為強 · 對頡利可汗＋墩欲谷＋趙德言三大高手殺出重圍 · 亡命小戈壁奔綠洲得古阿魯</p>
+
+  <div class="quote-box">
+    「在墩欲谷高呼『動手』後，四周近五十個營帳同時被掀翻，搶出六、七百人，加上遍布營帳外扮作各族戰士的突厥精銳，竟達上千之眾……原本帳篷林立的營地，變回捕魚兒海旁的空曠草原和一望無際殺聲震天的戰場。」
+    <div class="source">—— 黃易《大唐雙龍傳》卷三十九 · 第三章（本頁各圖皆據本章原文繪製）</div>
+  </div>
+
+  <h2>⚔️ ① 燕原集突圍戰 · 俯視戰場圖</h2>
+  <svg class="scene-svg" viewBox="0 0 960 820" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#69f0ae"/></marker>
+      <marker id="arr-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef5350"/></marker>
+      <marker id="arr-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#eceff1"/></marker>
+      <marker id="arr-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffd54f"/></marker>
+      <marker id="arr-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#ba68c8"/></marker>
+    </defs>
+    <rect width="960" height="820" fill="#2c2416"/>
+    <text x="480" y="34" text-anchor="middle" fill="#d4a356" font-size="20" font-weight="bold">燕原集 · 千人伏擊突圍戰（捕魚兒海旁草原）</text>
+
+    <!-- 方位盤 -->
+    <g transform="translate(906, 78)">
+      <circle r="24" fill="rgba(255,255,255,0.08)" stroke="#d4a356" stroke-width="1"/>
+      <text y="-8" text-anchor="middle" fill="#d4a356" font-size="11" font-weight="bold">北</text>
+      <text y="16" text-anchor="middle" fill="#888" font-size="9">西←→東</text>
+    </g>
+
+    <!-- 捕魚兒海（西側） -->
+    <path d="M 0 60 L 118 90 Q 150 220 122 380 Q 100 540 130 700 L 0 760 Z" fill="#1565c0" opacity="0.4" stroke="#1565c0" stroke-width="2"/>
+    <text x="58" y="300" text-anchor="middle" fill="#90caf9" font-size="15" font-weight="bold" font-style="italic" transform="rotate(-84 58 300)">捕魚兒海（今貝爾湖）</text>
+
+    <!-- 被掀翻的營帳（近五十個，示意） -->
+    <g stroke="#6d5640" stroke-width="1.5" fill="#4a3a25">
+      <path d="M 300 170 l 20 -12 l 18 14 z" transform="rotate(38 310 168)"/>
+      <path d="M 390 140 l 20 -12 l 18 14 z" transform="rotate(-25 400 138)"/>
+      <path d="M 500 150 l 20 -12 l 18 14 z" transform="rotate(60 510 148)"/>
+      <path d="M 620 170 l 20 -12 l 18 14 z" transform="rotate(-40 630 168)"/>
+      <path d="M 730 210 l 20 -12 l 18 14 z" transform="rotate(20 740 208)"/>
+      <path d="M 260 280 l 20 -12 l 18 14 z" transform="rotate(-55 270 278)"/>
+      <path d="M 790 320 l 20 -12 l 18 14 z" transform="rotate(45 800 318)"/>
+      <path d="M 250 420 l 20 -12 l 18 14 z" transform="rotate(15 260 418)"/>
+      <path d="M 820 440 l 20 -12 l 18 14 z" transform="rotate(-30 830 438)"/>
+      <path d="M 300 560 l 20 -12 l 18 14 z" transform="rotate(50 310 558)"/>
+      <path d="M 700 560 l 20 -12 l 18 14 z" transform="rotate(-15 710 558)"/>
+      <path d="M 480 620 l 20 -12 l 18 14 z" transform="rotate(30 490 618)"/>
+    </g>
+    <text x="255" y="240" text-anchor="middle" fill="#8a7a62" font-size="11" font-style="italic">近五十營帳同時掀翻（示意）</text>
+
+    <!-- 主帳（北面偏中） -->
+    <path d="M 430 92 L 480 58 L 530 92 L 522 128 L 438 128 Z" fill="#5d4037" stroke="#ffd700" stroke-width="2.5"/>
+    <text x="480" y="112" text-anchor="middle" fill="#ffd700" font-size="13" font-weight="bold">主帳</text>
+    <text x="480" y="148" text-anchor="middle" fill="#e8cfa0" font-size="10">衝出十多名高手 · 敵方主力（趙德言在內）</text>
+
+    <!-- ② 墩欲谷破帳頂而出 -->
+    <circle cx="560" cy="70" r="16" fill="#eceff1" stroke="#546e7a" stroke-width="2.5"/>
+    <text x="560" y="75" text-anchor="middle" fill="#37474f" font-size="12" font-weight="bold">墩</text>
+    <path d="M 535 90 Q 548 76 556 62" stroke="#eceff1" stroke-width="2" fill="none" stroke-dasharray="4,3"/>
+    <text x="592" y="58" text-anchor="start" fill="#eceff1" font-size="11" font-weight="bold">② 墩欲谷破主帳頂衝天四丈：「大汗有命！動手！」</text>
+
+    <!-- 東面敵騎主力（潮水般） -->
+    <g fill="#c0392b" stroke="#fff" stroke-width="1">
+      <circle cx="878" cy="250" r="7"/><circle cx="898" cy="280" r="7"/><circle cx="872" cy="310" r="7"/>
+      <circle cx="900" cy="340" r="7"/><circle cx="876" cy="372" r="7"/><circle cx="902" cy="404" r="7"/>
+      <circle cx="874" cy="436" r="7"/><circle cx="898" cy="468" r="7"/><circle cx="878" cy="500" r="7"/>
+      <circle cx="856" cy="284" r="7"/><circle cx="852" cy="350" r="7"/><circle cx="854" cy="420" r="7"/><circle cx="850" cy="478" r="7"/>
+    </g>
+    <path d="M 848 300 L 700 340" stroke="#ef5350" stroke-width="4" fill="none" marker-end="url(#arr-r)"/>
+    <path d="M 844 400 L 774 410" stroke="#ef5350" stroke-width="4" fill="none" marker-end="url(#arr-r)"/>
+    <path d="M 846 480 L 706 500" stroke="#ef5350" stroke-width="4" fill="none" marker-end="url(#arr-r)"/>
+    <text x="876" y="222" text-anchor="middle" fill="#ff8a80" font-size="12" font-weight="bold">突厥精騎主力</text>
+    <text x="876" y="238" text-anchor="middle" fill="#ff8a80" font-size="10">潮水般從東面攻來</text>
+
+    <!-- ④ 徐子陵鐵彈壓制東面 -->
+    <g stroke="#ffd54f" stroke-width="1.6" opacity="0.9">
+      <line x1="560" y1="392" x2="668" y2="330"/><line x1="560" y1="398" x2="684" y2="366"/>
+      <line x1="560" y1="404" x2="690" y2="402"/><line x1="560" y1="410" x2="684" y2="440"/>
+      <line x1="560" y1="416" x2="668" y2="474"/>
+    </g>
+    <!-- 人馬堆疊小丘 -->
+    <ellipse cx="722" cy="404" rx="34" ry="20" fill="#5d4037" stroke="#8d6e63" stroke-width="2"/>
+    <text x="722" y="400" text-anchor="middle" fill="#bcaaa4" font-size="9">中彈人馬</text>
+    <text x="722" y="412" text-anchor="middle" fill="#bcaaa4" font-size="9">堆疊如小丘</text>
+    <text x="640" y="282" text-anchor="middle" fill="#ffd54f" font-size="11" font-weight="bold">④ 徐子陵鐵彈漫天花雨</text>
+    <text x="640" y="297" text-anchor="middle" fill="#ffd54f" font-size="10">封死東面攻勢 · 敵騎難越雷池</text>
+
+    <!-- 徒步戰士圍圈（五十多名） -->
+    <g fill="none" stroke="#8d6e63" stroke-width="1.5">
+      <circle cx="480" cy="330" r="98" stroke-dasharray="6,5"/>
+    </g>
+    <g fill="#a1887f" stroke="#fff" stroke-width="1">
+      <circle cx="480" cy="232" r="5"/><circle cx="545" cy="254" r="5"/><circle cx="578" cy="316" r="5"/>
+      <circle cx="566" cy="386" r="5"/><circle cx="508" cy="424" r="5"/><circle cx="438" cy="422" r="5"/>
+      <circle cx="392" cy="378" r="5"/><circle cx="384" cy="306" r="5"/><circle cx="418" cy="248" r="5"/>
+    </g>
+    <text x="322" y="212" text-anchor="middle" fill="#bcaaa4" font-size="10">五十多名徒步戰士拔刀圍困</text>
+
+    <!-- ① 三人品字陣（圍圈中心） -->
+    <circle cx="462" cy="316" r="17" fill="#1b5e20" stroke="#fff" stroke-width="2.5"/>
+    <text x="462" y="321" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">寇</text>
+    <circle cx="500" cy="342" r="17" fill="#1b5e20" stroke="#fff" stroke-width="2.5"/>
+    <text x="500" y="347" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">陵</text>
+    <circle cx="462" cy="368" r="17" fill="#1b5e20" stroke="#fff" stroke-width="2.5"/>
+    <text x="462" y="373" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">跋</text>
+    <text x="404" y="344" text-anchor="end" fill="#b9f6ca" font-size="12" font-weight="bold">① 三馬品字陣 →</text>
+    <text x="404" y="360" text-anchor="end" fill="#b9f6ca" font-size="10">識破陷阱 · 先下手為強</text>
+
+    <!-- ③ 突圍路線：往主帳左方虛晃 → 馬躍 → 南面突圍 -->
+    <path d="M 462 296 Q 440 220 408 160" stroke="#69f0ae" stroke-width="3.5" fill="none" stroke-dasharray="8,6"/>
+    <text x="386" y="188" text-anchor="end" fill="#69f0ae" font-size="11" font-weight="bold">③ 先朝主帳左方衝</text>
+    <text x="386" y="203" text-anchor="end" fill="#69f0ae" font-size="10">馬躍丈許越敵（跳！）</text>
+    <path d="M 408 160 Q 330 260 330 420 Q 330 560 380 660 L 420 740" stroke="#69f0ae" width="5" stroke-width="5" fill="none" marker-end="url(#arr-g)"/>
+    <text x="298" y="424" text-anchor="end" fill="#69f0ae" font-size="12" font-weight="bold">⑦ 南面兵力薄弱</text>
+    <text x="298" y="440" text-anchor="end" fill="#69f0ae" font-size="11">沿岸破缺口突圍</text>
+
+    <!-- ⑤ 墩欲谷凌空右後側撲至＋亡月弓 -->
+    <circle cx="596" cy="560" r="16" fill="#eceff1" stroke="#546e7a" stroke-width="2.5"/>
+    <text x="596" y="565" text-anchor="middle" fill="#37474f" font-size="12" font-weight="bold">墩</text>
+    <path d="M 640 200 Q 660 400 612 542" stroke="#eceff1" stroke-width="2.5" fill="none" stroke-dasharray="7,5" marker-end="url(#arr-w)"/>
+    <text x="672" y="520" text-anchor="start" fill="#eceff1" font-size="11" font-weight="bold">⑤ 墩欲谷凌空斜撲（右後側）</text>
+    <!-- 亡月弓一箭 -->
+    <path d="M 452 620 L 576 574" stroke="#ffd54f" stroke-width="3" fill="none" marker-end="url(#arr-gold)"/>
+    <text x="470" y="648" text-anchor="middle" fill="#ffd54f" font-size="11" font-weight="bold">跋鋒寒亡月弓勁箭</text>
+    <!-- 被震退 -->
+    <path d="M 614 548 Q 700 600 780 640" stroke="#90a4ae" stroke-width="2.5" fill="none" stroke-dasharray="4,4" marker-end="url(#arr-w)"/>
+    <text x="722" y="668" text-anchor="middle" fill="#b0bec5" font-size="10">袖擋箭碎 · 反震力送遠 · 距離拉闊</text>
+
+    <!-- ⑥ 趙德言鏈子菱槍 -->
+    <circle cx="560" cy="480" r="15" fill="#6a1b9a" stroke="#fff" stroke-width="2.5"/>
+    <text x="560" y="485" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">趙</text>
+    <path d="M 546 492 Q 500 530 452 602" stroke="#ba68c8" stroke-width="2.5" fill="none" stroke-dasharray="2,4" marker-end="url(#arr-p)"/>
+    <text x="600" y="452" text-anchor="middle" fill="#ce93d8" font-size="11" font-weight="bold">⑥ 趙德言鏈子菱槍</text>
+    <text x="600" y="467" text-anchor="middle" fill="#ce93d8" font-size="10">丈半外無聲直取跋鋒寒後腦</text>
+
+    <!-- 突圍中的三人（南段，品字改寇仲為首） -->
+    <circle cx="392" cy="618" r="16" fill="#1b5e20" stroke="#fff" stroke-width="2.5"/>
+    <text x="392" y="623" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">寇</text>
+    <circle cx="424" cy="652" r="15" fill="#1b5e20" stroke="#fff" stroke-width="2.5"/>
+    <text x="424" y="657" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">陵</text>
+    <circle cx="384" cy="662" r="15" fill="#1b5e20" stroke="#fff" stroke-width="2.5"/>
+    <text x="384" y="667" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">跋</text>
+    <text x="330" y="628" text-anchor="end" fill="#b9f6ca" font-size="10">改寇仲為首 · 跋鋒寒殿後</text>
+
+    <!-- ⑧ 頡利從靠海方趕上 -->
+    <circle cx="228" cy="600" r="19" fill="#e8b730" stroke="#fff" stroke-width="3"/>
+    <text x="228" y="606" text-anchor="middle" fill="#5d4037" font-size="12" font-weight="bold">頡</text>
+    <path d="M 190 520 Q 210 560 222 582" stroke="#e8b730" stroke-width="3" fill="none" marker-end="url(#arr-gold)"/>
+    <path d="M 246 612 L 358 640" stroke="#e8b730" stroke-width="3" fill="none" stroke-dasharray="8,5" marker-end="url(#arr-gold)"/>
+    <text x="196" y="498" text-anchor="middle" fill="#ffd54f" font-size="12" font-weight="bold">⑧ 頡利可汗（金袍禿漢）</text>
+    <text x="196" y="514" text-anchor="middle" fill="#ffd54f" font-size="10">從靠海一方騰空趕上 · 射人先射馬</text>
+    <!-- 頡利被震飛 -->
+    <path d="M 360 680 Q 300 730 232 758" stroke="#e8b730" stroke-width="2.5" fill="none" stroke-dasharray="3,4" marker-end="url(#arr-gold)"/>
+    <text x="284" y="784" text-anchor="middle" fill="#ffd54f" font-size="10">中寶瓶氣 · 斷線風箏般橫拋（⑨ 換位反擊，見下節）</text>
+
+    <!-- 突圍出口 -->
+    <text x="446" y="778" text-anchor="start" fill="#69f0ae" font-size="13" font-weight="bold">殺出重圍 → 亡命小戈壁（往得古阿魯綠洲）</text>
+  </svg>
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#1b5e20"></span>寇仲（井中月）· 徐子陵（鐵彈）· 跋鋒寒（斬玄劍＋亡月弓）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e8b730"></span>頡利可汗（金袍禿漢 · 長馬刀）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#eceff1"></span>墩欲谷（白袍 · 突厥國師級高手）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#6a1b9a"></span>趙德言（鏈子菱槍）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>突厥精騎（伏兵上千）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#a1887f"></span>徒步戰士（五十多名 · 各式馬刀）</div>
+    <div class="legend-item"><span class="legend-dot sq" style="background:#4a3a25"></span>被掀翻的營帳（近五十個）</div>
+    <div class="legend-item"><span class="legend-dot sq" style="background:#1565c0"></span>捕魚兒海（今貝爾湖）</div>
+  </div>
+
+  <h2>🐎 ② 高潮攻防 —— 頡利「射人先射馬」vs 雙龍空中換位</h2>
+  <div class="step"><span class="step-num">1</span><b>頡利搶攻</b>：頡利全憑一口真氣凌空追趕，策略是「射人先射馬」——先迫得寇仲應接不暇，再以重手法擊斃千里夢。長馬刀化作耀眼白芒，劈往寇仲左頸；同時另有一槍一刀攔路。</div>
+  <div class="step"><span class="step-num">2</span><b>寇仲喝「跳」</b>：猛抽馬韁，真勁依跋鋒寒親授秘法傳到馬腿——千里夢直躍離地近丈，越過六、七名敵人，橫過三丈多距離。寇仲以井中月硬撼頡利馬刀（「鏘」！），大笑：「寇仲參見大汗！」</div>
+  <div class="step"><span class="step-num">3</span><b>徐子陵喝「換位」</b>：看出頡利有足夠實力拖住他們，把手中鐵彈全數灑出，平飛過來——手按千里夢馬背，一腳橫撐，疾取頡利臉門。寇仲則完全出乎頡利料外地借力彈離千里夢，投往徐子陵的萬里斑。</div>
+  <div class="step"><span class="step-num">4</span><b>寶瓶氣建功</b>：頡利來不及變招，怒喝改以刀柄撞向徐子陵——寶瓶氣勁驟發，高度集中得令人難信。頡利雖臻宗師級數仍吃個啞巴虧，震得手酸臂麻、一口真氣已盡，斷線風箏般橫拋開去。</div>
+  <div class="step"><span class="step-num">5</span><b>缺口告成</b>：三馬落地，敵陣大亂失去攻擊重心；徐子陵成為三角陣尖鋒，寶瓶氣發、兩敵應拳墮馬——南方敵陣被破開逃生缺口，與趙德言、頡利大幅拉遠距離，沿岸突圍。</div>
+
+  <h2>🗺️ ③ 逃亡路線 —— 捕魚兒海 → 小戈壁 → 綠洲得古阿魯</h2>
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot sq" style="background:#0a8043"></span>三人逃亡路線（星宿指引 · 一天半夜）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>古今對照地點</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#9b59b6"></span>小說虛構地點（位置推定）</div>
+  </div>
+  <div id="map" class="map-frame"></div>
+
+  <h2>🦅 ④ 綠洲得古阿魯 —— 射鷹之計</h2>
+  <div class="quote-box">
+    「綠色的線條隨著他們的前推變成一片綠色的叢林……筆直的楊樹和茂密的榆槐緊挨雜生，形成天然的防沙陣形，綠油油的草野伸展開去，覆蓋著一座小湖四周的岸原，彷彿由天而降的一塊綠毯。」
+    <div class="source">—— 三人抵達小戈壁內唯一的綠洲「得古阿魯」，調息近半個時辰，體力精神回復大半</div>
+  </div>
+  <div class="step"><span class="step-num">1</span><b>威脅</b>：頡利放出的第二頭獵鷹在百丈高空時現時隱地盤旋追蹤（第一頭已被幹掉），敵人仍在後方苦追不捨。</div>
+  <div class="step"><span class="step-num">2</span><b>寇仲之計</b>：躲進樹林引鷹兒飛低查看——「只要把鷹兒引得飛低點，沒可能的事不是變得可能嗎？」目標是<b>只傷不死</b>：受傷的鷹回到頡利身邊，頡利便不敢再放鷹（訓練獵鷹非十天半月可成）。</div>
+  <div class="step"><span class="step-num">3</span><b>執行</b>：跋鋒寒要求送上四十丈高空，徐子陵計算頂多送上二十丈——跋鋒寒接過寇仲的滅日弓長身而起：「沒試過怎知不行？」</div>
+
+  <h2>🕸️ ⑤ 連環陰謀鏈 —— 「由漁陽到此，一計不成又施一計」</h2>
+  <div class="step plot"><span class="step-num">1</span><b>暴露行蹤</b>：三人到青樓找箭大師求弓，行蹤暴露，以杜興、許開山為首的敵人隨即展開行動。</div>
+  <div class="step plot"><span class="step-num">2</span><b>山海關變招</b>：杜興本擬在山海關傾盡全力擊殺兩人，因跋鋒寒與師妃暄出現而陣腳大亂，改由許開山出馬。</div>
+  <div class="step plot"><span class="step-num">3</span><b>飲馬驛毒計</b>：狼盜與騷娘子針對的從來不是陰顯鶴或各幫會——精於天文和用毒的騷娘子在封閉環境中毒害諸人，只因寇仲、徐子陵百毒不侵而功虧一簣。</div>
+  <div class="step plot"><span class="step-num">4</span><b>狼盜誘餌</b>：許開山巧妙引三人追趕狼盜出塞；狼盜把他們引到燕原集附近後隱去蹤跡，迫使他們只好去找「馬吉」探消息。</div>
+  <div class="step plot"><span class="step-num">5</span><b>燕原集殺局</b>：所謂馬吉營地實為突厥千人伏擊圈，頡利、墩欲谷、趙德言恭候多時——幸徐子陵臨場起疑（「曾聽人說過馬吉懂漢語嗎？」），三人先下手為強，殺出生天。</div>
+
+  <h2>👥 出場高手與戰果</h2>
+  <table>
+    <tr><th>人物</th><th>陣營・武器</th><th>本章表現</th><th>結果</th></tr>
+    <tr><td>寇仲</td><td>井中月 · 滅日弓 · 千里夢</td><td>刀芒擋者披靡如破浪船首；一刀震得擋路者七竅滲血、撞翻七八人；馬躍越敵、空中換位</td><td>滿身傷痕突圍</td></tr>
+    <tr><td>徐子陵</td><td>鐵彈（漫天花雨手法）· 萬里斑</td><td>識破馬吉陷阱；鐵彈封死東面攻勢、人馬堆疊如小丘；寶瓶氣重創頡利</td><td>滿身傷痕突圍</td></tr>
+    <tr><td>跋鋒寒</td><td>斬玄劍 · 亡月弓</td><td>左弓右劍一心二用；一箭射退墩欲谷；「人馬如一」心法保三馬不倒；星宿導航</td><td>身添兩處傷口</td></tr>
+    <tr><td>頡利可汗</td><td>突厥大汗 · 金袍 · 長馬刀</td><td>「射人先射馬」搶攻寇仲，刀法把寇仲鎖個牢固</td><td>中寶瓶氣，斷線風箏般橫拋</td></tr>
+    <tr><td>墩欲谷</td><td>突厥國師級 · 白袍</td><td>破帳頂衝天四丈發動伏擊；凌空斜撲追擊</td><td>袖擋勁箭被反震送遠</td></tr>
+    <tr><td>趙德言</td><td>鏈子菱槍</td><td>丈半外無聲偷襲跋鋒寒後腦</td><td>被反手一劍盪開（跋添兩傷）</td></tr>
+    <tr><td>突厥伏兵</td><td>精騎＋徒步戰士上千</td><td>五十營帳掀翻齊出，東面潮水攻勢</td><td>被破南面缺口，十多人中鐵彈斃命</td></tr>
+  </table>
+
+  <div class="note">
+    <b>繪製聲明</b>：戰場圖為<b>示意圖</b>，非按比例；hetubook 版正文段落原序錯亂，已依敘事邏輯重排後取材。
+    ① 方位依原文：突厥精騎「從捕魚兒海相對的東面」攻來（故海在西）、「南面因兵力薄弱」為突圍方向、頡利「從靠海一方趕上」、墩欲谷「從右後側下掠」。
+    ② 燕原集、綠洲「得古阿魯」皆小說虛構地名；捕魚兒海即今中蒙邊界貝爾湖為史地實址。綠洲方位原文僅言「小戈壁內唯一綠洲」，地圖上位置為推定並已標註。
+    ③ 「五十多名徒步戰士」「上千之眾」「六、七百人」等數字均出自原文；圖中點數為示意。
+    ④ 師妃暄之「師紀暄」、趙德言之「趙德高」等為所據版本異字，本頁統一作通行寫法。
+  </div>
+</div>
+
+<script>
+  const map = L.map('map').setView([47.3, 117.5], 8);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+    attribution:'© OpenStreetMap / CARTO', maxZoom:19, subdomains:'abcd',
+  }).addTo(map);
+
+  // 繁體地理標籤
+  const geoLabels = [
+    { name:'貝爾湖（捕魚兒海）', lat:47.80, lon:117.70, type:'water' },
+    { name:'呼倫湖', lat:48.95, lon:117.40, type:'water' },
+    { name:'哈拉哈河', lat:47.35, lon:118.35, type:'river' },
+    { name:'克魯倫河', lat:48.30, lon:116.60, type:'river' },
+  ];
+  geoLabels.forEach(g => {
+    const style = {
+      water:'color:#1565c0;font-style:italic;font-size:13px;font-weight:bold;',
+      river:'color:#1565c0;font-style:italic;font-size:11px;',
+    }[g.type];
+    L.marker([g.lat,g.lon], {
+      icon: L.divIcon({ className:'geo-label',
+        html:`<span style="${style};white-space:nowrap;background:rgba(255,255,255,0.7);padding:1px 4px;border-radius:2px;">${g.name}</span>`,
+        iconSize:[60,16], iconAnchor:[30,8] }),
+      interactive:false,
+    }).addTo(map);
+  });
+
+  const placeIcon = L.divIcon({ className:'place-marker',
+    html:'<div style="background:#e67e22;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.6);"></div>',
+    iconSize:[20,20], iconAnchor:[10,10] });
+  const fictionIcon = L.divIcon({ className:'place-marker',
+    html:'<div style="background:#9b59b6;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.6);"></div>',
+    iconSize:[20,20], iconAnchor:[10,10] });
+
+  // 燕原集（虛構：捕魚兒海東岸，戰場所在）
+  L.marker([47.78, 117.92], { icon:fictionIcon })
+   .bindPopup('<h3>燕原集（虛構）</h3><p>捕魚兒海旁的各族交易營地——實為突厥千人伏擊圈。頡利、墩欲谷、趙德言在此恭候。位置推定：原文僅言營地位於捕魚兒海旁、敵騎自東面（海之對面）攻來，故置於東岸。</p>')
+   .bindTooltip('燕原集（伏擊戰場・推定）', { permanent:true, direction:'right', offset:[12,0], className:'place-label' })
+   .addTo(map);
+
+  // 捕魚兒海實址
+  L.marker([47.80, 117.70], { icon:placeIcon })
+   .bindPopup('<h3>捕魚兒海（今貝爾湖）</h3><p>中蒙邊界大湖，史地實址。突厥大軍在湖旁草原紮營設伏。</p>')
+   .addTo(map);
+
+  // 得古阿魯（虛構綠洲，位置推定）
+  L.marker([46.55, 116.75], { icon:fictionIcon })
+   .bindPopup('<h3>綠洲得古阿魯（虛構）</h3><p>小戈壁半沙漠中唯一綠洲：楊樹榆槐環抱小湖。三人調息半個時辰，並在此定下射傷獵鷹之計。位置推定：原文僅言突圍後奔行一天半夜、跋鋒寒以星宿導航，方向未明。</p>')
+   .bindTooltip('綠洲得古阿魯（推定）', { permanent:true, direction:'right', offset:[12,0], className:'place-label' })
+   .addTo(map);
+
+  // 逃亡路線
+  L.polyline([[47.78,117.92],[47.62,117.88],[47.35,117.60],[47.05,117.25],[46.80,116.98],[46.55,116.75]], {
+    color:'#0a8043', weight:6, opacity:0.9, dashArray:'12,8'
+  }).bindPopup('突圍後沿岸南逃，穿越小戈壁半沙漠，星宿指引，急趕一天半夜（真元近油盡燈枯，以真氣支撐馬兒）').addTo(map);
+
+  // 小戈壁範圍框（示意）
+  L.rectangle([[46.45,116.55],[47.45,117.75]], {
+    color:'#c9a227', weight:2, fillOpacity:0.06, dashArray:'10,8'
+  }).bindPopup('<b>小戈壁半沙漠地帶（示意）</b><p>荒沙遮大地、觸目灰黃；頡利獵鷹在百丈高空盤旋追蹤。</p>').addTo(map);
+
+  map.fitBounds([[46.35,116.3],[48.15,118.5]]);
+</script>
+</body>
+</html>
