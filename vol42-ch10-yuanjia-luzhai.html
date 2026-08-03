@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>大唐雙龍傳 · 卷 42 第 10 章 · 冤家路窄（監視者 vs 寇仲 街頭諜對諜圖）</title>
+<style>
+  body { font-family:"PingFang TC","Noto Sans CJK TC","Noto Serif TC",serif; margin:0; background:#fdfaf3; color:#2a2a2a; }
+  .container { max-width:1100px; margin:0 auto; padding:30px 20px; }
+  .back { color:#c0392b; text-decoration:none; border-bottom:1px dashed; }
+  h1 { color:#8b0000; border-bottom:2px solid #d4a356; padding-bottom:10px; }
+  h2 { color:#5d4037; margin-top:30px; }
+  .meta { color:#888; font-size:13px; }
+  .scene-svg { width:100%; background:#1c2430; border:3px solid #8b6914; border-radius:8px; margin:20px 0; display:block; }
+  /* 深色雨夜街景：所有圖內文字加同色描邊光暈 */
+  .scene-svg text { paint-order:stroke; stroke:#1c2430; stroke-width:2.6px; stroke-linejoin:round; }
+  .mech-svg { width:100%; background:#241c30; border:3px solid #8b6914; border-radius:8px; margin:20px 0; display:block; }
+  .mech-svg text { paint-order:stroke; stroke:#241c30; stroke-width:2.6px; stroke-linejoin:round; }
+  .legend { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:8px; background:#fff; padding:14px 18px; border-radius:8px; border:1px solid #d4a356; margin:12px 0; font-size:14px; }
+  .legend-item { display:flex; align-items:center; }
+  .legend-dot { display:inline-block; width:14px; height:14px; border-radius:50%; margin-right:8px; border:2px solid white; box-shadow:0 0 0 1px #888; flex-shrink:0; }
+  .legend-dot.sq { border-radius:3px; }
+  .quote-box { background:#fff8e1; border-left:4px solid #d4a356; padding:12px 18px; margin:16px 0; border-radius:4px; line-height:1.7; }
+  .quote-box .source { color:#8b6914; font-size:12px; margin-top:8px; }
+  table { border-collapse:collapse; width:100%; margin:12px 0; font-size:14px; }
+  th, td { border-bottom:1px solid #e6d9b8; padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:#fdf0d0; color:#5d4037; }
+  .step { background:#fff; border-left:4px solid #c0392b; padding:10px 14px; margin:8px 0; border-radius:4px; }
+  .step-num { display:inline-block; background:#c0392b; color:white; border-radius:50%; width:24px; height:24px; text-align:center; line-height:24px; font-weight:bold; margin-right:8px; }
+  .step.green { border-left-color:#1b7a3d; }
+  .step.green .step-num { background:#1b7a3d; }
+  .note { background:#f5f0e4; border:1px dashed #b8a06a; padding:12px 16px; border-radius:6px; font-size:13px; color:#6d5640; line-height:1.7; margin:20px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <p><a href="index.html" class="back">← 回卷別索引</a></p>
+  <h1>卷 42 · 第十章 · 冤家路窄</h1>
+  <p class="meta">龍泉 · 近王城大道（外賓館街）· 大雨 · 寇仲扮「莫一心」探越克蓬 · 距大門數步被對街銳利目光試探 · 忍住不回望過門不入 · 反獵監視者疑見崔望 ｜ 本章另一線：徐子陵三訪聖光寺，師妃暄答允聯絡祝玉妍圍剿石之軒（不入本圖）</p>
+
+  <h2>🌧️ 監視者 vs 寇仲 · 街頭位置圖（俯視示意）</h2>
+  <svg class="scene-svg" viewBox="0 0 960 660" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#4caf50"/>
+      </marker>
+      <marker id="arr-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#ba68c8"/>
+      </marker>
+    </defs>
+
+    <rect width="960" height="660" fill="#1c2430"/>
+
+    <!-- 雨絲（大雨下個不休） -->
+    <g stroke="#5c7a9e" stroke-width="1" opacity="0.22">
+      <line x1="80" y1="0" x2="60" y2="40"/><line x1="240" y1="10" x2="220" y2="50"/>
+      <line x1="420" y1="0" x2="400" y2="40"/><line x1="600" y1="8" x2="580" y2="48"/>
+      <line x1="760" y1="0" x2="740" y2="40"/><line x1="900" y1="12" x2="880" y2="52"/>
+      <line x1="150" y1="600" x2="130" y2="640"/><line x1="500" y1="610" x2="480" y2="650"/>
+      <line x1="860" y1="600" x2="840" y2="640"/>
+    </g>
+
+    <text x="480" y="30" text-anchor="middle" fill="#d4a356" font-size="19" font-weight="bold">龍泉 · 近王城的大道（一邊外賓館林立，一邊各式店鋪）</text>
+
+    <!-- ── 外賓館側（上） ── -->
+    <text x="52" y="58" fill="#90a4ae" font-size="12">外賓館側 · 十多所林立（僅標可考者，其餘示意）</text>
+    <g>
+      <rect x="40" y="66" width="105" height="78" fill="#37424e" stroke="#546472" rx="3"/>
+      <text x="92" y="110" text-anchor="middle" fill="#78909c" font-size="11">外賓館</text>
+      <rect x="158" y="66" width="105" height="78" fill="#37424e" stroke="#546472" rx="3"/>
+      <text x="210" y="110" text-anchor="middle" fill="#78909c" font-size="11">外賓館</text>
+
+      <!-- 車師國外賓館（越克蓬落腳·被嚴密監視） -->
+      <rect x="285" y="62" width="180" height="82" fill="#5d2f2f" stroke="#ff8a80" stroke-width="2.5" rx="4"/>
+      <text x="375" y="92" text-anchor="middle" fill="#ffcdd2" font-size="13" font-weight="bold">車師國外賓館</text>
+      <text x="375" y="110" text-anchor="middle" fill="#ff8a80" font-size="11">越克蓬落腳 · 整館遭嚴密監視</text>
+      <!-- 大門 + 守門車師戰士 -->
+      <rect x="352" y="138" width="46" height="12" fill="#8b6914" stroke="#ffd700" stroke-width="1.5"/>
+      <text x="475" y="162" text-anchor="start" fill="#ffd700" font-size="11">← 大門（車師戰士守門）</text>
+      <circle cx="360" cy="158" r="6" fill="#8d6e63" stroke="#fff" stroke-width="1"/>
+      <circle cx="390" cy="158" r="6" fill="#8d6e63" stroke="#fff" stroke-width="1"/>
+
+      <rect x="485" y="66" width="100" height="78" fill="#37424e" stroke="#546472" rx="3"/>
+      <text x="535" y="110" text-anchor="middle" fill="#78909c" font-size="11">外賓館</text>
+      <rect x="602" y="66" width="100" height="78" fill="#37424e" stroke="#546472" rx="3"/>
+      <text x="652" y="110" text-anchor="middle" fill="#78909c" font-size="11">外賓館</text>
+
+      <!-- 高麗人外賓館 -->
+      <rect x="720" y="62" width="160" height="82" fill="#2c3e50" stroke="#64b5f6" stroke-width="2" rx="4"/>
+      <text x="800" y="98" text-anchor="middle" fill="#bbdefb" font-size="12" font-weight="bold">高麗人外賓館</text>
+      <text x="800" y="116" text-anchor="middle" fill="#90caf9" font-size="10">寇仲一度改道往此</text>
+    </g>
+
+    <!-- 外賓館側行人道 -->
+    <rect x="30" y="170" width="900" height="52" fill="#26303c" stroke="#3d4a58" rx="3"/>
+    <text x="60" y="214" fill="#78909c" font-size="11">行人道（無避雨處 · 行人疏落）</text>
+
+    <!-- 車馬道 -->
+    <rect x="30" y="234" width="900" height="96" fill="#151c26" stroke="#3d4a58" rx="3"/>
+    <line x1="50" y1="282" x2="910" y2="282" stroke="#455a64" stroke-width="1.5" stroke-dasharray="14,10"/>
+    <text x="90" y="262" fill="#607d8b" font-size="12">車馬道</text>
+    <ellipse cx="500" cy="310" rx="46" ry="7" fill="#2e4a66" opacity="0.5"/>
+    <ellipse cx="720" cy="256" rx="34" ry="6" fill="#2e4a66" opacity="0.5"/>
+    <text x="906" y="262" text-anchor="end" fill="#d4a356" font-size="11">→ 王城（方向推定）</text>
+
+    <!-- 店鋪側行人道（檐篷+避雨人群） -->
+    <rect x="30" y="342" width="900" height="56" fill="#26303c" stroke="#3d4a58" rx="3"/>
+    <rect x="46" y="342" width="660" height="12" fill="#6d5640" stroke="#8b6914" stroke-width="1"/>
+    <text x="60" y="336" fill="#c9a86a" font-size="11">檐篷（下擠滿避雨的人）</text>
+    <!-- 避雨人群 -->
+    <g fill="#546e7a" stroke="#90a4ae" stroke-width="1">
+      <circle cx="90" cy="372" r="7"/><circle cx="118" cy="378" r="7"/><circle cx="146" cy="370" r="7"/>
+      <circle cx="230" cy="376" r="7"/><circle cx="258" cy="368" r="7"/>
+      <circle cx="300" cy="378" r="7"/><circle cx="330" cy="370" r="7"/>
+      <circle cx="440" cy="374" r="7"/><circle cx="468" cy="368" r="7"/>
+      <circle cx="560" cy="376" r="7"/><circle cx="588" cy="370" r="7"/><circle cx="640" cy="374" r="7"/>
+    </g>
+
+    <!-- 監視者（人群中·對街） -->
+    <circle cx="392" cy="372" r="15" fill="#6a1b9a" stroke="#e1bee7" stroke-width="2.5"/>
+    <text x="392" y="377" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">？</text>
+    <text x="416" y="330" text-anchor="start" fill="#ce93d8" font-size="12" font-weight="bold">監視者（位置推定 · 疑為崔望）</text>
+    <line x1="400" y1="360" x2="424" y2="336" stroke="#ce93d8" stroke-width="1.2" opacity="0.7"/>
+
+    <!-- 目光線：監視者 → 寇仲臉上 -->
+    <line x1="392" y1="355" x2="352" y2="214" stroke="#ba68c8" stroke-width="2.5" stroke-dasharray="7,5" marker-end="url(#arr-purple)"/>
+    <text x="288" y="252" text-anchor="end" fill="#e1bee7" font-size="12" font-weight="bold">銳利目光 · 功聚雙目凝注臉上</text>
+
+    <!-- ── 店鋪側（下） ── -->
+    <g>
+      <rect x="46" y="404" width="130" height="80" fill="#37424e" stroke="#546472" rx="3"/>
+      <text x="111" y="440" text-anchor="middle" fill="#90a4ae" font-size="12">酒館</text>
+      <text x="111" y="458" text-anchor="middle" fill="#78909c" font-size="10">客滿</text>
+      <rect x="192" y="404" width="120" height="80" fill="#37424e" stroke="#546472" rx="3"/>
+      <text x="252" y="440" text-anchor="middle" fill="#90a4ae" font-size="12">食店</text>
+      <text x="252" y="458" text-anchor="middle" fill="#78909c" font-size="10">客滿</text>
+
+      <!-- 成衣店（變裝處） -->
+      <rect x="328" y="404" width="130" height="80" fill="#1b3a2a" stroke="#69f0ae" stroke-width="2.5" rx="4"/>
+      <text x="393" y="438" text-anchor="middle" fill="#b9f6ca" font-size="12" font-weight="bold">成衣店</text>
+      <text x="393" y="456" text-anchor="middle" fill="#69f0ae" font-size="10">寇仲入內變裝而出</text>
+
+      <rect x="474" y="404" width="115" height="80" fill="#37424e" stroke="#546472" rx="3"/>
+      <text x="531" y="446" text-anchor="middle" fill="#90a4ae" font-size="11">店鋪</text>
+      <rect x="605" y="404" width="100" height="80" fill="#37424e" stroke="#546472" rx="3"/>
+      <text x="655" y="446" text-anchor="middle" fill="#90a4ae" font-size="11">店鋪</text>
+      <!-- 橫街 -->
+      <rect x="722" y="400" width="60" height="90" fill="#151c26" stroke="#3d4a58" rx="3"/>
+      <text x="752" y="508" text-anchor="middle" fill="#607d8b" font-size="11">↑ 橫街（時點推定）</text>
+      <rect x="800" y="404" width="110" height="80" fill="#37424e" stroke="#546472" rx="3"/>
+      <text x="855" y="446" text-anchor="middle" fill="#90a4ae" font-size="11">店鋪</text>
+    </g>
+
+    <!-- ── 寇仲路線 ── -->
+    <!-- ① 成衣店出來（已扮莫一心） → 過街 → ② 距大門數步感目光 → ③ 忍住·過門不入 → ④ 車師館落後方目光消斂 → ⑤ 棄訪高麗館·橫過車馬道 → ⑥ 混入對街人群反獵 -->
+    <path d="M 372 404 L 372 396 L 340 396 L 340 282 L 250 282 L 250 196 L 300 196"
+          fill="none" stroke="#4caf50" stroke-width="3.5" opacity="0.9"/>
+    <path d="M 300 196 L 336 196 L 470 196 L 585 196 L 690 196"
+          fill="none" stroke="#4caf50" stroke-width="3.5" opacity="0.9"/>
+    <path d="M 690 196 L 712 196 L 712 300 L 700 356 L 660 372"
+          fill="none" stroke="#4caf50" stroke-width="3.5" opacity="0.9" stroke-dasharray="9,6" marker-end="url(#arr-green)"/>
+
+    <!-- 寇仲當前位（②感應點） -->
+    <circle cx="336" cy="196" r="17" fill="#1b7a3d" stroke="#fff" stroke-width="2.5"/>
+    <text x="336" y="201" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">寇</text>
+    <text x="336" y="172" text-anchor="middle" fill="#b9f6ca" font-size="11" font-weight="bold">寇仲（扮神醫莫一心 · 打傘）</text>
+
+    <!-- 路線編號 -->
+    <g font-size="12" font-weight="bold">
+      <circle cx="372" cy="418" r="11" fill="#1b7a3d" stroke="#fff" stroke-width="1.5" opacity="0.95"/>
+      <text x="372" y="422" text-anchor="middle" fill="#fff">①</text>
+      <circle cx="298" cy="222" r="11" fill="#1b7a3d" stroke="#fff" stroke-width="1.5" opacity="0.95"/>
+      <text x="298" y="226" text-anchor="middle" fill="#fff">②</text>
+      <circle cx="470" cy="220" r="11" fill="#1b7a3d" stroke="#fff" stroke-width="1.5" opacity="0.95"/>
+      <text x="470" y="224" text-anchor="middle" fill="#fff">③</text>
+      <circle cx="585" cy="220" r="11" fill="#1b7a3d" stroke="#fff" stroke-width="1.5" opacity="0.95"/>
+      <text x="585" y="224" text-anchor="middle" fill="#fff">④</text>
+      <circle cx="690" cy="170" r="11" fill="#1b7a3d" stroke="#fff" stroke-width="1.5" opacity="0.95"/>
+      <text x="690" y="174" text-anchor="middle" fill="#fff">⑤</text>
+      <circle cx="648" cy="352" r="11" fill="#1b7a3d" stroke="#fff" stroke-width="1.5" opacity="0.95"/>
+      <text x="648" y="356" text-anchor="middle" fill="#fff">⑥</text>
+    </g>
+
+    <!-- 底部圖說 -->
+    <text x="480" y="530" text-anchor="middle" fill="#c9a86a" font-size="12">① 成衣店戴面具變裝 → ② 距車師館大門數步 · 感到對街目光 → ③ 忍住不回望 · 過門不入</text>
+    <text x="480" y="552" text-anchor="middle" fill="#c9a86a" font-size="12">④ 車師館落到後方 · 目光隨即消斂（確認遭監視）→ ⑤ 棄訪高麗館/宋師道 · 橫過車馬道</text>
+    <text x="480" y="574" text-anchor="middle" fill="#c9a86a" font-size="12">⑥ 混入對街檐篷避雨人群 · 守株待兔反獵監視者（「寇仲自有他的辦法」）</text>
+    <text x="480" y="620" text-anchor="middle" fill="#607d8b" font-size="11">方位原文未載，本圖以「外賓館側／店鋪側」相對位置示意；雨勢：大雨下個不休、瓦頂瀉成小瀑布</text>
+  </svg>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#1b7a3d"></span>寇仲（扮莫一心）＋路線①→⑥</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#6a1b9a"></span>監視者（人群中 · 位置推定）</div>
+    <div class="legend-item"><span class="legend-dot sq" style="background:#5d2f2f;border:1px solid #ff8a80"></span>車師國外賓館（監視目標）</div>
+    <div class="legend-item"><span class="legend-dot sq" style="background:#1b3a2a;border:1px solid #69f0ae"></span>成衣店（變裝處）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#546e7a"></span>檐篷下避雨人群</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#8d6e63"></span>守門車師戰士</div>
+  </div>
+
+  <h2>👁️ 「如何將目光射向寇仲」— 試探機制拆解</h2>
+  <svg class="mech-svg" viewBox="0 0 960 440" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="m-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#e53935"/>
+      </marker>
+      <marker id="m-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#4caf50"/>
+      </marker>
+      <linearGradient id="gaze" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#ba68c8" stop-opacity="0.55"/>
+        <stop offset="1" stop-color="#ba68c8" stop-opacity="0.12"/>
+      </linearGradient>
+    </defs>
+    <rect width="960" height="440" fill="#241c30"/>
+    <text x="480" y="34" text-anchor="middle" fill="#d4a356" font-size="17" font-weight="bold">監視者的高明試探：以目光為餌，釣「高手的感應」</text>
+
+    <!-- 監視者 -->
+    <circle cx="110" cy="220" r="32" fill="#6a1b9a" stroke="#e1bee7" stroke-width="3"/>
+    <text x="110" y="226" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">監視者</text>
+    <text x="110" y="278" text-anchor="middle" fill="#ce93d8" font-size="11">隱身對街檐篷人群</text>
+
+    <!-- 目光束 -->
+    <polygon points="145,208 145,232 490,238 490,202" fill="url(#gaze)"/>
+    <line x1="150" y1="220" x2="480" y2="220" stroke="#ba68c8" stroke-width="2" stroke-dasharray="8,6"/>
+    <text x="315" y="192" text-anchor="middle" fill="#e1bee7" font-size="13" font-weight="bold">功聚雙目 · 凝注對方臉上</text>
+    <text x="315" y="256" text-anchor="middle" fill="#ce93d8" font-size="11">刻意施為，令對方「生出被高手凝視的感應」</text>
+
+    <!-- 寇仲 -->
+    <circle cx="520" cy="220" r="28" fill="#1b7a3d" stroke="#fff" stroke-width="3"/>
+    <text x="520" y="226" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">寇仲</text>
+    <text x="520" y="176" text-anchor="middle" fill="#b9f6ca" font-size="11">莫一心面具 · 體型已變</text>
+
+    <!-- 分歧 A：回望（暴露） -->
+    <path d="M 545 202 Q 610 130 668 112" fill="none" stroke="#e53935" stroke-width="2.5" marker-end="url(#m-red)"/>
+    <rect x="676" y="58" width="252" height="118" rx="8" fill="#3a1f24" stroke="#e53935" stroke-width="2"/>
+    <text x="802" y="84" text-anchor="middle" fill="#ff8a80" font-size="13" font-weight="bold">若中計別頭回望</text>
+    <text x="802" y="106" text-anchor="middle" fill="#ffcdd2" font-size="11">有感應 ＝ 必是高手</text>
+    <text x="802" y="126" text-anchor="middle" fill="#ffcdd2" font-size="11">→ 疑為寇仲／徐子陵偽裝</text>
+    <text x="802" y="150" text-anchor="middle" fill="#ff8a80" font-size="11" font-weight="bold">→ 離館時集中人手 · 雷霆突襲</text>
+
+    <!-- 分歧 B：不動聲色（過關） -->
+    <path d="M 545 238 Q 610 310 668 328" fill="none" stroke="#4caf50" stroke-width="2.5" marker-end="url(#m-green)"/>
+    <rect x="676" y="272" width="252" height="128" rx="8" fill="#1b3a2a" stroke="#4caf50" stroke-width="2"/>
+    <text x="802" y="298" text-anchor="middle" fill="#69f0ae" font-size="13" font-weight="bold">寇仲之選：制止回望衝動</text>
+    <text x="802" y="320" text-anchor="middle" fill="#b9f6ca" font-size="11">與常人無異 → 身份未破</text>
+    <text x="802" y="340" text-anchor="middle" fill="#b9f6ca" font-size="11">過門不入 · 車師館落後方目光消斂</text>
+    <text x="802" y="364" text-anchor="middle" fill="#69f0ae" font-size="11" font-weight="bold">→ 反向確認：車師館正被人監視</text>
+    <text x="802" y="384" text-anchor="middle" fill="#b9f6ca" font-size="10">「心叫好險」</text>
+
+    <text x="480" y="424" text-anchor="middle" fill="#8d7ba8" font-size="11">此術之妙：望與不望，監視者皆零成本；被試者唯有「感應到卻紋風不動」方能全身而退</text>
+  </svg>
+
+  <h2>👥 在場人物與位置</h2>
+  <table>
+    <tr><th>人物 / 勢力</th><th>位置</th><th>當下狀態</th></tr>
+    <tr><td>寇仲（扮神醫莫一心）</td><td>外賓館側行人道，距車師館大門數步 → 後轉對街</td><td>運功改變體型、戴楊公寶庫面具、打傘；胸口創傷未愈</td></tr>
+    <tr><td>監視者（身份未明）</td><td>對街（店鋪側），確切位置原文未載，推定於檐篷人群附近</td><td>功聚雙目試探過路人；寇仲事後對徐子陵說「我可能剛見過崔望」</td></tr>
+    <tr><td>車師戰士</td><td>車師國外賓館大門</td><td>守門；寇仲若鬼祟壓低聲音攀談反惹疑</td></tr>
+    <tr><td>越克蓬</td><td>車師國外賓館內（落腳處，本段未露面）</td><td>整座外賓館被敵人明暗嚴密監視</td></tr>
+    <tr><td>避雨人群</td><td>店鋪側檐篷下、客滿的酒館食店</td><td>大雨中行人大減，人群成監視者的掩護</td></tr>
+  </table>
+
+  <h2>🎯 寇仲行動與反制逐步</h2>
+  <div class="step"><span class="step-num">1</span>大雨中溜進大街，看準左右無人 → 成衣店變裝：運功改體型＋「莫一心」面具，出來搖身另一人。</div>
+  <div class="step"><span class="step-num">2</span>打傘沿外賓館側行人道走向越克蓬落腳的車師國外賓館。此側無避雨處、行人疏落。</div>
+  <div class="step"><span class="step-num">3</span>距大門數步，忽然心生警覺——感到一對銳利目光從對街打量他，正要別頭瞧去，連忙制止，心叫好險。</div>
+  <div class="step"><span class="step-num">4</span>識破機制：這是監視者故意「功聚雙目凝注他臉上」的詭計，誘他回望自證高手身份。</div>
+  <div class="step"><span class="step-num">5</span>把心一橫，過門不入，改往高麗人外賓館方向走；車師館落到後方時目光隨即消斂——猜測獲證。</div>
+  <div class="step green"><span class="step-num">6</span>推論：監視者大不簡單；杜興極可能與呼延金勾結，派人盯他們會否聯絡越克蓬。找宋師道亦不宜。</div>
+  <div class="step green"><span class="step-num">7</span>反獵：橫過車馬道到對街，混入檐篷避雨人群——只要再有體型類似兩人者經過外賓館、監視者重施故技，必瞞不過他的感覺。</div>
+  <div class="step green"><span class="step-num">8</span>收穫：回四合院溫泉池後對徐子陵道「我可能剛見過崔望」（辨識經過原文未詳述）。</div>
+
+  <h2>⚔️ 計策核心</h2>
+  <div class="quote-box">
+    「這肯定是監視者的詭計。他並非忽然擁有徐子陵式的靈覺，而是敵人故意施為，功累雙目凝注他臉上，令他生出高手應有的感應。假若他中計望去，便表示他亦為高手，從而猜到他可能是寇仲或徐子陵偽裝的。」
+    <div class="source">—— 卷四十二 · 第十章 · 冤家路窄（和圖書版原文，「功累」照錄）</div>
+  </div>
+  <div class="quote-box">
+    「外賓館那邊行人道由於沒有避雨的地方，故行人疏落，只要有體型類似他和徐子陵的人經過外賓館，那高明的監視者又重施故技時，必瞞不過他的感覺。」
+    <div class="source">—— 同章（寇仲反獵監視者的辦法）</div>
+  </div>
+
+  <h2>📜 圖面要素與原文依據</h2>
+  <table>
+    <tr><th>要素</th><th>原文依據（引句）</th><th>繪製說明</th></tr>
+    <tr><td>街道兩側構成</td><td>「一邊是林立的十多所外賓館，另一邊是各式店鋪」「這段接近王城的大道」</td><td>上排外賓館、下排店鋪；王城方向原文未指明，標「推定」</td></tr>
+    <tr><td>大雨與人群</td><td>「大雨下個不休…」「檐篷下擠滿避雨的人，酒館食店均告客滿」</td><td>雨絲、檐篷帶、人群圓點、酒館食店標「客滿」</td></tr>
+    <tr><td>成衣店變裝</td><td>「看準左右無人…掏出『神醫莫一心』的面具…轉進一間成衣店，出來時搖身變成另一個人」</td><td>店鋪側綠框成衣店，路線起點①</td></tr>
+    <tr><td>感應點（②）</td><td>「當他還差數步即可柢達目標的外賓館大門，忽然心生警覺，感到一對銳利的目光在對街打量他」</td><td>寇仲圈置於車師館大門前數步，紫色目光線自對街射向其臉</td></tr>
+    <tr><td>忍住不回望（③）</td><td>「正要別頭瞧去，又連忙制止這衝動，心叫好險」</td><td>路線直行通過大門不入</td></tr>
+    <tr><td>目光消斂（④）</td><td>「當車師國人住的外賓館落到他後方時，凝注他身上的目光隨即消斂」</td><td>④置於車師館後方路段</td></tr>
+    <tr><td>改道高麗館（⑤）</td><td>「把心一橫，過門不入，改往高麗人住的外賓館步去」「找宋師道似亦不宜…橫過車馬道，朝對街行人道走過去」</td><td>路線折向高麗館後南轉過街</td></tr>
+    <tr><td>反獵位置（⑥）</td><td>「要把監視者找出來並非易事，不過寇仲自有他的辦法」＋反獵原理引句（見上）</td><td>虛線段收於對街人群，示意守候</td></tr>
+    <tr><td>橫街</td><td>「想到這裏，轉進橫街」</td><td>原文段落亂序，轉進時點無法確定，圖上標「時點推定」</td></tr>
+    <tr><td>監視者身份</td><td>「我可能剛見過崔望。」／徐子陵：「甚麼？你可辨認出誰是崔望嗎？」</td><td>以「？」圈表示，註記寇仲事後推測，非確認</td></tr>
+    <tr><td>監視動機（背景）</td><td>「杜興極可能確與呼延金互相勾結，才會派人監視他們會否與越克蓬聯絡」「現在越克蓬的整座外賓館都在敵人的嚴密監視下」</td><td>車師館紅框標「整館遭嚴密監視」</td></tr>
+  </table>
+
+  <div class="note">
+    <b>忠實度聲明：</b>本頁俯視圖為示意排布，非按比例。原文未載街道方位（東西南北）與監視者確切站位——僅知其在「對街」且目光凝注範圍止於車師館後方，故監視者位置、王城方向、橫街時點均標「推定」。「崔望」為寇仲事後對徐子陵所言之推測（「可能剛見過」），其辨識過程本章未詳述。原文異體/版本用字（「功累雙目」「柢達」）照錄不改。本章徐子陵×師妃暄聖光寺一線（三訪禪室、真氣療傷、允諾聯絡祝玉妍共圍石之軒）無空間對峙，不另作圖。
+  </div>
+</div>
+</body>
+</html>
