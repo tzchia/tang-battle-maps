@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>大唐雙龍傳 · 卷 44 第 4 章 · 攻陷渤海（小龍泉海港突擊全方位戰略圖）</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  body { font-family:"PingFang TC","Noto Sans CJK TC","Noto Serif TC",serif; margin:0; background:#fdfaf3; color:#2a2a2a; }
+  .container { max-width:1100px; margin:0 auto; padding:30px 20px; }
+  .back { color:#c0392b; text-decoration:none; border-bottom:1px dashed; }
+  h1 { color:#8b0000; border-bottom:2px solid #d4a356; padding-bottom:10px; }
+  h2 { color:#5d4037; margin-top:34px; }
+  .meta { color:#888; font-size:13px; }
+  .chart-svg { width:100%; background:#f4ecd8; border:3px solid #8b6914; border-radius:8px; margin:20px 0; display:block; }
+  .battle-svg { width:100%; background:#16222e; border:3px solid #8b6914; border-radius:8px; margin:20px 0; display:block; }
+  .battle-svg text { paint-order:stroke; stroke:#16222e; stroke-width:2.6px; stroke-linejoin:round; }
+  .legend { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:8px; background:#fff; padding:14px 18px; border-radius:8px; border:1px solid #d4a356; margin:12px 0; font-size:14px; }
+  .legend-item { display:flex; align-items:center; }
+  .legend-dot { display:inline-block; width:14px; height:14px; border-radius:50%; margin-right:8px; border:2px solid white; box-shadow:0 0 0 1px #888; flex-shrink:0; }
+  .legend-dot.sq { border-radius:3px; }
+  .quote-box { background:#fff8e1; border-left:4px solid #d4a356; padding:12px 18px; margin:16px 0; border-radius:4px; line-height:1.7; }
+  .quote-box .source { color:#8b6914; font-size:12px; margin-top:8px; }
+  table { border-collapse:collapse; width:100%; margin:12px 0; font-size:14px; }
+  th, td { border-bottom:1px solid #e6d9b8; padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:#fdf0d0; color:#5d4037; }
+  .step { background:#fff; border-left:4px solid #c0392b; padding:10px 14px; margin:8px 0; border-radius:4px; line-height:1.7; }
+  .step-num { display:inline-block; background:#c0392b; color:white; border-radius:50%; width:24px; height:24px; text-align:center; line-height:24px; font-weight:bold; margin-right:8px; }
+  .note { background:#f5f0e0; border:1px dashed #b5894e; padding:12px 16px; border-radius:6px; font-size:13px; color:#6d5640; line-height:1.7; margin-top:26px; }
+  .map-frame { height:540px; width:100%; border:3px solid #8b6914; border-radius:8px; margin:14px 0; }
+  .place-label { background:rgba(255,243,224,0.95); border:1px solid #e65100; color:#e65100; font-weight:600; font-size:12px; padding:2px 8px; border-radius:3px; }
+  .leaflet-popup-content h3 { margin:0 0 6px 0; color:#8b0000; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <p><a href="index.html" class="back">← 回卷別索引</a></p>
+  <h1>卷 44 · 第四章 · 攻陷渤海</h1>
+  <p class="meta">小龍泉海港突擊戰（漫天風雨）· 寇仲聯軍五百餘騎 vs 宗湘花靺鞨守軍一千至一千五百 · 雙線攻堅：偽裝奪堡 × 潛水奪船 · 馬吉北逃追擊</p>
+
+  <div class="quote-box">
+    「我們若能控制高麗和馬吉的幾條大船，再攻佔石堡，宗湘花的軍隊只余退走一途，別無他法。……必須避重就輕，讓宗湘花知難而退，我們只擒下馬吉那混蛋了事。」
+    <div class="source">—— 黃易《大唐雙龍傳》卷四十四 · 第四章（本頁各圖皆據本章原文繪製，前情引卷四十四第三章）</div>
+  </div>
+
+  <h2>👥 ① 人物陣營關係圖</h2>
+  <svg class="chart-svg" viewBox="0 0 1200 560" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr-friend" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#27ae60"/></marker>
+      <marker id="arr-foe" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#c0392b"/></marker>
+      <marker id="arr-neutral" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#e67e22"/></marker>
+      <marker id="arr-love" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#8e44ad"/></marker>
+    </defs>
+
+    <!-- 三大區塊 -->
+    <rect x="20" y="56" width="430" height="484" rx="10" fill="#e8f5e9" stroke="#27ae60" stroke-dasharray="6,4"/>
+    <text x="235" y="82" text-anchor="middle" font-size="15" font-weight="bold" fill="#1b5e20">攻方聯軍（寇仲 × 室韋 × 車師）</text>
+    <rect x="470" y="56" width="330" height="484" rx="10" fill="#ffebee" stroke="#c0392b" stroke-dasharray="6,4"/>
+    <text x="635" y="82" text-anchor="middle" font-size="15" font-weight="bold" fill="#b71c1c">守方（拜紫亭 · 靺鞨）</text>
+    <rect x="820" y="56" width="360" height="484" rx="10" fill="#fff3e0" stroke="#e67e22" stroke-dasharray="6,4"/>
+    <text x="1000" y="82" text-anchor="middle" font-size="15" font-weight="bold" fill="#b35c00">第三方 · 逃亡者 · 外圍勢力</text>
+
+    <!-- 攻方 -->
+    <circle cx="120" cy="150" r="34" fill="#27ae60" stroke="#fff" stroke-width="3"/>
+    <text x="120" y="156" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">寇仲</text>
+    <text x="120" y="200" text-anchor="middle" font-size="11" fill="#1b5e20">扮靺鞨兵 · 攻石堡線指揮</text>
+    <circle cx="300" cy="150" r="32" fill="#27ae60" stroke="#fff" stroke-width="3"/>
+    <text x="300" y="156" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">徐子陵</text>
+    <text x="300" y="198" text-anchor="middle" font-size="11" fill="#1b5e20">奪船線 → 登岸追馬吉</text>
+    <circle cx="120" cy="280" r="28" fill="#2e7d32" stroke="#fff" stroke-width="3"/>
+    <text x="120" y="286" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">跋鋒寒</text>
+    <text x="120" y="324" text-anchor="middle" font-size="11" fill="#1b5e20">射月弓破望樓 · 守四船</text>
+    <circle cx="300" cy="280" r="28" fill="#2e7d32" stroke="#fff" stroke-width="3"/>
+    <text x="300" y="286" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">陰顯鶴</text>
+    <text x="300" y="324" text-anchor="middle" font-size="11" fill="#1b5e20">同追馬吉 · 心繫宗湘花</text>
+    <circle cx="90" cy="410" r="24" fill="#388e3c" stroke="#fff" stroke-width="2.5"/>
+    <text x="90" y="415" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">古納台</text>
+    <text x="90" y="450" text-anchor="middle" font-size="10.5" fill="#1b5e20">蒙兀室韋兄弟 · 五百餘騎</text>
+    <circle cx="215" cy="410" r="24" fill="#388e3c" stroke="#fff" stroke-width="2.5"/>
+    <text x="215" y="415" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">越克蓬</text>
+    <text x="215" y="450" text-anchor="middle" font-size="10.5" fill="#1b5e20">車師 · 假傳軍令誘敵</text>
+    <circle cx="330" cy="410" r="22" fill="#388e3c" stroke="#fff" stroke-width="2.5"/>
+    <text x="330" y="415" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">客專</text>
+    <text x="330" y="448" text-anchor="middle" font-size="10.5" fill="#1b5e20">越克蓬副手</text>
+    <text x="235" y="505" text-anchor="middle" font-size="11.5" fill="#33691e">室韋＋車師戰士四百餘（分兩組支援）＋八十餘水性精銳（潛水奪船）</text>
+
+    <!-- 守方 -->
+    <circle cx="635" cy="170" r="32" fill="#c0392b" stroke="#fff" stroke-width="3"/>
+    <text x="635" y="176" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">宗湘花</text>
+    <text x="635" y="218" text-anchor="middle" font-size="11" fill="#b71c1c">小龍泉守將 · 劍法高明</text>
+    <text x="635" y="234" text-anchor="middle" font-size="11" fill="#b71c1c">兵力一千至一千五百</text>
+    <circle cx="550" cy="330" r="26" fill="#8d3030" stroke="#fff" stroke-width="2.5"/>
+    <text x="550" y="336" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">拜紫亭</text>
+    <text x="550" y="372" text-anchor="middle" font-size="10.5" fill="#b71c1c">龍泉王（僅提及）</text>
+    <text x="550" y="387" text-anchor="middle" font-size="10.5" fill="#b71c1c">明早突厥獻寶期限</text>
+    <circle cx="720" cy="330" r="26" fill="#8d3030" stroke="#fff" stroke-width="2.5"/>
+    <text x="720" y="336" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">伏難陀</text>
+    <text x="720" y="372" text-anchor="middle" font-size="10.5" fill="#b71c1c">天竺狂僧（僅提及）</text>
+    <text x="635" y="440" text-anchor="middle" font-size="11.5" fill="#8d3030">石堡守軍 · 營地騎兵 · 望樓哨衛</text>
+    <text x="635" y="458" text-anchor="middle" font-size="11" fill="#8d3030">「迅快而不亂，靺鞨兵確是大草原東北的精銳勁旅」</text>
+
+    <!-- 第三方 -->
+    <circle cx="920" cy="160" r="30" fill="#e67e22" stroke="#fff" stroke-width="3"/>
+    <text x="920" y="166" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">馬吉</text>
+    <text x="920" y="206" text-anchor="middle" font-size="11" fill="#b35c00">狼盜／安樂慘案謎團關鍵</text>
+    <text x="920" y="221" text-anchor="middle" font-size="11" fill="#b35c00">率三十餘手下北逃</text>
+    <circle cx="1080" cy="160" r="28" fill="#e67e22" stroke="#fff" stroke-width="2.5"/>
+    <text x="1080" y="166" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">高麗船</text>
+    <text x="1080" y="204" text-anchor="middle" font-size="10.5" fill="#b35c00">三艘大船：蓋蘇文的船？</text>
+    <text x="1080" y="219" text-anchor="middle" font-size="10.5" fill="#b35c00">或高麗王的人（未明）</text>
+    <circle cx="920" cy="330" r="26" fill="#78909c" stroke="#fff" stroke-width="2.5"/>
+    <text x="920" y="336" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">突厥狼軍</text>
+    <text x="920" y="372" text-anchor="middle" font-size="10.5" fill="#546e7a">隨時壓境（僅提及）</text>
+    <circle cx="1080" cy="330" r="26" fill="#8e44ad" stroke="#fff" stroke-width="2.5"/>
+    <text x="1080" y="336" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">石青璇</text>
+    <text x="1080" y="372" text-anchor="middle" font-size="10.5" fill="#6a1b9a">幽林小谷（徐子陵心念）</text>
+    <text x="1000" y="440" text-anchor="middle" font-size="11" fill="#8d6e63">被扣人質：宋師道、術文等（在拜紫亭手上）</text>
+    <text x="1000" y="458" text-anchor="middle" font-size="11" fill="#8d6e63">寇仲對尚秀芳承諾：免龍泉百姓於戰禍</text>
+
+    <!-- 跨區關係 -->
+    <path d="M 334 268 Q 480 210 601 185" stroke="#8e44ad" stroke-width="3" fill="none" stroke-dasharray="8,5" marker-end="url(#arr-love)"/>
+    <text x="452" y="212" text-anchor="middle" font-size="12" fill="#6a1b9a" font-weight="bold">「我想你們放過宗湘花」</text>
+    <path d="M 152 172 Q 400 260 603 190" stroke="#27ae60" stroke-width="3" fill="none" marker-end="url(#arr-friend)"/>
+    <text x="400" y="262" text-anchor="middle" font-size="12" fill="#1b5e20" font-weight="bold">「小弟會親手把她擒下，交由陰兄處置」</text>
+    <path d="M 330 132 Q 620 60 892 143" stroke="#c0392b" stroke-width="3" fill="none" marker-end="url(#arr-foe)"/>
+    <text x="618" y="42" text-anchor="middle" font-size="12" fill="#b71c1c" font-weight="bold">奪船斷後路 · 登岸追擒（揭狼盜之謎）</text>
+  </svg>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#27ae60"></span>攻方聯軍（綠）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>守方靺鞨（紅）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>第三方／逃亡者（橘）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#8e44ad"></span>情感線／心念（紫虛線）</div>
+  </div>
+  <h2>⚔️ ② 小龍泉海港突擊戰俯視圖（北為上）</h2>
+  <svg class="battle-svg" viewBox="0 0 960 820" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="b-green" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4caf50"/></marker>
+      <marker id="b-blue" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#42a5f5"/></marker>
+      <marker id="b-red" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#ef5350"/></marker>
+      <marker id="b-orange" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#ffa726"/></marker>
+      <pattern id="rain" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">
+        <line x1="0" y1="0" x2="0" y2="7" stroke="#3d5266" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="960" height="820" fill="#16222e"/>
+    <rect width="960" height="820" fill="url(#rain)" opacity="0.5"/>
+    <text x="480" y="34" text-anchor="middle" fill="#d4a356" font-size="19" font-weight="bold">攻陷渤海 · 小龍泉海港突擊戰（漫天風雨 · 雙線並發）</text>
+
+    <!-- 方位盤 -->
+    <g transform="translate(52,92)">
+      <circle r="24" fill="none" stroke="#d4a356" stroke-width="1.5"/>
+      <path d="M 0 -20 L 5 5 L 0 0 L -5 5 Z" fill="#d4a356"/>
+      <text y="-32" text-anchor="middle" fill="#d4a356" font-size="13" font-weight="bold">北</text>
+    </g>
+
+    <!-- 大海（東側） -->
+    <rect x="640" y="50" width="320" height="770" fill="#1d3a52" opacity="0.9"/>
+    <path d="M 640 50 L 640 820" stroke="#3d6a8f" stroke-width="3"/>
+    <text x="850" y="120" fill="#5b90b8" font-size="16" font-style="italic" font-weight="bold">大　海</text>
+    <text x="850" y="142" fill="#4a7a9e" font-size="11">波高浪急 · 泊船拋擲如玩具</text>
+    <!-- 風向：從大海吹來 -->
+    <path d="M 905 195 L 830 235" stroke="#9fb0d0" stroke-width="3" fill="none" marker-end="url(#b-blue)"/>
+    <text x="908" y="185" text-anchor="end" fill="#9fb0d0" font-size="12" font-weight="bold">風自大海吹來</text>
+
+    <!-- 碼頭岸線 -->
+    <rect x="600" y="200" width="40" height="500" fill="#4a3b28"/>
+    <text x="620" y="460" text-anchor="middle" fill="#c8a96a" font-size="13" font-weight="bold" transform="rotate(-90 620 460)">碼　頭　區（腳夫逃散 · 泊船紛離岸）</text>
+
+    <!-- 四艘目標大船 -->
+    <g>
+      <rect x="668" y="300" width="26" height="64" rx="10" fill="#8d6e63" stroke="#ffd54f" stroke-width="2.5"/>
+      <rect x="702" y="330" width="26" height="64" rx="10" fill="#8d6e63" stroke="#ffd54f" stroke-width="2.5"/>
+      <rect x="668" y="390" width="26" height="64" rx="10" fill="#8d6e63" stroke="#ffd54f" stroke-width="2.5"/>
+      <rect x="702" y="424" width="26" height="64" rx="10" fill="#8d6e63" stroke="#ffd54f" stroke-width="2.5"/>
+      <text x="748" y="360" fill="#ffd54f" font-size="13" font-weight="bold">目標四大船</text>
+      <text x="748" y="378" fill="#d0b060" font-size="11">三艘高麗船＋馬吉座船</text>
+      <text x="748" y="394" fill="#d0b060" font-size="11">負重吃水深 · 不宜冒風浪離港</text>
+    </g>
+    <!-- 其他船 -->
+    <g fill="#5d4a3a" opacity="0.85">
+      <rect x="672" y="150" width="16" height="38" rx="7"/><rect x="700" y="170" width="16" height="38" rx="7"/>
+      <rect x="730" y="140" width="16" height="38" rx="7"/><rect x="676" y="540" width="16" height="38" rx="7"/>
+      <rect x="706" y="565" width="16" height="38" rx="7"/><rect x="736" y="590" width="16" height="38" rx="7"/>
+    </g>
+    <text x="760" y="165" fill="#7a6650" font-size="11">大船二十餘 · 中小船近五十</text>
+
+    <!-- 望樓 -->
+    <g>
+      <rect x="604" y="230" width="18" height="30" fill="#6d5640" stroke="#a08050" stroke-width="1.5"/>
+      <rect x="604" y="620" width="18" height="30" fill="#6d5640" stroke="#a08050" stroke-width="1.5"/>
+      <text x="586" y="250" text-anchor="end" fill="#c8a96a" font-size="12">沿海望樓（守軍避雨下層）</text>
+      <text x="586" y="640" text-anchor="end" fill="#c8a96a" font-size="12">望樓</text>
+    </g>
+
+    <!-- 軍營（碼頭北） -->
+    <g>
+      <rect x="470" y="90" width="130" height="90" rx="8" fill="none" stroke="#ef5350" stroke-width="2.5" stroke-dasharray="8,5"/>
+      <circle cx="505" cy="120" r="7" fill="#c0392b"/><circle cx="535" cy="135" r="7" fill="#c0392b"/>
+      <circle cx="565" cy="118" r="7" fill="#c0392b"/><circle cx="520" cy="155" r="7" fill="#c0392b"/>
+      <text x="535" y="78" text-anchor="middle" fill="#ef9a9a" font-size="13" font-weight="bold">靺鞨駐軍營地（碼頭北）</text>
+      <text x="535" y="196" text-anchor="middle" fill="#e57373" font-size="11">守軍一千至一千五百 · 蜂巢被搗般蜂擁列隊</text>
+    </g>
+
+    <!-- 石堡 -->
+    <g>
+      <rect x="330" y="420" width="120" height="120" rx="12" fill="#3e3428" stroke="#c8a96a" stroke-width="3"/>
+      <circle cx="345" cy="435" r="6" fill="#8b6914"/><circle cx="435" cy="435" r="6" fill="#8b6914"/>
+      <circle cx="345" cy="525" r="6" fill="#8b6914"/><circle cx="435" cy="525" r="6" fill="#8b6914"/>
+      <circle cx="390" cy="430" r="6" fill="#8b6914"/><circle cx="390" cy="530" r="6" fill="#8b6914"/>
+      <circle cx="336" cy="480" r="6" fill="#8b6914"/><circle cx="444" cy="480" r="6" fill="#8b6914"/>
+      <rect x="378" y="462" width="24" height="24" fill="#d4a356"/>
+      <text x="390" y="479" text-anchor="middle" fill="#16222e" font-size="11" font-weight="bold">鐘</text>
+      <rect x="440" y="472" width="14" height="18" fill="#ffd54f"/>
+      <text x="466" y="486" fill="#ffd54f" font-size="11">唯一大門</text>
+      <text x="390" y="404" text-anchor="middle" fill="#e8c87a" font-size="14" font-weight="bold">大石堡（小龍泉安危與操控權象徵）</text>
+      <text x="390" y="560" text-anchor="middle" fill="#c8a96a" font-size="11">上層八座箭樓 · 正中鐘樓「當！當！當！」</text>
+    </g>
+
+    <!-- 樹林（西南） -->
+    <g>
+      <ellipse cx="130" cy="680" rx="105" ry="72" fill="#1d3320" stroke="#3e6b42" stroke-width="2"/>
+      <text x="130" y="672" text-anchor="middle" fill="#81c784" font-size="13" font-weight="bold">小龍泉西南樹林</text>
+      <text x="130" y="692" text-anchor="middle" fill="#66a56a" font-size="11">寇仲隊換靺鞨兵裝束候發</text>
+      <text x="130" y="775" text-anchor="middle" fill="#66a56a" font-size="11">後方：室韋＋車師四百餘 · 分兩組推前支援</text>
+    </g>
+
+    <!-- ③ 寇仲隊路線 -->
+    <path d="M 195 640 Q 280 590 328 520" stroke="#4caf50" stroke-width="5" fill="none" marker-end="url(#b-green)"/>
+    <text x="240" y="575" fill="#81c784" font-size="12.5" font-weight="bold">③ 寇仲·別勒古納台·三十餘精銳</text>
+    <text x="240" y="592" fill="#66a56a" font-size="11">偽裝靺鞨兵 · 越克蓬假傳軍令「突厥狼軍來哩！」</text>
+
+    <!-- ② 潛水路線 -->
+    <path d="M 560 760 Q 680 740 700 660 Q 715 580 700 500" stroke="#42a5f5" stroke-width="4.5" fill="none" stroke-dasharray="10,7" marker-end="url(#b-blue)"/>
+    <text x="600" y="720 " fill="#64b5f6" font-size="12.5" font-weight="bold">② 徐子陵·跋鋒寒·不古納台＋八十餘水性精銳</text>
+    <text x="640" y="738" fill="#4a90c2" font-size="11">自海港另一邊游渡半里 · 封閉出入口制服船上敵</text>
+
+    <!-- ① 射月弓 -->
+    <path d="M 545 745 L 616 655" stroke="#ffd54f" stroke-width="2.5" fill="none" stroke-dasharray="4,4" marker-end="url(#b-orange)"/>
+    <text x="530" y="765" fill="#ffd54f" font-size="12" font-weight="bold">① 射月弓破望樓（千餘步一箭貫胸）</text>
+
+    <!-- ⑤ 敵軍反應 -->
+    <path d="M 540 185 Q 570 280 610 330" stroke="#ef5350" stroke-width="5" fill="none" marker-end="url(#b-red)"/>
+    <text x="588" y="302" text-anchor="end" fill="#ef9a9a" font-size="12.5" font-weight="bold">⑤ 主力奪回四船（首要之務）</text>
+    <path d="M 480 185 Q 430 300 415 416" stroke="#ef5350" stroke-width="3" fill="none" stroke-dasharray="8,6" marker-end="url(#b-red)"/>
+    <text x="398" y="300" text-anchor="end" fill="#e57373" font-size="12">⑤' 僅一小隊支援石堡</text>
+
+    <!-- ⑥ 馬吉北逃 -->
+    <path d="M 505 100 Q 480 60 450 42" stroke="#ffa726" stroke-width="4" fill="none" stroke-dasharray="10,6" marker-end="url(#b-orange)"/>
+    <text x="432" y="60" text-anchor="end" fill="#ffb74d" font-size="12.5" font-weight="bold">⑥ 馬吉＋三十餘手下策騎北逃</text>
+
+    <!-- ⑦ 追擊 -->
+    <path d="M 660 320 Q 620 290 590 240 Q 555 170 520 90 Q 505 60 488 38" stroke="#4caf50" stroke-width="4" fill="none" stroke-dasharray="12,7" marker-end="url(#b-green)"/>
+    <text x="700" y="270" fill="#81c784" font-size="12.5" font-weight="bold">⑦ 徐子陵＋陰顯鶴撲上碼頭</text>
+    <text x="700" y="287" fill="#66a56a" font-size="11">擊倒十餘敵 · 奪雙馬北追馬吉</text>
+
+    <!-- ④ 靺鞨反撲四船 -->
+    <path d="M 625 430 L 664 405" stroke="#ef5350" stroke-width="3.5" fill="none" marker-end="url(#b-red)"/>
+    <text x="618" y="418" text-anchor="end" fill="#ef9a9a" font-size="11.5">④ 靺鞨戰士前仆後繼撲船 · 室韋箭網人仰馬翻</text>
+  </svg>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#4caf50"></span>攻方行動線（實線=馳襲 · 虛線=追擊）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#42a5f5"></span>潛水奪船線（藍虛線）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#ef5350"></span>守軍反應線（紅）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#ffa726"></span>馬吉北逃線（橘虛線）</div>
+    <div class="legend-item"><span class="legend-dot sq" style="background:#8d6e63; border-color:#ffd54f"></span>目標四大船（金框）</div>
+    <div class="legend-item"><span class="legend-dot sq" style="background:#3e3428"></span>石堡（八箭樓＋鐘樓）</div>
+  </div>
+
+  <h2>🎯 ③ 突擊戰步驟拆解</h2>
+  <div class="step"><span class="step-num">1</span><b>謀定：</b>寇仲定策「制敵先擄船」——控制高麗與馬吉的四艘大船＋攻佔石堡，宗湘花只餘退走一途。避重就輕不求殲滅：兵力僅敵之半，慘勝將擋不住拜紫亭反擊。</div>
+  <div class="step"><span class="step-num">2</span><b>兩線同發：</b>徐子陵、跋鋒寒、不古納台率八十餘水性精銳游渡半里潛近四船；寇仲、越克蓬、客專、別勒古納台率三十餘人換上靺鞨軍服（車師刺殺伏難陀的道具）自西南樹林出擊，後方四百餘騎分兩組推前支援。</div>
+  <div class="step"><span class="step-num">3</span><b>奪船：</b>風雨中船上敵人躲艙避雨，封閉所有出入口以雷霆之勢制服——四船到手，跋鋒寒判斷吃水深不宜離岸，守船牽制敵人方寸。</div>
+  <div class="step"><span class="step-num">4</span><b>誘敵與奪堡：</b>蹄聲驚動石堡箭樓，鐘樓示警；越克蓬以帶靺鞨口音的龍泉漢語假傳軍令「突厥狼軍來哩！大王有令！立即迎戰！」大雨加偽裝，敵人難辨真假。攻堡要旨：迫近後撲登上層、沿樓道殺入、控制唯一大門。</div>
+  <div class="step"><span class="step-num">5</span><b>腹背受敵：</b>望樓守衛發覺四船易手也敲響警鐘，「鐘聲此起彼落，遙相對聞，把小龍泉送進腹背受敵的噩夢去」。營地主力以奪船為首要之務馳向碼頭，僅一小隊往援石堡。</div>
+  <div class="step"><span class="step-num">6</span><b>追擒馬吉：</b>馬吉見勢不妙率三十餘手下北逃（他過慣奢華陸上生活，不敢上怒濤大船）；徐子陵與陰顯鶴撲上碼頭反擊、奪馬急追——拿住馬吉即可揭破狼盜與安樂慘案之謎。</div>
+  <div class="step"><span class="step-num">7</span><b>不殺之令：</b>陰顯鶴求放過宗湘花，寇仲承諾親手擒下交其處置；徐子陵以突厥話傳令全軍「不得傷損宗御衛長半根毫毛」。另一重顧忌：不能殺小師姨（傅君嬙）的高麗人，否則傅采林不會善罷。</div>
+
+  <h2>🗺️ ④ 渤海戰略態勢圖（Leaflet · 古今對照）</h2>
+  <p class="meta">龍泉上京＝歷史渤海國上京龍泉府（今黑龍江寧安市渤海鎮）；小龍泉海港位置原文未給經緯，依「龍泉外圍 · 面海港口 · 揚帆可沿岸南下抵中土大江」推測為日本海側港灣（取歷史渤海國「日本道」出海口一帶示意）。</p>
+  <div id="map-strategy" class="map-frame"></div>
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#27ae60"></span>寇仲聯軍（室韋·車師五百餘騎）</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>拜紫亭靺鞨勢力</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#78909c"></span>突厥狼軍壓境方向</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>馬吉北逃 · 高麗海路</div>
+  </div>
+
+  <h2>📜 ⑤ 古今地名對照</h2>
+  <table>
+    <tr><th>小說地名</th><th>今地（考證／推測）</th><th>依據</th></tr>
+    <tr><td>龍泉（上京）</td><td>黑龍江省寧安市渤海鎮（渤海國上京龍泉府遺址）</td><td>歷史渤海國都城；小說時間線（唐初）早於史實渤海建國（698 年），屬黃易的時代挪移</td></tr>
+    <tr><td>小龍泉海港</td><td>推測：日本海側港灣（示意取克拉斯基諾／波謝特灣一帶，歷史渤海國「日本道」出海口）</td><td>原文：面海、泊大船數十、揚帆可「沿岸南下直抵中土大江」——原文未給方位，屬推測</td></tr>
+    <tr><td>渤海</td><td>非今渤海灣；指靺鞨故地（後建渤海國）之疆域</td><td>章名「攻陷渤海」指小龍泉一戰奠定控制靺鞨海口</td></tr>
+    <tr><td>高麗</td><td>高句麗（都城平壤）</td><td>三艘高麗大船：蓋蘇文或高麗王的人，原文存疑未定</td></tr>
+    <tr><td>蒙兀室韋</td><td>今內蒙古東北部／黑龍江上游流域</td><td>古納台兄弟部族，史載室韋分部之一</td></tr>
+    <tr><td>中土大江</td><td>長江</td><td>徐子陵心念：揚帆沿岸南下可抵石青璇隱居的幽林小谷（成都附近）</td></tr>
+  </table>
+
+  <h2>⚔️ ⑥ 計策核心</h2>
+  <div class="quote-box">
+    「擒賊先擒王？——既非擒賊先擒王，是否來個制敵先擄船呢？」<br>
+    本章的勝負手不在殺敵，而在<b>奪其所必救</b>：四艘大船＋石堡到手，守軍失去海口操控權便只餘退路一途。以一半兵力打出全面勝利，靠的是風雨掩護、偽裝誘敵、兩線同發的時間差——同時全程綁著兩條「不可傷」的枷鎖（宗湘花、高麗人），是一場戴著鐐銬的突擊戰。
+    <div class="source">戰後半天一夜即是突厥獻寶期限——本戰只是龍泉大局的籌碼戰。</div>
+  </div>
+
+  <div class="note">
+    <b>繪製聲明：</b>俯視圖為示意排布（原文未給精確方位，僅明示：樹林在小龍泉西南、軍營在碼頭北、石堡居樹林與碼頭之間、望樓沿海、目標四船泊碼頭）；戰略圖之小龍泉位置屬推測，已於古今對照表註明。
+    <b>訛字對照（盜文站 OCR 污染，已依前後文回正）：</b>「戰咯」→戰略、「跋寒鋒」→跋鋒寒、「宗御待長」→宗御衛長（依上下文她任拜紫亭衛隊將領；「御衛長」為推定職稱）、「尖高手」→頂尖高手、「即要開的當兒」→即要展開的當兒、「以舟船伐步」→代步。原文異體用字（如「系起來」）照錄不改。
+  </div>
+
+  <p style="margin-top:28px"><a href="index.html" class="back">← 回卷別索引</a></p>
+</div>
+
+<script>
+  const map = L.map('map-strategy').setView([43.6, 129.8], 7);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+    attribution:'© OpenStreetMap / CARTO', maxZoom:19, subdomains:'abcd',
+  }).addTo(map);
+
+  // 繁體地理標籤
+  const geoLabels = [
+    { name:'日本海', lat:41.9, lon:132.2, type:'sea' },
+    { name:'牡丹江', lat:44.85, lon:129.55, type:'river' },
+    { name:'鏡泊湖', lat:43.85, lon:128.95, type:'river' },
+    { name:'圖們江', lat:42.55, lon:130.1, type:'river' },
+    { name:'長白山', lat:42.0, lon:128.08, type:'city' },
+    { name:'大草原東北（靺鞨故地）', lat:45.6, lon:130.8, type:'city' },
+  ];
+  geoLabels.forEach(g => {
+    const style = {
+      river:'color:#1565c0;font-style:italic;font-size:11px;',
+      sea:'color:#1565c0;font-style:italic;font-size:14px;font-weight:bold;',
+      city:'color:#424242;font-size:11px;',
+    }[g.type];
+    L.marker([g.lat,g.lon], {
+      icon: L.divIcon({ className:'geo-label',
+        html:`<span style="${style};white-space:nowrap;background:rgba(255,255,255,0.7);padding:1px 4px;border-radius:2px;">${g.name}</span>`,
+        iconSize:[120,16], iconAnchor:[60,8] }),
+      interactive:false,
+    }).addTo(map);
+  });
+
+  // 地點
+  const placeIcon = L.divIcon({ className:'place-marker',
+    html:'<div style="background:#e67e22;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.6);"></div>',
+    iconSize:[20,20], iconAnchor:[10,10] });
+  const places = [
+    { name:'龍泉上京（今寧安渤海鎮）', lat:44.115, lon:129.375, desc:'拜紫亭的王城。宵禁驅逐聯軍、扣押宋師道等人質；明早為突厥獻寶最後期限。前章寇仲於此城南門殺出重圍。' },
+    { name:'小龍泉海港（推測位置）', lat:42.71, lon:130.78, desc:'本章戰場：泊大船二十餘、中小船近五十的海港。位置原文未明，取歷史渤海國「日本道」出海口（克拉斯基諾一帶）示意。' },
+    { name:'平壤（高麗）', lat:39.03, lon:125.75, desc:'三艘高麗大船的母國：蓋蘇文的船？或高麗王的人？傅君嬙（小師姨）勢力所在，寇仲下令不可傷高麗人。' },
+  ];
+  places.forEach(p => {
+    L.marker([p.lat,p.lon], { icon:placeIcon })
+     .bindPopup(`<h3>${p.name}</h3><p>${p.desc}</p>`)
+     .bindTooltip(p.name, { permanent:true, direction:'right', offset:[12,0], className:'place-label' })
+     .addTo(map);
+  });
+
+  // 陣營圈
+  L.circleMarker([44.115,129.375], { radius:13, color:'#c0392b', fillColor:'#c0392b', fillOpacity:0.75, weight:3 })
+   .bindPopup('<h3>拜紫亭主力</h3><p>龍泉城軍隊＋大明尊教＋伏難陀。前章於城南門外設伏，毒害千里夢欲殺寇仲。</p>').addTo(map);
+  L.circleMarker([42.71,130.78], { radius:12, color:'#e67e22', fillColor:'#e67e22', fillOpacity:0.75, weight:3 })
+   .bindPopup('<h3>宗湘花守軍</h3><p>靺鞨精銳一千至一千五百，守石堡、軍營、望樓。</p>').addTo(map);
+  L.circleMarker([43.55,130.35], { radius:11, color:'#27ae60', fillColor:'#27ae60', fillOpacity:0.85, weight:3 })
+   .bindPopup('<h3>寇仲聯軍</h3><p>室韋＋車師五百餘騎，屯於小龍泉外圍樹林，冒雨突擊。</p>').addTo(map);
+
+  // 路線
+  L.polyline([[44.115,129.375],[43.75,129.9],[43.2,130.4],[42.78,130.72]], {
+    color:'#0a8043', weight:5, opacity:0.9, dashArray:'12,8'
+  }).bindPopup('前章→本章：寇仲雨中血戰殺出龍泉南門，聯軍轉進小龍泉海港').addTo(map);
+  L.polyline([[42.71,130.78],[42.95,130.75],[43.3,130.9]], {
+    color:'#e67e22', weight:4, opacity:0.9, dashArray:'8,7'
+  }).bindPopup('馬吉率三十餘手下望北而逃，徐子陵＋陰顯鶴奪馬急追').addTo(map);
+  L.polyline([[39.03,125.75],[40.5,128.3],[42.0,130.4],[42.71,130.78]], {
+    color:'#8d6e63', weight:3, opacity:0.75, dashArray:'4,8'
+  }).bindPopup('高麗三艘大船海路（來向示意）').addTo(map);
+  L.polyline([[44.0,126.2],[44.08,127.8],[44.115,129.0]], {
+    color:'#78909c', weight:5, opacity:0.85
+  }).bindPopup('突厥狼軍隨時壓境（西方，示意）——明早即獻寶期限').addTo(map);
+
+  map.fitBounds([[38.6,124.8],[46.0,132.8]], { padding:[20,20] });
+</script>
+</body>
+</html>
