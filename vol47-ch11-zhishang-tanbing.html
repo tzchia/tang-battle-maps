@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>紙上談兵：寇仲 vs 李世民｜大唐雙龍傳 卷四十七・第十一回</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
+<style>
+  :root{
+    --ink:#2b2118; --ink2:#5c4a37; --paper:#f6efe2; --card:#fffaf0; --line:#d8c7a8;
+    --tang:#c0392b; --zheng:#2458a6; --granary:#c87f12; --flip:#8a4fbe; --live:#1f8a4c;
+    --gold:#b06e14; --amber:#e8a33d; --board:#eac98f; --boardline:#8a6a3f;
+    --rpn-accent:#e8a33d; --rpn-accent-deep:#b06e14; --rpn-track:#f0e2c8;
+    --rpn-line:#e2d5ba; --rpn-muted:#8a7a5f; --rpn-soft:#fbf3e2; --rpn-glass:rgba(252,248,240,.95);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;line-height:1.9}
+  .wrap{max-width:960px;margin:0 auto;padding:26px 16px 60px}
+  h1{font-size:30px;margin:8px 0 2px;letter-spacing:.04em}
+  .subtitle{color:var(--ink2);margin:0 0 14px;font-size:15.5px}
+  .badge{display:inline-block;background:var(--ink);color:#f5e9cf;border-radius:6px;
+    padding:3px 10px;font-size:12.5px;letter-spacing:.2em;margin-right:6px;vertical-align:middle}
+  .badge.b2{background:var(--gold)}
+  .meta{font-size:13.5px;color:var(--ink2);margin:6px 0 18px}
+  .meta a{color:var(--gold)}
+  .summary-box{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);
+    border-radius:12px;padding:18px 22px;margin:0 0 26px;font-size:15.5px}
+  section{margin:34px 0}
+  h2{font-size:21px;border-bottom:3px double var(--line);padding-bottom:8px;letter-spacing:.06em}
+  h2 small{font-size:13px;color:var(--ink2);font-weight:normal;margin-left:10px}
+  figure{margin:18px 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+  figcaption{font-size:13.5px;color:var(--ink2);padding:8px 8px 2px}
+  svg{width:100%;height:auto;display:block}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13px;color:var(--ink2);margin:10px 4px}
+  .legend i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:6px;vertical-align:-2px}
+  .legend .sq{border-radius:3px}
+  #map{height:620px;border-radius:14px;border:1px solid var(--line)}
+  .mk{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50% 50% 50% 8px;
+    transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);font-weight:900}
+  .mk>span{transform:rotate(45deg);font-size:12px;color:#fff}
+  .mk.tang{background:var(--tang)} .mk.zheng{background:var(--zheng)}
+  .mk.granary{background:var(--granary)} .mk.flip{background:var(--flip)} .mk.hub{background:#111}
+  .mk.est::after{content:'';position:absolute;top:-4px;right:-4px;width:8px;height:8px;border-radius:50%;
+    background:#fff;border:2px solid var(--gold)}
+  .lbl{background:rgba(255,250,240,.95);border:1.5px solid var(--gold);color:var(--ink);
+    border-radius:8px;padding:3px 9px;font-weight:900;font-size:12.5px;white-space:nowrap}
+  .lbl.threat{border-color:var(--tang);color:var(--tang)}
+  .lbl.geo{border-color:var(--ink2);color:var(--ink2);font-weight:700}
+  .lbl.ghost{border-style:dashed;color:var(--ink2)}
+  .battle-steps{counter-reset:step;display:grid;gap:14px}
+  .battle-steps .step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px 14px 60px}
+  .battle-steps .step::before{counter-increment:step;content:counter(step);position:absolute;left:16px;top:16px;
+    width:30px;height:30px;border-radius:8px;background:var(--ink);color:#f2e4c2;font-weight:900;
+    display:flex;align-items:center;justify-content:center;font-size:15px}
+  .battle-steps .step.lishimin::before{background:var(--tang)}
+  .battle-steps .step.kouzhong::before{background:var(--zheng)}
+  .step h3{margin:0 0 6px;font-size:16.5px}
+  .step .who{display:inline-block;font-size:11.5px;border-radius:999px;padding:1px 10px;margin-left:8px;vertical-align:2px;letter-spacing:.1em}
+  .who.li{background:#f7dede;color:var(--tang)} .who.kou{background:#dde8f7;color:var(--zheng)}
+  .step blockquote{margin:8px 0;border-left:4px solid var(--line);padding:2px 0 2px 14px;
+    font-size:14.5px;color:var(--ink2);background:rgba(0,0,0,.02);border-radius:0 8px 8px 0}
+  .step .sub{font-size:14px;color:var(--ink2);margin:4px 0 0}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:700px){.duel{grid-template-columns:1fr}}
+  .bet{border-radius:14px;padding:18px 20px;color:#fff}
+  .bet.li{background:linear-gradient(160deg,#7e241b,#a63a2b)}
+  .bet.kou{background:linear-gradient(160deg,#1d3f73,#2c5aa0)}
+  .bet h3{margin:0 0 8px;font-size:16px;letter-spacing:.12em}
+  .bet p{margin:6px 0;font-size:14.5px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#efe4cc;letter-spacing:.05em}
+  td.tag{white-space:nowrap;font-weight:900}
+  .t-real{color:var(--live)} .t-est{color:var(--gold)} .t-site{color:var(--tang)}
+  .note{font-size:13px;color:var(--ink2);background:var(--rpn-soft);border:1px dashed var(--line);
+    border-radius:10px;padding:12px 16px;margin-top:14px}
+  .foot{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink2)}
+  .foot a{color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- 閱讀進度條＋章節導覽（rpn 模板） -->
+<div class="rpn-navbar" id="rpnNavbar">
+  <div class="rpn-progress"><i id="rpnFill"></i></div>
+  <div class="rpn-toc" id="rpnToc">
+    <a href="#sec-scene">場景</a><a href="#sec-board">棋盤</a><a href="#sec-map">形勢圖</a><a href="#sec-rounds">過招</a><a href="#sec-bet">賭約</a><a href="#sec-gaz">輿地</a>
+  </div>
+</div>
+<nav class="rpn-dock" id="rpnDock" aria-label="頁面導覽">
+  <div class="rpn-dock-head">本頁導覽</div>
+  <div class="rpn-dock-prog"><i id="rpnSideFill"></i></div>
+  <a href="#sec-scene"><span class="rpn-dot"></span>場景</a>
+  <a href="#sec-board"><span class="rpn-dot"></span>棋盤</a>
+  <a href="#sec-map"><span class="rpn-dot"></span>形勢圖</a>
+  <a href="#sec-rounds"><span class="rpn-dot"></span>過招</a>
+  <a href="#sec-bet"><span class="rpn-dot"></span>賭約</a>
+  <a href="#sec-gaz"><span class="rpn-dot"></span>輿地</a>
+</nav>
+
+<header>
+  <span class="badge">大唐雙龍傳</span><span class="badge b2">卷四十七・第十一回</span>
+  <h1>紙上談兵：寇仲 vs 李世民</h1>
+  <p class="subtitle">「想不到世民兄對紙上談兵興緻極濃，小弟就奉陪到底。」——寇仲</p>
+  <p class="meta">原文出處：黃易《大唐雙龍傳》卷四十七第十一回「紙上談兵」（<a href="https://www.hetubook.com/book/3134/2221505.html">河圖書網</a>）｜本頁只繪主線：唐鄭對峙前夜的一局棋；徐子陵、紀倩的長安支線不在圖內。</p>
+</header>
+
+<div class="summary-box">
+  <b>一句話：</b>慈澗前夜，李世民在營寨外擺一桌兩席、鄉間米酒，以圍棋喻戰局——王世充全軍是一條<b>大龍</b>，唐軍的打法是<b>圍堵斬截、逐一收氣</b>：三軍各萬人分指伊闕、河內、洛口，黃君漢三萬屯河陽渡孟津取回洛，李世績全權攻虎牢，再堅壘不出、坐候四城陷落，最後拋出<b>半年之期的豪賭</b>。寇仲層層反問皆被封死，只能以「奉陪到底」收場。
+</div>
+
+<section id="sec-scene">
+  <h2>場景：寨門夜宴<small>一桌兩席・離寨門二百步・火把與米酒</small></h2>
+  <figure>
+    <svg viewBox="0 0 920 250" role="img" aria-label="唐軍寨門前夜宴示意圖">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#241f2e"/><stop offset="1" stop-color="#4a3a33"/>
+        </linearGradient>
+        <radialGradient id="flame" cx=".5" cy=".8" r=".9">
+          <stop offset="0" stop-color="#ffd76b"/><stop offset=".55" stop-color="#f08a2c"/><stop offset="1" stop-color="rgba(240,138,44,0)"/>
+        </radialGradient>
+      </defs>
+      <rect x="0" y="0" width="920" height="250" fill="url(#sky)"/>
+      <g fill="#f5e9cf" opacity=".9">
+        <circle cx="80" cy="34" r="2"/><circle cx="200" cy="20" r="1.6"/><circle cx="330" cy="40" r="1.8"/>
+        <circle cx="455" cy="18" r="1.4"/><circle cx="560" cy="38" r="2"/><circle cx="700" cy="24" r="1.5"/>
+        <circle cx="820" cy="42" r="1.8"/><circle cx="870" cy="18" r="1.3"/><circle cx="140" cy="58" r="1.3"/>
+      </g>
+      <circle cx="128" cy="46" r="20" fill="#f5e9cf" opacity=".85"/>
+      <circle cx="121" cy="40" r="18" fill="#2c2633"/>
+      <!-- 營寨柵欄 -->
+      <g stroke="#8a6a3f" stroke-width="7">
+        <line x1="640" y1="70" x2="640" y2="180"/><line x1="678" y1="64" x2="678" y2="180"/>
+        <line x1="716" y1="70" x2="716" y2="180"/><line x1="754" y1="60" x2="754" y2="180"/>
+        <line x1="792" y1="66" x2="792" y2="180"/><line x1="830" y1="72" x2="830" y2="180"/>
+        <line x1="868" y1="64" x2="868" y2="180"/>
+      </g>
+      <line x1="620" y1="96" x2="900" y2="92" stroke="#6f5533" stroke-width="8"/>
+      <rect x="742" y="52" width="46" height="128" rx="8" fill="#3d2f1f" stroke="#8a6a3f" stroke-width="4"/>
+      <text x="765" y="44" text-anchor="middle" font-size="14" fill="#f0dcb4" font-weight="900">寨門</text>
+      <!-- 火把 -->
+      <g><line x1="700" y1="120" x2="700" y2="176" stroke="#6f5533" stroke-width="5"/>
+         <ellipse cx="700" cy="108" rx="16" ry="26" fill="url(#flame)"/></g>
+      <g><line x1="846" y1="118" x2="846" y2="176" stroke="#6f5533" stroke-width="5"/>
+         <ellipse cx="846" cy="106" rx="16" ry="26" fill="url(#flame)"/></g>
+      <!-- 李世民身後四將（剪影） -->
+      <g fill="#141019">
+        <circle cx="648" cy="112" r="9"/><rect x="639" y="120" width="18" height="40" rx="7"/>
+        <circle cx="682" cy="110" r="9"/><rect x="673" y="118" width="18" height="42" rx="7"/>
+        <circle cx="806" cy="112" r="9"/><rect x="797" y="120" width="18" height="40" rx="7"/>
+        <circle cx="840" cy="110" r="9"/><rect x="831" y="118" width="18" height="42" rx="7"/>
+      </g>
+      <text x="745" y="212" text-anchor="middle" font-size="13" fill="#d9c49a">尉遲敬德・龐玉・秦叔寶・長孫無忌（恭候於寨門）</text>
+      <!-- 李世民席 -->
+      <g><circle cx="560" cy="122" r="11" fill="#c0392b"/><path d="M544 134 q16 -10 32 0 l6 44 h-44 z" fill="#7e241b"/></g>
+      <!-- 酒桌 -->
+      <g><rect x="392" y="152" width="128" height="14" rx="5" fill="#8a6a3f"/>
+         <rect x="404" y="166" width="10" height="30" fill="#6f5533"/><rect x="498" y="166" width="10" height="30" fill="#6f5533"/>
+         <rect x="424" y="138" width="12" height="14" rx="3" fill="#f5e9cf"/><rect x="476" y="138" width="12" height="14" rx="3" fill="#f5e9cf"/>
+         <ellipse cx="456" cy="146" rx="14" ry="6" fill="#e8d9b8" stroke="#8a6a3f"/>
+      </g>
+      <!-- 寇仲席 -->
+      <g><circle cx="352" cy="122" r="11" fill="#2458a6"/><path d="M336 134 q16 -10 32 0 l6 44 h-44 z" fill="#1d3f73"/></g>
+      <!-- 二百步距離標 -->
+      <g stroke="#f0dcb4" stroke-width="2">
+        <line x1="300" y1="228" x2="740" y2="228"/>
+        <path d="M308 223 l-10 5 l10 5" fill="none"/><path d="M732 223 l10 5 l-10 5" fill="none"/>
+      </g>
+      <text x="520" y="222" text-anchor="middle" font-size="13.5" fill="#f0dcb4" font-weight="900">酒席離寨門二百步</text>
+      <text x="352" y="100" text-anchor="middle" font-size="14" fill="#9ec1ef" font-weight="900">寇仲</text>
+      <text x="560" y="100" text-anchor="middle" font-size="14" fill="#efa79c" font-weight="900">李世民</text>
+      <text x="456" y="128" text-anchor="middle" font-size="12" fill="#d9c49a">鄉間米酒</text>
+    </svg>
+    <figcaption>原文：「唐軍營寨前擺開一桌酒菜，只有兩個席位……身後立著尉遲敬德、龐玉、秦叔寶、長孫無忌一眾心腹大將」「我大唐軍營內嚴禁喝酒，違令者斬，所以今晚的宴會，不得不在寨外舉行。」寇仲還算過：酒席離寨門足有二百步——退路與殺機都在計算之中。</figcaption>
+  </figure>
+</section>
+
+<section id="sec-board">
+  <h2>紙上棋盤：圍堵大龍，逐一收氣<small>以棋盤喻洛陽戰局（依原文方位示意）</small></h2>
+  <figure>
+    <svg viewBox="0 0 920 700" role="img" aria-label="紙上談兵棋盤形勢總覽">
+      <text x="460" y="26" text-anchor="middle" font-size="18" font-weight="900" fill="#2b2118">以棋盤作輿圖：一條大龍，四子收氣，獨眼求活</text>
+      <text x="46" y="58" text-anchor="start" font-size="12.5" fill="#5c4a37">竇建德（河北方向・盤外）：受高開道、羅藝、孟海公牽制</text>
+      <!-- 棋盤 -->
+      <rect x="44" y="66" width="832" height="540" fill="#eac98f" stroke="#8a5f2c" stroke-width="3" rx="6"/>
+      <g stroke="#8a6a3f" stroke-width="1.4">
+        <line x1="72" y1="72" x2="72" y2="576"/><line x1="128" y1="72" x2="128" y2="576"/><line x1="184" y1="72" x2="184" y2="576"/><line x1="240" y1="72" x2="240" y2="576"/><line x1="296" y1="72" x2="296" y2="576"/><line x1="352" y1="72" x2="352" y2="576"/><line x1="408" y1="72" x2="408" y2="576"/><line x1="464" y1="72" x2="464" y2="576"/><line x1="520" y1="72" x2="520" y2="576"/><line x1="576" y1="72" x2="576" y2="576"/><line x1="632" y1="72" x2="632" y2="576"/><line x1="688" y1="72" x2="688" y2="576"/><line x1="744" y1="72" x2="744" y2="576"/><line x1="800" y1="72" x2="800" y2="576"/><line x1="856" y1="72" x2="856" y2="576"/>
+        <line x1="72" y1="72" x2="856" y2="72"/><line x1="72" y1="128" x2="856" y2="128"/><line x1="72" y1="184" x2="856" y2="184"/><line x1="72" y1="240" x2="856" y2="240"/><line x1="72" y1="296" x2="856" y2="296"/><line x1="72" y1="352" x2="856" y2="352"/><line x1="72" y1="408" x2="856" y2="408"/><line x1="72" y1="464" x2="856" y2="464"/><line x1="72" y1="520" x2="856" y2="520"/><line x1="72" y1="576" x2="856" y2="576"/>
+      </g>
+      <!-- 大河 -->
+      <path d="M44,142 C 230,124 340,152 470,148 C 590,144 630,170 700,178 C 770,186 830,180 876,186"
+            fill="none" stroke="#9fc6d8" stroke-width="15" opacity=".6"/>
+      <text x="150" y="126" font-size="14" fill="#33607a" font-weight="900">大河（黃河）</text>
+      <!-- 大龍龍身 -->
+      <path d="M240,296 L240,408 L352,408 L352,520" fill="none" stroke="#f7f2e7" stroke-width="5" opacity=".95"/>
+      <!-- 糧道 -->
+      <path d="M408,184 C 340,210 280,250 252,282" fill="none" stroke="#c87f12" stroke-width="3.5" stroke-dasharray="9 7"/>
+      <path d="M676,196 C 560,300 400,320 268,306" fill="none" stroke="#c87f12" stroke-width="3.5" stroke-dasharray="9 7"/>
+      <path d="M792,254 C 640,368 430,362 264,310" fill="none" stroke="#1f8a4c" stroke-width="3.5" stroke-dasharray="3 8"/>
+      <!-- 唐軍行軍箭頭 -->
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+      <marker id="arb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4a3a6b"/></marker></defs>
+      <path d="M142,452 L328,416" fill="none" stroke="#c0392b" stroke-width="4" marker-end="url(#ar)"/>
+      <path d="M566,146 L432,172" fill="none" stroke="#c0392b" stroke-width="4" marker-end="url(#ar)"/>
+      <path d="M698,112 L684,164" fill="none" stroke="#c0392b" stroke-width="4" marker-end="url(#ar)"/>
+      <path d="M874,66 L770,70" fill="none" stroke="#c0392b" stroke-width="4" marker-end="url(#ar)"/>
+      <text x="872" y="90" font-size="12.5" fill="#c0392b" font-weight="900" text-anchor="end">劉德威自太行東來③</text>
+      <path d="M430,282 C 560,230 700,236 772,246" fill="none" stroke="#4a3a6b" stroke-width="3.5" stroke-dasharray="7 7" marker-end="url(#arb)"/>
+      <!-- 收氣 ✗ -->
+      <g font-size="26" font-weight="900" fill="#b03a2e">
+        <text x="184" y="362" text-anchor="middle">✗</text>
+        <text x="296" y="362" text-anchor="middle">✗</text>
+        <text x="352" y="474" text-anchor="middle">✗</text>
+      </g>
+      <!-- 白子：鄭 -->
+      <g>
+        <circle cx="240" cy="296" r="21" fill="#faf6ee" stroke="#4a3f2e" stroke-width="2"/>
+        <circle cx="240" cy="296" r="7" fill="none" stroke="#4a3f2e" stroke-width="2.5"/>
+        <circle cx="240" cy="408" r="13" fill="#faf6ee" stroke="#4a3f2e" stroke-width="2"/>
+        <circle cx="352" cy="408" r="13" fill="#faf6ee" stroke="#4a3f2e" stroke-width="2"/>
+        <circle cx="352" cy="520" r="13" fill="#faf6ee" stroke="#4a3f2e" stroke-width="2"/>
+        <circle cx="800" cy="240" r="14" fill="#faf6ee" stroke="#4a3f2e" stroke-width="2"/>
+      </g>
+      <!-- 四目標：黑虛線圈 -->
+      <g fill="none" stroke="#141019" stroke-width="3" stroke-dasharray="6 5">
+        <circle cx="408" cy="184" r="19"/><circle cx="680" cy="184" r="19"/><circle cx="744" cy="72" r="19"/><circle cx="352" cy="408" r="19"/>
+      </g>
+      <!-- 壽安降變 -->
+      <circle cx="352" cy="520" r="19" fill="none" stroke="#8a4fbe" stroke-width="3" stroke-dasharray="6 5"/>
+      <!-- 黑子：唐 -->
+      <g fill="#17120d">
+        <circle cx="408" cy="296" r="20"/>
+        <circle cx="128" cy="464" r="14"/>
+        <circle cx="576" cy="128" r="14"/>
+      </g>
+      <circle cx="520" cy="184" r="13" fill="none" stroke="#17120d" stroke-width="3.5"/>
+      <text x="520" y="190" text-anchor="middle" font-size="14" font-weight="900" fill="#17120d">?</text>
+      <!-- 標註 -->
+      <g font-size="14.5" font-weight="900" fill="#2b2118">
+        <text x="208" y="288" text-anchor="end">洛陽・王世充</text>
+        <text x="208" y="306" text-anchor="end" font-size="12.5" fill="#b03a2e">只餘一隻眼</text>
+        <text x="408" y="268" text-anchor="middle">慈澗・李世民大寨</text>
+        <text x="240" y="438" text-anchor="middle">龍門堡</text>
+        <text x="352" y="380" text-anchor="middle">伊闕④</text>
+        <text x="352" y="556" text-anchor="middle">壽安・張鎮周</text>
+        <text x="352" y="574" text-anchor="middle" font-size="12" fill="#8a4fbe">降變＝全局死穴</text>
+        <text x="128" y="498" text-anchor="middle">宜陽・史萬寶萬人</text>
+        <text x="408" y="150" text-anchor="middle">回洛倉①</text>
+        <text x="296" y="216" text-anchor="middle" font-size="13">孟津渡口</text>
+        <text x="520" y="150" text-anchor="middle" font-size="13">金塘城（備選）</text>
+        <text x="680" y="220" text-anchor="middle">洛口倉②</text>
+        <text x="744" y="42" text-anchor="middle">河內③</text>
+        <text x="800" y="276" text-anchor="middle">虎牢・唯一活口</text>
+        <text x="800" y="294" text-anchor="middle" font-size="12" fill="#4a3a6b">李世績軍的目標</text>
+      </g>
+      <text x="560" y="112" text-anchor="start" font-size="13" fill="#2b2118" font-weight="900">河陽・黃君漢張夜叉三萬</text>
+      <path d="M828,520 L884,584" stroke="#c0392b" stroke-width="3.5" stroke-dasharray="7 7"/>
+      <text x="884" y="612" text-anchor="end" font-size="12.5" fill="#c0392b" font-weight="900">襄陽方面北上：錢獨關＋朱粲（原文提及・盤外）</text>
+      <text x="460" y="666" text-anchor="middle" font-size="14.5" fill="#5c4a37">「堵死他每一個活口，然後逐一收氣，到只剩下洛陽一隻眼，獨眼焉能造活？」——李世民</text>
+    </svg>
+    <div class="legend">
+      <span><i style="background:#17120d"></i>唐軍據點</span>
+      <span><i style="background:#faf6ee;border:2px solid #4a3f2e"></i>鄭軍城／糧倉</span>
+      <span><i style="border:3px dashed #141019;background:none"></i>李世民四目標：回洛①洛口②河內③伊闕④</span>
+      <span><i style="border:3px dashed #8a4fbe;background:none"></i>降變變數（壽安）</span>
+      <span style="color:#b03a2e;font-weight:900">✗ 收氣點</span>
+      <span><i class="sq" style="background:#c87f12"></i>鄭軍糧道（洛口・回洛→洛陽）</span>
+      <span><i class="sq" style="background:#1f8a4c"></i>活口通道（虎牢一線）</span>
+      <span><i class="sq" style="background:#c0392b"></i>唐軍進攻方向</span>
+    </div>
+    <figcaption>方位依原文描述示意（非等比例地圖）：洛陽居中為「眼」，龍身延伊水（龍門堡—伊闕—壽安），大河橫北隔住河內，洛口當洛黃之交，虎牢是唯一的呼吸孔。真實地理位置見下一節形勢圖。</figcaption>
+  </figure>
+</section>
+
+<section id="sec-map">
+  <h2>真實地理形勢圖<small>洛陽—虎牢前線・唐軍四向絞索（紫點＝推定位置）</small></h2>
+  <div id="map"></div>
+  <div class="legend">
+    <span><i style="background:#c0392b"></i>唐軍（圍側）</span>
+    <span><i style="background:#2458a6"></i>鄭軍（被圍）</span>
+    <span><i style="background:#c87f12"></i>糧倉</span>
+    <span><i style="background:#8a4fbe"></i>降變要點</span>
+    <span><i style="background:#111"></i>對峙中樞</span>
+    <span style="color:var(--gold)">◦ 右上角小白點＝位置推定</span>
+  </div>
+  <p class="note">推定說明：伊闕（今偃師鳴皋鎮一帶）、壽安（今伊川—伊陽間伊水河谷）、宜陽（今伊川伊里溝一帶）、洛口（今鞏義河洛鎮洛黃交匯處）、河內（今焦作—沁陽一帶）、金塘城（洛陽東北、北邙山南）、慈澗（洛陽—虎牢走廊前線）均為依原文方位的推定位置；虎牢關、龍門、孟津、河陽（孟州）、回洛（會盟鎮附近）有今地名或遺址可據。</p>
+</section>
+
+<section id="sec-rounds">
+  <h2>一局過招<small>紅＝李世民落子，藍＝寇仲反問</small></h2>
+  <div class="battle-steps">
+
+    <div class="step lishimin"><h3>起手：圍棋喻戰局<span class="who li">李世民</span></h3>
+      <blockquote>「王世充和它的軍隊是一條大龍，若正面對撼，我縱勝亦傷亡慘重。所以得採取圍堵和斬截的策略，堵死他每一個活口，然後逐一收氣，到只剩下洛陽一隻眼，獨眼焉能造活？」</blockquote>
+      <p class="sub">不強攻洛陽，先把鄭軍外圍的氣一口口收掉。</p>
+    </div>
+
+    <div class="step kouzhong"><h3>反問一：虎牢是活口<span class="who kou">寇仲</span></h3>
+      <blockquote>「小弟從未學過下圍棋，獨眼活不了，那麼一雙眼是否能活？另一個活口就是虎牢，更是另一條活龍的來路。」</blockquote>
+      <p class="sub">虎牢在手，洛陽就還連著竇建德與河北這條「活龍」。</p>
+    </div>
+
+    <div class="step lishimin"><h3>落子：三軍各萬人<span class="who li">李世民</span></h3>
+      <blockquote>「為了虎牢，世民另遣三軍，每軍萬人：一由行軍總管史萬寶率領，自宜陽進軍伊闕；另一軍由劉德威指揮，自太行東圍河內……大河既任我縱橫，最後一軍由上谷公王君廓率兵，渡河枕軍洛口，斷去洛陽最後一條糧道。」</blockquote>
+      <p class="sub">伊闕、河內、洛口三點同時收氣；河內一失，大河以北尽歸唐軍。</p>
+    </div>
+
+    <div class="step kouzhong"><h3>反問二：伊闕難啃<span class="who kou">寇仲</span></h3>
+      <blockquote>「壽安有經驗老到的張鎮周坐鎮，只要他發兵呼應，史萬寶憑甚麼本領攻陷伊闕？伊闕城外尚有龍門堡，況且若襄陽錢獨關與朱粲聯軍北上，史萬寶將四面受敵。」</blockquote>
+      <p class="sub">壽安—伊闕唇齒相依，外加襄陽方向的第三方威脅。</p>
+    </div>
+
+    <div class="step lishimin"><h3>落子：河陽三萬，渡孟津取回洛<span class="who li">李世民</span></h3>
+      <blockquote>「我已命懷州總管黃君漢和猛將張夜叉在河陽集結三萬大軍，只要成功渡過孟津，將可剋日攻陷回洛。」</blockquote>
+      <p class="sub">回洛與洛口是洛陽兩大糧倉——先斷糧倉，再談城防。</p>
+    </div>
+
+    <div class="step kouzhong"><h3>反問三：尚有洛口<span class="who kou">寇仲</span></h3>
+      <blockquote>「幸好尚有洛口，一天虎牢仍在，洛口可源源不絕把本身藏糧由洛水運往洛陽，以保洛陽糧食無缺，支援慈澗的鄭軍，更可向大河下游諸城買糧。」</blockquote>
+      <p class="sub">寇仲抓住的正是「洛口＋虎牢」這組剩餘的氣。</p>
+    </div>
+
+    <div class="step lishimin"><h3>攤牌：張鎮周已降<span class="who li">李世民</span></h3>
+      <blockquote>「首先是伊闕不保，且切斷與洛陽的聯繫。大唐軍那時會如蝗蟲般蠶食洛陽南面所有城鎮，北面的大河則在唐軍手上，再失慈澗，洛陽將只余東線虎牢唯一的呼吸孔道透氣。」</blockquote>
+      <p class="sub">寇仲的「反問二」被整枚棋直接抽走——壽安不守，伊闕自成孤島。</p>
+    </div>
+
+    <div class="step lishimin"><h3>補刀：不要對虎牢寄希望<span class="who li">李世民</span></h3>
+      <blockquote>「不要對虎牢再寄任何希望，我已派李世績全權負責攻克虎牢……我有十足信心他可輕取虎牢。」</blockquote>
+      <p class="sub">原文寫寇仲「像一個賭得天昏地暗的賭徒，想下最後一注時，忽然發覺手上籌碼全輸掉」。</p>
+    </div>
+
+    <div class="step lishimin"><h3>收官：堅壘不出，坐候四城<span class="who li">李世民</span></h3>
+      <blockquote>「由今晚開始，我軍將堅壘不出，等待另四支軍隊分別攻陷回洛、洛口、河內、伊闕的好消息。若這還不夠，世民可留下萬來人守寨，自己則率其他人沿大河南下親取北邱山南、洛陽東北的金塘城。」</blockquote>
+      <p class="sub">正面不出戰，外圍逐一收氣——這才是真正的「圍堵斬截」。</p>
+    </div>
+
+    <div class="step lishimin"><h3>外圍：竇建德自身難保<span class="who li">李世民</span></h3>
+      <blockquote>「至於竇建德，一方面要留下部分兵力以壓制北面高開道和羅藝的蠢蠢欲動，更要應付東面另一支義軍的挑戰，這支義軍由山東孟海公率領，與徐圓朗齊名。」</blockquote>
+      <p class="sub">外加一手「牽制寇仲與少帥軍」的暗招，李世民賣關子不說破。</p>
+    </div>
+
+    <div class="step lishimin"><h3>豪賭：半年之期<span class="who li">李世民</span></h3>
+      <blockquote>「我想和少帥來一場豪賭……假若我李世民不能在半年內攻陷洛陽，我李世民從此不問任何軍事政事；但我如能成功，閣下須放棄爭霸大業。」又補一句：「若洛陽的主事者是寇仲而非王世充，我李世民絕不敢下重注作此豪賭。」</blockquote>
+      <p class="sub">賭資是洛陽，期限半年，「就當是還你的人情債」。</p>
+    </div>
+
+    <div class="step kouzhong"><h3>收場：奉陪到底<span class="who kou">寇仲</span></h3>
+      <blockquote>「想不到世民兄對紙上談兵興緻極濃，小弟就奉陪到底。」／「你寇仲是英雄的，就接受我的賭約。」</blockquote>
+      <p class="sub">紙上之局到此為止——真章要等洛陽城下的半年。</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="sec-bet">
+  <h2>半年賭約<small>洛陽作注</small></h2>
+  <div class="duel">
+    <div class="bet li"><h3>李世民 · 賭</h3>
+      <p>半年內攻陷洛陽 → 寇仲<b>放棄爭霸大業</b></p>
+      <p>半年內攻不下 → 李世民<b>從此不問任何軍事政事</b></p>
+      <p>底氣：四軍收氣＋張鎮周已降＋李世績攻虎牢＋牽制竇建德的暗招</p>
+    </div>
+    <div class="bet kou"><h3>寇仲 · 局中人</h3>
+      <p>反問層層被封死：伊闕援、洛口糧、虎牢氣，一手一手被預先堵死。</p>
+      <p>唯一没被計算的是<b>寇仲本人</b>——李世民自承：若洛陽主事者是寇仲，他絕不敢下重注。</p>
+      <p>章內未寫下正式落押；寇仲答以「奉陪到底」。</p>
+    </div>
+  </div>
+</section>
+
+<section id="sec-gaz">
+  <h2>古今輿地對照<small>＋校勘記</small></h2>
+  <table>
+    <tr><th>古地名</th><th>小說中的角色</th><th>今地</th><th>性質</th></tr>
+    <tr><td class="tag">洛陽</td><td>王世充鄭都・大龍之「眼」</td><td>河南洛陽市</td><td class="tag t-real">實地</td></tr>
+    <tr><td class="tag">慈澗</td><td>唐鄭兩軍大寨對峙處（夜宴發生地）</td><td>洛陽—虎牢前線走廊</td><td class="tag t-est">推定</td></tr>
+    <tr><td class="tag">虎牢</td><td>洛陽唯一活口・李世績攻取目標</td><td>滎陽市虎牢關鎮</td><td class="tag t-site">實地・遺址</td></tr>
+    <tr><td class="tag">回洛（倉）</td><td>洛陽兩大糧倉之一・四目標①</td><td>洛陽市孟津區會盟鎮一帶</td><td class="tag t-site">遺址附近・推定</td></tr>
+    <tr><td class="tag">洛口（倉）</td><td>洛水運糧之樞・四目標②</td><td>鞏義市河洛鎮洛黃交匯處一帶</td><td class="tag t-est">推定</td></tr>
+    <tr><td class="tag">河內</td><td>鄭軍大河以北唯一據點・四目標③</td><td>焦作—沁陽一帶</td><td class="tag t-est">推定</td></tr>
+    <tr><td class="tag">伊闕</td><td>伊水正面・四目標④</td><td>偃師市鳴皋鎮一帶</td><td class="tag t-est">推定</td></tr>
+    <tr><td class="tag">壽安</td><td>張鎮周坐鎮（降變死穴）</td><td>伊川—伊陽間伊水河谷</td><td class="tag t-est">推定</td></tr>
+    <tr><td class="tag">龍門堡</td><td>伊闕城外屏壘</td><td>洛陽龍門石窟附近・伊水之濱</td><td class="tag t-site">實地・遺址</td></tr>
+    <tr><td class="tag">宜陽</td><td>史萬寶進軍出發地</td><td>伊川縣伊里溝一帶</td><td class="tag t-est">推定</td></tr>
+    <tr><td class="tag">河陽</td><td>黃君漢、張夜叉三萬集結地</td><td>焦作市孟州市（河陽故城）</td><td class="tag t-site">實地・遺址</td></tr>
+    <tr><td class="tag">孟津</td><td>渡河點</td><td>洛陽市孟津區黃河渡口一帶</td><td class="tag t-est">推定</td></tr>
+    <tr><td class="tag">金塘城</td><td>李世民備選親取目標（北邱山南）</td><td>洛陽東北・北邙山南</td><td class="tag t-est">推定</td></tr>
+    <tr><td class="tag">襄陽</td><td>原文威脅：錢獨關＋朱粲聯軍北上</td><td>湖北襄陽市</td><td class="tag t-real">實地</td></tr>
+  </table>
+  <p class="note"><b>校勘記</b>（河圖書網原文疑似排印錯誤，本頁徑改並註記）：「籌安」→壽安、「寇伸」→寇仲、「案門」→寨門、「伊厥」→伊闕、「同洛」→回洛、「少師軍」→少帥軍、「斬草除恨」→斬草除根（疑）、「迎土」→迎上（疑）。「襄陽<b>錢獨關</b>」一詞依原文保留，疑為排印訛字，所指應為襄陽方向唐軍將領。「李世績」即後之李世勣（徐世勣、李勣）。引文出處：<a href="https://www.hetubook.com/book/3134/2221505.html">hetubook.com/book/3134/2221505.html</a></p>
+</section>
+
+<p class="foot">大唐雙龍傳系列戰場地圖・回<a href="./">索引</a>｜前作：<a href="./vol46-ch26-47-cixian.html">卷四十六第26～47回：慈澗之戰</a>｜本頁地圖 Leaflet + CARTO｜僅供讀書導覽，非歷史軍事地圖</p>
+
+</div><!-- /wrap -->
+
+<!-- rpn JS -->
+<script>
+(function(){
+  var toc=document.getElementById('rpnToc'),fill=document.getElementById('rpnFill'),
+      navbar=document.getElementById('rpnNavbar'),dock=document.getElementById('rpnDock'),
+      sideFill=document.getElementById('rpnSideFill');
+  if(!toc||!fill||!navbar)return;
+  var links=Array.prototype.slice.call(toc.querySelectorAll('a'));
+  var sideLinks=dock?Array.prototype.slice.call(dock.querySelectorAll('a')):[];
+  var sections=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))});
+  var ticking=false;
+  function update(){
+    ticking=false;
+    var doc=document.documentElement,max=doc.scrollHeight-doc.clientHeight;
+    var pct=max>0?(doc.scrollTop/max)*100:0;pct=Math.min(100,Math.max(0,pct));
+    fill.style.width=pct+'%';if(sideFill)sideFill.style.width=pct+'%';
+    var nbB=navbar.getBoundingClientRect().bottom,line=(nbB>0?nbB:90)+8,idx=0;
+    for(var i=0;i<sections.length;i++){var s=sections[i];if(s&&s.getBoundingClientRect().top<=line)idx=i;}
+    if(doc.scrollTop+doc.clientHeight>=doc.scrollHeight-4)idx=links.length-1;
+    links.forEach(function(a,i){a.classList.toggle('active',i===idx);
+      if(i===idx){var ar=a.getBoundingClientRect(),tr=toc.getBoundingClientRect();
+        if(ar.left<tr.left||ar.right>tr.right)toc.scrollLeft+=ar.left-tr.left-tr.width/2+ar.width/2;}});
+    sideLinks.forEach(function(a,i){a.classList.toggle('active',i===idx);
+      if(i===idx&&dock){var ar2=a.getBoundingClientRect(),sr=dock.getBoundingClientRect();
+        if(ar2.top<sr.top||ar2.bottom>sr.bottom)dock.scrollTop+=ar2.top-sr.top-sr.height/2+ar2.height/2;}});
+  }
+  window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(update);}},{passive:true});
+  window.addEventListener('resize',function(){requestAnimationFrame(update)});
+  links.concat(sideLinks).forEach(function(a){a.addEventListener('click',function(){setTimeout(update,400)})});
+  update();
+})();
+</script>
+
+<!-- 地圖 -->
+<script>
+var map=L.map('map',{scrollWheelZoom:false}).fitBounds([[34.30,112.28],[35.32,113.35]]);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',{
+  attribution:'&copy; OpenStreetMap &copy; CARTO',subdomains:'abcd',maxZoom:19
+}).addTo(map);
+var AR=[[0,1],[0,1]];
+function mk(latlng,cls,txt,tip){
+  var ic=L.divIcon({className:'',html:'<div class="mk '+cls+'"><span>'+txt+'</span></div>',iconSize:[28,28],iconAnchor:[14,14]});
+  var m=L.marker(latlng,{icon:ic}).addTo(map);
+  if(tip)m.bindTooltip(tip,{direction:'top',offset:[0,-14]});
+  return m;
+}
+function lbl(latlng,txt,cls){
+  L.marker(latlng,{icon:L.divIcon({className:'',html:'<div class="lbl '+(cls||'')+'">'+txt+'</div>',iconSize:[10,10]}),interactive:false}).addTo(map);
+}
+function arrow(latlngs,color,dash,weight){
+  var s=L.polyline(latlngs,{color:color,weight:weight||3.5,opacity:.9,dashArray:dash||null}).addTo(map);
+  L.polylineDecorator(s,{patterns:[{offset:'100%',endOffset:7,repeat:0,symbol:L.Symbol.arrowHead({pixelSize:16,polygon:true,pathOptions:{color:color,weight:1,opacity:.95}})}]}).addTo(map);
+  return s;
+}
+/* 大河示意 */
+L.polyline([[34.87,112.20],[34.84,112.44],[34.825,112.63],[34.90,112.79],[34.86,112.96],[34.90,113.19],[34.88,113.40],[34.91,113.60]],
+  {color:'#9fc6d8',weight:11,opacity:.55}).addTo(map);
+lbl([34.80,112.31],'大河（黃河）','geo');
+
+var layerAtt=L.layerGroup().addTo(map), layerGrain=L.layerGroup().addTo(map), layerKey=L.layerGroup().addTo(map), layerFar=L.layerGroup().addTo(map);
+
+/* 對峙中樞 */
+mk([34.6197,112.4477],'zheng','洛','洛陽・王世充鄭都（大龍之「眼」）');
+mk([34.7200,112.7000],'hub','澗','慈澗・唐鄭大寨對峙處（夜宴發生地）—推定位置').bindPopup('<b>紙上談兵夜宴現場</b><br>唐軍寨門外一桌兩席，離寨門二百步；李世民身後立尉遲敬德、龐玉、秦叔寶、長孫無忌。位置為推定。');
+
+/* 鄭軍要點 */
+mk([34.8470,113.1983],'zheng','牢','虎牢・洛陽唯一活口（李世績軍攻取目標）');
+mk([34.5500,112.6200],'zheng','闕','伊闕・四目標④（鳴皋鎮一帶・推定）');
+mk([34.5943,112.4527],'zheng','龍','龍門堡・伊闕城外屏壘');
+mk([34.4400,112.4700],'flip','壽','壽安・張鎮周坐鎮——若降：伊闕不保、洛陽南面盡蝕（推定）');
+/* 糧倉 */
+mk([34.8158,112.6302],'granary','回','回洛倉・四目標①（會盟鎮一帶）');
+mk([34.8550,112.9550],'granary','洛','洛口倉・四目標②（洛黃交匯・推定）');
+
+/* 唐軍四軍 */
+mk([34.4400,112.3800],'tang','史','宜陽・史萬寶萬人自宜陽進軍伊闕（推定）');
+mk([35.0856,112.9422],'tang','劉','河內・劉德威一萬自太行東圍（四目標③・沁陽一帶推定）');
+mk([34.9065,112.7921],'tang','黃','河陽・黃君漢＋張夜叉三萬集結，謀渡孟津取回洛');
+mk([34.8000,112.5500],'tang','塘','金塘城・李世民備選親取目標（北邱山南・推定）');
+
+/* 進攻箭頭 */
+layerAtt.addLayer(arrow([[34.460,112.400],[34.545,112.600]],'#c0392b'));
+layerAtt.addLayer(arrow([[35.330,113.430],[35.080,112.970]],'#c0392b'));
+layerAtt.addLayer(arrow([[35.060,113.260],[34.862,112.975]],'#c0392b'));
+layerAtt.addLayer(arrow([[34.905,112.788],[34.828,112.452],[34.816,112.618]],'#c0392b'));
+layerAtt.addLayer(arrow([[34.725,112.730],[34.760,112.900],[34.843,113.168]],'#4a3a6b','8 8'));
+layerAtt.addLayer(arrow([[34.725,112.660],[34.795,112.575]],'#c0392b','6 6',3));
+
+/* 糧道與活口 */
+layerGrain.addLayer(L.polyline([[34.855,112.955],[34.8158,112.6302],[34.6197,112.4477]],{color:'#c87f12',weight:3.5,dashArray:'9 7',opacity:.9}));
+layerGrain.addLayer(L.polyline([[34.847,113.1983],[34.7200,112.7000],[34.6197,112.4477]],{color:'#1f8a4c',weight:3.5,dashArray:'3 9',opacity:.9}));
+
+/* 推定標記 */
+[[34.7200,112.7000],[34.5500,112.6200],[34.4400,112.4700],[34.4400,112.3800],[35.0856,112.9422],[34.8550,112.9550],[34.8000,112.5500]].forEach(function(p){
+  L.circleMarker(p,{radius:13,color:'#b06e14',weight:2,fill:false,dashArray:'2 5',opacity:.95,interactive:false}).addTo(layerKey);
+});
+
+/* 盤外 */
+layerFar.addLayer(L.polyline([[33.780,112.240],[34.320,112.400]],{color:'#c0392b',weight:3,dashArray:'8 8',opacity:.8}));
+lbl([33.700,112.200],'襄陽方向：錢獨關＋朱粲聯軍北上（原文・盤外）','threat');
+lbl([35.280,113.500],'太行——劉德威軍來向','geo');
+lbl([35.260,113.190],'竇建德（河北方向・盤外）：受高開道、羅藝、孟海公牽制','ghost');
+
+L.control.layers(null,{
+  '① 唐軍四向攻勢':layerAtt,
+  '② 鄭軍糧道與虎牢活口':layerGrain,
+  '③ 推定位置圈':layerKey,
+  '④ 盤外威脅與來向':layerFar
+},{collapsed:false,position:'bottomleft'}).addTo(map);
+map.on('click',function(){map.scrollWheelZoom.enable()});
+</script>
+</body>
+</html>
