@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>唐 · 長安城 立體地圖</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#e9ede9;
+    font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;}
+  #app{position:relative;width:100%;height:100%;}
+  canvas{display:block;}
+  .panel{position:absolute;background:rgba(250,247,238,.9);border:1px solid rgba(90,80,60,.25);
+    border-radius:10px;color:#3a332a;backdrop-filter:blur(4px);}
+  #title{top:14px;left:14px;padding:10px 16px;}
+  #title h1{margin:0;font-size:20px;font-weight:600;letter-spacing:.2em;
+    font-family:"Songti TC","STSong","Noto Serif TC",serif;}
+  #title p{margin:4px 0 0;font-size:11.5px;color:#7a6f5c;letter-spacing:.05em;}
+  #bar{bottom:14px;left:50%;transform:translateX(-50%);padding:8px 10px;display:flex;gap:6px;
+    flex-wrap:wrap;justify-content:center;max-width:92vw;}
+  #bar button{border:1px solid rgba(90,80,60,.35);background:transparent;color:#4a4234;
+    border-radius:16px;padding:5px 12px;font-size:12.5px;cursor:pointer;white-space:nowrap;}
+  #bar button:hover{background:rgba(120,100,70,.12);}
+  #bar button.on{background:#5c4f3a;color:#f5efe0;border-color:#5c4f3a;}
+  #opts{top:14px;right:14px;padding:8px 12px;font-size:12px;display:flex;flex-direction:column;gap:6px;}
+  #opts label{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;}
+  #hint{position:absolute;bottom:14px;right:14px;font-size:11px;color:#8a7f6a;text-align:right;
+    pointer-events:none;text-shadow:0 1px 2px rgba(250,247,238,.8);}
+  .lbl{position:absolute;transform:translate(-50%,-100%);font-size:12px;color:#2f2a20;
+    pointer-events:none;white-space:nowrap;letter-spacing:.08em;
+    text-shadow:0 0 3px #f3efe2,0 0 3px #f3efe2,0 1px 2px #f3efe2;
+    font-family:"Songti TC","STSong","Noto Serif TC",serif;}
+  .lbl.big{font-size:14px;font-weight:600;}
+  .lbl.water{color:#2b5876;}
+  @media (max-width:640px){
+    #title h1{font-size:16px}#title p{display:none}
+    #bar{bottom:10px}#bar button{padding:4px 9px;font-size:11.5px}
+    #hint{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="labels"></div>
+  <div class="panel" id="title">
+    <h1>長安城 · 唐</h1>
+    <p>外郭城約 9.7 × 8.7 公里 · 一百零八坊 · 建築高度經誇大以利辨識</p>
+  </div>
+  <div class="panel" id="opts">
+    <label><input type="checkbox" id="ckLabels" checked> 顯示名稱</label>
+    <label><input type="checkbox" id="ckDaming"> 大明宮（貞觀後增建）</label>
+  </div>
+  <div class="panel" id="bar">
+    <button data-v="bird" class="on">鳥瞰全城</button>
+    <button data-v="huang">皇城 · 太極宮</button>
+    <button data-v="xing">興慶宮</button>
+    <button data-v="zhuque">朱雀大街</button>
+    <button data-v="daming">大明宮</button>
+    <button data-v="qujiang">曲江池</button>
+  </div>
+  <div id="hint">拖曳旋轉 · 滾輪／雙指縮放 · 右鍵平移</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const app = document.getElementById('app');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xdfe7e4);
+scene.fog = new THREE.Fog(0xdfe7e4, 140, 340);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+app.insertBefore(renderer.domElement, app.firstChild);
+const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 600);
+
+scene.add(new THREE.HemisphereLight(0xf2f6ff, 0x9c8f72, 0.85));
+const sun = new THREE.DirectionalLight(0xfff2dd, 0.9);
+sun.position.set(-60, 90, 55);
+scene.add(sun);
+
+const M = {
+  ground:  new THREE.MeshLambertMaterial({color:0xd3c69f}),
+  outer:   new THREE.MeshLambertMaterial({color:0xc4b593}),
+  ward:    new THREE.MeshLambertMaterial({color:0xb5a47a}),
+  ward2:   new THREE.MeshLambertMaterial({color:0xac9b72}),
+  wall:    new THREE.MeshLambertMaterial({color:0x8d8069}),
+  pwall:   new THREE.MeshLambertMaterial({color:0x9c6a55}),
+  plaster: new THREE.MeshLambertMaterial({color:0xe7dcc2}),
+  roofImp: new THREE.MeshLambertMaterial({color:0x7c3526}),
+  roofCiv: new THREE.MeshLambertMaterial({color:0x615b50}),
+  roofMkt: new THREE.MeshLambertMaterial({color:0x54524c}),
+  water:   new THREE.MeshLambertMaterial({color:0x4a7d9c}),
+  park:    new THREE.MeshLambertMaterial({color:0x7f9160}),
+  tree:    new THREE.MeshLambertMaterial({color:0x4f6b3d}),
+  trunk:   new THREE.MeshLambertMaterial({color:0x6d5a42}),
+  platform:new THREE.MeshLambertMaterial({color:0xc9b28a}),
+  court:   new THREE.MeshLambertMaterial({color:0xcfc19b})
+};
+
+function box(w,h,d,x,y,z,mat,parent){
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
+  m.position.set(x, y+h/2, z);
+  (parent||scene).add(m);
+  return m;
+}
+function hipRoof(w,d,h,x,y,z,mat,parent){
+  const r = Math.hypot(w,d)/2;
+  const g = new THREE.CylinderGeometry(r*0.18, r, h, 4);
+  const m = new THREE.Mesh(g, mat);
+  m.rotation.y = Math.atan2(d,w);
+  m.position.set(x, y+h/2, z);
+  (parent||scene).add(m);
+  return m;
+}
+function hall(w,d,bh,rh,x,z,roof,parent,y){
+  y = y||0;
+  box(w,bh,d,x,y,z,M.plaster,parent);
+  hipRoof(w*1.12,d*1.12,rh,x,y+bh,z,roof,parent);
+}
+function gateTower(x,z,along,roof,parent,scale){
+  const s = scale||1;
+  const w = along==='x'?3.2*s:1.8*s, d = along==='x'?1.8*s:3.2*s;
+  box(w,1.2*s,d,x,0,z,M.wall,parent);
+  hall(w*0.8, d*0.8, 0.7*s, 0.6*s, x, z, roof||M.roofImp, parent, 1.2*s);
+}
+function wallRect(x0,z0,x1,z1,h,t,mat,parent){
+  const cx=(x0+x1)/2, cz=(z0+z1)/2, w=x1-x0, d=z1-z0;
+  box(w+t,h,t,cx,0,z0,mat,parent);
+  box(w+t,h,t,cx,0,z1,mat,parent);
+  box(t,h,d-t,x0,0,cz,mat,parent);
+  box(t,h,d-t,x1,0,cz,mat,parent);
+}
+function tree(x,z,s,parent){
+  s=s||1;
+  box(0.16*s,0.5*s,0.16*s,x,0,z,M.trunk,parent);
+  const c=new THREE.Mesh(new THREE.ConeGeometry(0.55*s,1.2*s,7),M.tree);
+  c.position.set(x,0.5*s+0.6*s,z);(parent||scene).add(c);
+}
+
+const X=48.6, Z=43.25;
+
+const base = new THREE.Mesh(new THREE.PlaneGeometry(560,560), M.outer);
+base.rotation.x = -Math.PI/2; base.position.y = -0.06; scene.add(base);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(X*2+1.6, Z*2+1.6), M.ground);
+ground.rotation.x = -Math.PI/2; scene.add(ground);
+
+wallRect(-X,-Z,X,Z,0.9,0.6,M.wall);
+[[0,Z,'z','明德門'],[ -17,Z,'z','安化門'],[17,Z,'z','啟夏門'],
+ [-X,-13.5,'x','開遠門'],[-X,-1.5,'x','金光門'],[-X,20,'x','延平門'],
+ [ X,-13.5,'x','通化門'],[ X,-1.5,'x','春明門'],[ X,20,'x','延興門'],
+ [0,-Z,'z','玄武門']].forEach(g=>gateTower(g[0],g[1],g[2]==='z'?'x':'z',M.roofCiv,scene,0.9));
+
+const reserved = [];
+function addWardGrid(x0,x1,z0,z1,nc,nr){
+  const gap=0.6;
+  const cw=((x1-x0)-(nc-1)*gap)/nc, rh=((z1-z0)-(nr-1)*gap)/nr;
+  for(let i=0;i<nc;i++)for(let j=0;j<nr;j++){
+    const ax=x0+i*(cw+gap), az=z0+j*(rh+gap);
+    const bx=ax+cw, bz=az+rh;
+    let skip=false;
+    for(const r of reserved){
+      if(ax<r[2]+0.2 && bx>r[0]-0.2 && az<r[3]+0.2 && bz>r[1]-0.2){skip=true;break;}
+    }
+    if(skip)continue;
+    const h=0.22+((i*7+j*13)%5)*0.02;
+    box(cw,h,rh,(ax+bx)/2,0,(az+bz)/2,((i+j)%2)?M.ward:M.ward2);
+  }
+  return {cw,rh,gap};
+}
+
+const eMkt=[29.5,-1.6,38.5,9.0], wMkt=[-38.5,-1.6,-29.5,9.0];
+const xgRect=[39.1,-14.6,48.1,-2.2];
+const qjRect=[29,30.5,48.6,43.25];
+reserved.push(eMkt,wMkt,xgRect,qjRect);
+
+addWardGrid(0.75,48.1,-7.12,42.45,5,9);
+addWardGrid(-48.1,-0.75,-7.12,42.45,5,9);
+addWardGrid(14.85,48.1,-42.55,-8.32,3,4);
+addWardGrid(-48.1,-14.85,-42.55,-8.32,3,4);
+
+function market(r,name){
+  const cx=(r[0]+r[2])/2, cz=(r[1]+r[3])/2, w=r[2]-r[0], d=r[3]-r[1];
+  box(w,0.1,d,cx,0,cz,M.court);
+  wallRect(r[0],r[1],r[2],r[3],0.35,0.25,M.wall);
+  for(let i=-1;i<=1;i+=2)for(let j=-1;j<=1;j+=2){
+    box(w*0.36,0.3,d*0.36,cx+i*w*0.245,0,cz+j*d*0.245,M.roofMkt);
+  }
+}
+market(eMkt); market(wMkt);
+
+const PC_Z0=-Z, PC_Z1=-28.35, HC_Z0=-26.15, HC_Z1=-7.72;
+box(28.2,0.06,PC_Z1-PC_Z0,0,0,(PC_Z0+PC_Z1)/2,M.court);
+box(28.2,0.06,HC_Z1-HC_Z0,0,0,(HC_Z0+HC_Z1)/2,M.court);
+wallRect(-14.1,PC_Z0,14.1,PC_Z1,0.8,0.45,M.pwall);
+box(0.45,0.8,PC_Z1-PC_Z0,-6.4,0,(PC_Z0+PC_Z1)/2,M.pwall);
+box(0.45,0.8,PC_Z1-PC_Z0, 6.4,0,(PC_Z0+PC_Z1)/2,M.pwall);
+hall(4.6,2.6,1.1,0.8,0,-36.2,M.roofImp);
+hall(3.2,1.9,0.9,0.6,0,-39.8,M.roofImp);
+hall(2.6,1.6,0.8,0.55,0,-41.6,M.roofImp);
+hall(2.2,1.5,0.7,0.5, 10.2,-36,M.roofImp);
+hall(2.0,1.4,0.7,0.5, 10.2,-39.5,M.roofImp);
+hall(2.0,1.4,0.65,0.5,-10.3,-36,M.roofCiv);
+hall(2.0,1.4,0.65,0.5,-10.3,-39.5,M.roofCiv);
+gateTower(0,PC_Z1,'x',M.roofImp,scene,1.15);
+gateTower(0,-Z,'x',M.roofImp,scene,1.0);
+
+wallRect(-14.1,HC_Z0,14.1,HC_Z1,0.7,0.4,M.wall);
+gateTower(0,HC_Z1,'x',M.roofImp,scene,1.1);
+gateTower(-14.1,-17,'z',M.roofCiv,scene,0.85);
+gateTower( 14.1,-17,'z',M.roofCiv,scene,0.85);
+for(let i=0;i<3;i++)for(let j=0;j<3;j++){
+  const gx=-9.5+i*9.5, gz=-23.2+j*5.1;
+  if(Math.abs(gx)<2)continue;
+  hall(3.6,2.2,0.55,0.4,gx,gz,M.roofCiv);
+}
+
+box(1.5,0.07,Z-HC_Z1,0,0,(HC_Z1+Z)/2,M.court);
+box(1.1,0.065,HC_Z1-PC_Z1,0,0,(PC_Z1+HC_Z1)/2,M.court);
+
+const xg = new THREE.Group(); scene.add(xg);
+const xr = xgRect;
+box(xr[2]-xr[0],0.05,xr[3]-xr[1],(xr[0]+xr[2])/2,0,(xr[1]+xr[3])/2,M.court,xg);
+wallRect(xr[0],xr[1],xr[2],xr[3],0.6,0.35,M.pwall,xg);
+const lake = new THREE.Mesh(new THREE.CircleGeometry(3.1,28), M.water);
+lake.rotation.x=-Math.PI/2; lake.scale.set(1.15,1,0.85);
+lake.position.set(42.4,0.08,-5.2); xg.add(lake);
+gateTower(xr[0],-8.4,'z',M.roofImp,xg,0.9);
+hall(2.6,1.7,0.8,0.6,41.2,-9.6,M.roofImp,xg);
+hall(1.9,1.4,0.7,0.5,44.7,-8.6,M.roofImp,xg);
+hall(1.7,1.3,0.65,0.5,45.9,-12.8,M.roofImp,xg);
+(function(){
+  const x=40.0,z=-3.1;
+  box(1.9,0.7,1.9,x,0,z,M.plaster,xg); hipRoof(2.1,2.1,0.35,x,0.7,z,M.roofImp,xg);
+  box(1.5,0.6,1.5,x,1.05,z,M.plaster,xg); hipRoof(1.7,1.7,0.33,x,1.65,z,M.roofImp,xg);
+  box(1.1,0.55,1.1,x,1.98,z,M.plaster,xg); hipRoof(1.4,1.4,0.5,x,2.53,z,M.roofImp,xg);
+})();
+hall(1.4,1.1,0.55,0.45,41.9,-2.9,M.roofImp,xg);
+(function(){
+  box(0.9,0.5,0.9,46.3,0,-5.6,M.plaster,xg);
+  hipRoof(1.3,1.3,0.5,46.3,0.5,-5.6,M.roofImp,xg);
+})();
+[[39.7,-6.4],[40.6,-7.6],[43,-8.2],[45.2,-7.4],[46.2,-6.6],[45.9,-3.4],[44.6,-2.7],
+ [39.8,-4.9],[41,-2.5],[43.5,-2.4],[46.8,-4.5],[44.4,-9.1],[47.2,-9.6],[40,-11],
+ [43.2,-11.5],[46.9,-13.6],[41.5,-13.5],[44.8,-13.9]].forEach(p=>tree(p[0],p[1],0.85,xg));
+
+const dm = new THREE.Group(); dm.visible=false; scene.add(dm);
+box(16,0.05,21,12,0,-54.3,M.court,dm);
+wallRect(4,-64.8,20,-43.8,0.75,0.45,M.pwall,dm);
+box(6,0.6,3.4,12,0,-46.6,M.platform,dm);
+hall(4.4,2.4,1.0,0.75,12,-46.6,M.roofImp,dm,0.6);
+hall(3.4,2.0,0.9,0.6,12,-50.8,M.roofImp,dm);
+hall(2.8,1.7,0.8,0.55,12,-54.2,M.roofImp,dm);
+hall(2.6,2.8,0.9,0.6,6.6,-58.6,M.roofImp,dm);
+const tly = new THREE.Mesh(new THREE.CircleGeometry(3.4,28), M.water);
+tly.rotation.x=-Math.PI/2; tly.scale.set(1.25,1,0.8);
+tly.position.set(13.3,0.08,-59.8); dm.add(tly);
+gateTower(12,-43.8,'x',M.roofImp,dm,1.0);
+[[7.5,-56.5],[9.3,-61],[17.4,-56.6],[18,-61.5],[16.5,-63.2],[8,-63.5]].forEach(p=>tree(p[0],p[1],0.9,dm));
+
+const park = new THREE.Mesh(new THREE.PlaneGeometry(qjRect[2]-qjRect[0], qjRect[3]-qjRect[1]), M.park);
+park.rotation.x=-Math.PI/2;
+park.position.set((qjRect[0]+qjRect[2])/2,0.03,(qjRect[1]+qjRect[3])/2);
+scene.add(park);
+const qj = new THREE.Mesh(new THREE.CircleGeometry(5.6,32), M.water);
+qj.rotation.x=-Math.PI/2; qj.scale.set(1.2,1,0.75); qj.rotation.z=0.5;
+qj.position.set(40,0.09,37.6); scene.add(qj);
+hall(1.6,1.2,0.6,0.5,33.5,34.5,M.roofImp);
+for(let i=0;i<16;i++){
+  tree(31.5+((i*37)%16),31.8+((i*23)%10),0.9+((i%3)*0.15));
+}
+
+const labels=[
+  {n:'太極宮',p:[0,3.2,-37],big:1},
+  {n:'皇城',p:[0,2.2,-17],big:1},
+  {n:'東宮',p:[10.2,2.2,-37.6],min:70},
+  {n:'掖庭宮',p:[-10.3,2.2,-37.6],min:70},
+  {n:'承天門',p:[0,2.6,-28.3],min:55},
+  {n:'朱雀門',p:[0,2.5,-7.7],min:60},
+  {n:'朱雀大街',p:[0,0.6,18],big:1},
+  {n:'明德門',p:[0,2.2,43.2],min:80},
+  {n:'東市',p:[34,1.2,3.7],big:1},
+  {n:'西市',p:[-34,1.2,3.7],big:1},
+  {n:'興慶宮',p:[43.6,3.4,-9.5],big:1},
+  {n:'龍池',p:[42.4,0.5,-5.2],w:1,min:55},
+  {n:'興慶殿',p:[41.2,2.4,-9.6],min:40},
+  {n:'花萼相輝樓',p:[40.0,3.6,-3.1],min:55},
+  {n:'南薰殿',p:[44.7,2.0,-8.6],min:40},
+  {n:'新射殿',p:[45.9,1.9,-12.8],min:40},
+  {n:'沉香亭',p:[46.3,1.6,-5.6],min:40},
+  {n:'興慶門',p:[39.1,2.0,-8.4],min:40},
+  {n:'勤政務本樓',p:[41.9,2.0,-2.9],min:35},
+  {n:'春明門',p:[48.6,2.2,-1.5],min:70},
+  {n:'通化門',p:[48.6,2.2,-13.5],min:70},
+  {n:'金光門',p:[-48.6,2.2,-1.5],min:85},
+  {n:'曲江池 · 芙蓉園',p:[40,0.8,37.6],w:1,big:1},
+  {n:'大明宮',p:[12,3.4,-52],big:1,dm:1},
+  {n:'含元殿',p:[12,3.2,-46.6],min:55,dm:1},
+  {n:'太液池',p:[13.3,0.6,-59.8],w:1,min:55,dm:1},
+  {n:'麟德殿',p:[6.6,2.2,-58.6],min:45,dm:1}
+];
+const lblRoot=document.getElementById('labels');
+labels.forEach(L=>{
+  const d=document.createElement('div');
+  d.className='lbl'+(L.big?' big':'')+(L.w?' water':'');
+  d.textContent=L.n; lblRoot.appendChild(d); L.el=d;
+  L.v=new THREE.Vector3(...L.p);
+});
+
+const ck1=document.getElementById('ckLabels');
+const ck2=document.getElementById('ckDaming');
+ck2.addEventListener('change',()=>{dm.visible=ck2.checked;});
+
+const cam={theta:0,phi:0.52,dist:150,tx:0,ty:0,tz:2};
+let anim=null;
+function applyCam(){
+  cam.phi=Math.max(0.12,Math.min(1.45,cam.phi));
+  cam.dist=Math.max(6,Math.min(260,cam.dist));
+  const sp=Math.sin(cam.phi);
+  camera.position.set(
+    cam.tx+cam.dist*sp*Math.sin(cam.theta),
+    cam.ty+cam.dist*Math.cos(cam.phi),
+    cam.tz+cam.dist*sp*Math.cos(cam.theta));
+  camera.lookAt(cam.tx,cam.ty,cam.tz);
+}
+const views={
+  bird:   {theta:0,   phi:0.52,dist:150,tx:0,   ty:0,tz:2},
+  huang:  {theta:0.12,phi:1.02,dist:46, tx:0,   ty:0,tz:-27},
+  xing:   {theta:1.75,phi:0.95,dist:21, tx:43,  ty:0,tz:-8.4},
+  zhuque: {theta:0.02,phi:1.28,dist:34, tx:0,   ty:0.8,tz:8},
+  daming: {theta:-0.35,phi:0.95,dist:34,tx:12,  ty:0,tz:-53},
+  qujiang:{theta:0.9, phi:1.0, dist:26, tx:39,  ty:0,tz:36}
+};
+function goTo(v){
+  const from={...cam}, to=views[v], t0=performance.now();
+  let dth=to.theta-from.theta;
+  while(dth>Math.PI)dth-=2*Math.PI; while(dth<-Math.PI)dth+=2*Math.PI;
+  anim=(now)=>{
+    let k=Math.min(1,(now-t0)/900);
+    k=k<0.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+    cam.theta=from.theta+dth*k;
+    cam.phi=from.phi+(to.phi-from.phi)*k;
+    cam.dist=from.dist+(to.dist-from.dist)*k;
+    cam.tx=from.tx+(to.tx-from.tx)*k;
+    cam.ty=from.ty+(to.ty-from.ty)*k;
+    cam.tz=from.tz+(to.tz-from.tz)*k;
+    if(k>=1)anim=null;
+  };
+}
+document.querySelectorAll('#bar button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('#bar button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    if(b.dataset.v==='daming'&&!ck2.checked){ck2.checked=true;dm.visible=true;}
+    goTo(b.dataset.v);
+  });
+});
+
+const el=renderer.domElement;
+const ptrs=new Map();
+let lastPinch=0,lastMid=null;
+el.style.touchAction='none';
+el.addEventListener('contextmenu',e=>e.preventDefault());
+el.addEventListener('pointerdown',e=>{
+  el.setPointerCapture(e.pointerId);
+  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY,btn:e.button});
+  anim=null;
+});
+el.addEventListener('pointerup',e=>{ptrs.delete(e.pointerId);lastPinch=0;lastMid=null;});
+el.addEventListener('pointercancel',e=>{ptrs.delete(e.pointerId);lastPinch=0;lastMid=null;});
+function panBy(dx,dy){
+  const s=cam.dist*0.0016;
+  const st=Math.sin(cam.theta),ct=Math.cos(cam.theta);
+  cam.tx-=(dx*ct - dy*st)*s;
+  cam.tz-=(-dx*st - dy*ct)*s;
+}
+el.addEventListener('pointermove',e=>{
+  if(!ptrs.has(e.pointerId))return;
+  const p=ptrs.get(e.pointerId);
+  const dx=e.clientX-p.x, dy=e.clientY-p.y;
+  p.x=e.clientX; p.y=e.clientY;
+  if(ptrs.size===1){
+    if(p.btn===2||p.btn===1){panBy(dx,dy);}
+    else{cam.theta-=dx*0.005;cam.phi-=dy*0.004;}
+  }else if(ptrs.size===2){
+    const arr=[...ptrs.values()];
+    const d=Math.hypot(arr[0].x-arr[1].x,arr[0].y-arr[1].y);
+    const mid={x:(arr[0].x+arr[1].x)/2,y:(arr[0].y+arr[1].y)/2};
+    if(lastPinch)cam.dist*=lastPinch/d;
+    if(lastMid)panBy(mid.x-lastMid.x,mid.y-lastMid.y);
+    lastPinch=d;lastMid=mid;
+  }
+});
+el.addEventListener('wheel',e=>{
+  e.preventDefault();
+  cam.dist*=Math.pow(1.0016,e.deltaY);
+  anim=null;
+},{passive:false});
+
+function resize(){
+  const w=app.clientWidth,h=app.clientHeight;
+  renderer.setSize(w,h);
+  camera.aspect=w/h;camera.updateProjectionMatrix();
+}
+addEventListener('resize',resize);resize();
+
+const tmp=new THREE.Vector3();
+function render(now){
+  requestAnimationFrame(render);
+  if(anim)anim(now);
+  applyCam();
+  renderer.render(scene,camera);
+  const w=app.clientWidth,h=app.clientHeight;
+  const show=ck1.checked;
+  for(const L of labels){
+    let vis=show&&(!L.dm||dm.visible)&&(!L.min||cam.dist<L.min);
+    if(vis){
+      tmp.copy(L.v).project(camera);
+      if(tmp.z>1||tmp.z<-1)vis=false;
+      else{
+        L.el.style.left=((tmp.x*0.5+0.5)*w)+'px';
+        L.el.style.top=((-tmp.y*0.5+0.5)*h)+'px';
+      }
+    }
+    L.el.style.display=vis?'block':'none';
+  }
+}
+requestAnimationFrame(render);
+</script>
+</body>
+</html>
